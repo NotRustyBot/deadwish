@@ -26,8 +26,6 @@ export class Person {
         this.chat = new Chat(this);
     }
 
-
-
     filterPossibleOptions(facts: Set<Fact>) {
         const result = new Set<Fact>();
         for (const [key, value] of this.responses) {
@@ -52,8 +50,8 @@ export class Person {
             await TimeManager.wait(1000);
         }
 
-        for (const element of convo.response.facts ?? []) {
-            this.notebook.facts.add(element);
+        for (const fact of convo.response.facts ?? []) {
+            this.notebook.add(fact);
         }
 
         this.showOptions();

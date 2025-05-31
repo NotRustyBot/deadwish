@@ -1,9 +1,9 @@
-import { Container, Graphics, Text } from "pixi.js";
+import { Container, Graphics, HTMLText, Text } from "pixi.js";
 import { game } from "./game";
 import { TimeManager } from "./timeManager";
 import { Easing } from "./easing";
-import type { Communication, Person } from "./person";
-import type { Fact } from "./notebook";
+import type { Person } from "./person";
+import { factStylelookup, type Fact } from "./notebook";
 
 const messageWidth = 400;
 const sidegap = 100;
@@ -61,10 +61,21 @@ export class Chat {
     }
 }
 
+function processText(input: string): string {
+    const regex = /<(\d+)>(.*?)<\/>/g;
+    
+    return input.replace(regex, (match, id, content) => {
+        const style = factStylelookup(parseInt(id));
+        return `<span style="${style}">${content}</span>`;
+    });
+}
+
+
 class ChatResponseOption {
     container: Container;
     constructor(chat: Chat, fact: Fact, message: string) {
         this.container = new Container();
+
 
         const graphics = new Graphics();
 
@@ -113,9 +124,11 @@ class ChatMessage {
     constructor(chat: Chat, message: string, request: boolean) {
         this.container = new Container();
 
+        message = processText(message);
+
         const graphics = new Graphics();
 
-        const text = new Text({
+        const text = new HTMLText({
             text: message,
             style: {
                 fontSize: 24,

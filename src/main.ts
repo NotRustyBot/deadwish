@@ -16,11 +16,10 @@ import "./style.css";
 
   await Assets.load(Object.keys(bundle));
 
-  /*
-  const rubik = new FontFace("Rubik", "url('./Rubik-Regular.ttf')");
-  await rubik.load();
-  document.fonts.add(rubik);
-  */
+
+  const caveat = new FontFace("Caveat", "url('./Caveat-VariableFont_wght.ttf')");
+  await caveat.load();
+  document.fonts.add(caveat);
 
   const game = new Game(app);
   game.init();

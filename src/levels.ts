@@ -13,14 +13,14 @@ export function testing() {
         const johnsCat = new Fact(FactType.misc, "John has a cat.");
         const bobHatesCat = new Fact(FactType.general, "Bob is allergic to cats.");
         const fclara = new Fact(FactType.person, "John had a friend named Clara.");
-
+        const cats = new Fact(FactType.misc, "Cats.");
 
         const notebook = new Notebook();
         notebook.facts.add(fbob);
         notebook.facts.add(problemCat);
         notebook.facts.add(johnsCat);
-
-        scene.add(Notebook, notebook);
+        notebook.facts.add(cats);
+        notebook.render();
 
         bob.responses.set(fbob, {
             askAs: "I have a few questions about John. You were his friend, right?",
@@ -33,7 +33,15 @@ export function testing() {
         bob.responses.set(johnsCat, {
             askAs: "Do you know about John's cat?",
             response: {
-                text: ["Not much, Im allergic", "But John liked it a lot."],
+                text: [`Not much, Im <${bobHatesCat.id}>allergic</>`, "But John liked it a lot."],
+                facts: [bobHatesCat]
+            }
+        });
+
+        bob.responses.set(cats, {
+            askAs: "Do you like cats?",
+            response: {
+                text: [`I'm <${bobHatesCat.id}>allergic</>`],
                 facts: [bobHatesCat]
             }
         });
