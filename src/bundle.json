@@ -1,3 +1,5 @@
 {
+  "cannon": "./cannon.png",
+  "light": "./light.png",
   "rect": "./rect.png"
 }

@@ -2,6 +2,7 @@ import type { Application } from "pixi.js";
 import type { Scene } from "./scene";
 import { testing } from "./levels";
 import { TimeManager } from "./timeManager";
+import { Input } from "./input";
 
 export let game: Game;
 export let scene: Scene;
@@ -9,6 +10,7 @@ export let scene: Scene;
 export enum UpdateOrder {
     system,
     ui,
+    cooking,
 }
 
 export interface IUpdatable {
@@ -24,6 +26,8 @@ export class Game {
         if (this.scene) this.scene.clear();
         scene = value;
     }
+
+    input = new Input();
 
     updateOrder: Array<UpdateOrder> = Object.keys(UpdateOrder).filter(k => isNaN(parseInt(k))).map(k => UpdateOrder[k as keyof typeof UpdateOrder]);
     toUpdate = new Map<UpdateOrder, Array<IUpdatable>>();
@@ -41,6 +45,7 @@ export class Game {
     get width() { return this.app.screen.width; }
     get height() { return this.app.screen.height; }
     get dt() { return this.app.ticker.elapsedMS / 1000; }
+    get rate() { return this.app.ticker.deltaTime }
 
     constructor(app: Application) {
         this.app = app;
@@ -54,6 +59,7 @@ export class Game {
     }
 
     update() {
+        this.input.update();
         for (const order of this.updateOrder) {
             if (!this.toUpdate.has(order)) continue;
             for (const updatable of this.toUpdate.get(order)!) {
