@@ -97,6 +97,7 @@ export class Person {
 
     destroy() {
         scene.remove(Person, this);
+        this.chat.destroy();
     }
 }
 

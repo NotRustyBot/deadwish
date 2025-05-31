@@ -5,6 +5,7 @@ import { scene } from "./game";
 
 
 export class Chat {
+
     responseColor = 0x333333;
     person: Person;
     htmlChat: HTMLChat;
@@ -47,6 +48,10 @@ export class Chat {
         }
         this.htmlChat.parentElement.style.display = "block";
         Chat.isInChat = true;
+    }
+
+    destroy() {
+        this.htmlChat.destroy();
     }
 }
 
