@@ -1,6 +1,7 @@
 import { Assets, FederatedPointerEvent, Graphics, Rectangle, Sprite } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { sound } from "@pixi/sound";
+import { Chat } from "./chat";
 
 export class Home {
     bgSprite: Sprite;
@@ -22,6 +23,7 @@ export class Home {
     }
 
     mouseMove(e: FederatedPointerEvent) {
+        if(Chat.isInChat) return;
         const doorDist = 500;
         const doorWidth = 250;
         const doorHeight = 700;

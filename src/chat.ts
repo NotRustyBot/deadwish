@@ -8,9 +8,10 @@ export class Chat {
     responseColor = 0x333333;
     person: Person;
     htmlChat: HTMLChat;
+    static isInChat = false;
 
     constructor(person: Person) {
-        this.htmlChat = new HTMLChat();
+        this.htmlChat = new HTMLChat(person);
         this.person = person;
     }
 
@@ -36,6 +37,7 @@ export class Chat {
 
     hideChat() {
         this.htmlChat.parentElement.style.display = "none";
+        Chat.isInChat = false;
     }
 
     showChat() {
@@ -44,6 +46,7 @@ export class Chat {
             person.chat.hideChat();
         }
         this.htmlChat.parentElement.style.display = "block";
+        Chat.isInChat = true;
     }
 }
 

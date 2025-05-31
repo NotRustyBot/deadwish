@@ -24,7 +24,7 @@ export function testing() {
 
         const antialergenPrepared = new Fact(FactType.misc, "Antialergen is prepared.");
 
-        const death = new Person("Death");
+        const death = new Person({ name: "Death", color: "#F13A3A", image: "img/death/0001.png" });
         death.knownFromStart = true;
         death.chat.addMessage("Hello", false);
         const initial = death.addCommunication({
@@ -76,7 +76,7 @@ export function testing() {
 
 
 
-        const bob = new Person("Bob");
+        const bob = new Person({ name: "Bob", color: "#39B3B3" });
 
         bob.knownByFact = fbob;
 
@@ -150,7 +150,7 @@ export function testing() {
         });
 
 
-        const clara = new Person("Clara");
+        const clara = new Person({ name: "Clara", color: "#39B3B3" });
         clara.knownByFact = fclara;
         clara.responses.set(fclara, {
             askAs: "Tell me about John's friends.",

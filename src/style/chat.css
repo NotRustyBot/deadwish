@@ -15,6 +15,10 @@
     width: 100vw;
     height: 100vh;
     pointer-events: none;
+    --player-color: #db2d81;
+    --player-color-semi: #db2d816d;
+    --player-bg: #902669;
+    --player-bg-muted:#531e40;
 }
 
 .chat-vignette {
@@ -38,7 +42,7 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 75vh;
+    width: 60vh;
     height: 100vh;
     background-size: contain;
     background-repeat: no-repeat;
@@ -52,7 +56,7 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 30vw;
+    width: 60vh;
     height: 20vh;
     z-index: 2;
     pointer-events: none;
@@ -111,14 +115,14 @@
     margin-bottom: 10px;
     width: fit-content;
     align-self: flex-end;
-    background-color: rgb(20, 20, 20);
-    outline: 2px solid rgba(224, 31, 57, 0.468);
+    background-color: var(--player-bg-muted);
+    outline: 2px solid var(--player-color);
     border-radius: 10px;
 }
 
 .chat-options div:hover {
-    background-color: rgb(49, 36, 38);
-    outline: 2px solid rgba(224, 31, 57, 0.889);
+    background-color: var(--player-bg);
+    outline: 2px solid var(--player-color);
     cursor: pointer;
 }
 
@@ -137,14 +141,16 @@
 
 .chat-message {
     padding: 1em 1.5em;
-    background-color: rgb(48, 48, 48);
+    background-color: var(--bg-color);
+    border: 2px solid var(--outline-color);
     border-radius: 10px;
     border-bottom-left-radius: 0px;
     --calc-height: 45px;
 }
 
 .chat-message.request {
-    background-color: #90263B;
+    background-color: #272727;
+    border-color: var(--player-color-semi);
     align-self: flex-end;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 0px;

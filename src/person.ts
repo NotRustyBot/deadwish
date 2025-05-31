@@ -13,6 +13,8 @@ export class Person {
     knownFromStart = false;
     responses = new Map<Fact, Communication>();
     chat: Chat;
+    color: string;
+    image: string;
 
     knownByFact?: Fact;
 
@@ -26,8 +28,10 @@ export class Person {
         return scene.getFirst<Notebook>(Notebook)!;
     }
 
-    constructor(name: string) {
-        this.name = name;
+    constructor(options:{name: string, color?: string, image?: string}) {
+        this.color = options.color ?? '#ffffff';
+        this.name = options.name;
+        this.image = options.image ?? 'img/ball.png';
         scene.add(Person, this);
         this.chat = new Chat(this);
         this.chat.hideChat();

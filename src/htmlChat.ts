@@ -1,5 +1,7 @@
 import type { ChatResponseOption } from "./chat";
+import { CustomColor } from "./color";
 import { game, UpdateOrder, type IUpdatable } from "./game";
+import type { Person } from "./person";
 import type { IDestroyable } from "./scene";
 
 export class HTMLChat implements IUpdatable, IDestroyable {
@@ -11,6 +13,8 @@ export class HTMLChat implements IUpdatable, IDestroyable {
     leftPortrait: HTMLElement;
     leftName: HTMLElement;
     optionsElement?: HTMLElement;
+    person: Person;
+    color: CustomColor;
     private _scrollBottom = 0;
     private _scrollTarget = 0;
     public get scrollTarget() {
@@ -29,10 +33,18 @@ export class HTMLChat implements IUpdatable, IDestroyable {
         this._scrollBottom = value;
         this.messagesWrapper.style.bottom = `${this._scrollBottom}px`;
     }
-    constructor() {
+    constructor(person: Person) {
+        this.person = person;
+        this.color = CustomColor.fromHTML(this.person.color);
         this.parentElement = customDiv(document.body, '', 'absolute');
-        this.leftName = customDiv(this.parentElement, 'Death', 'chat-name', 'left');
+        this.parentElement.style.setProperty("--color", this.person.color);
+        const hsl = this.color.toHSL();
+        this.parentElement.style.setProperty("--bg-color", CustomColor.fromHsl(hsl[0], hsl[1] * .4, hsl[2] * .2 + .1).toCSS());
+        this.parentElement.style.setProperty("--outline-color", CustomColor.fromHsl(hsl[0], hsl[1] * .7, hsl[2] * .6).toCSS());
+        this.leftName = customDiv(this.parentElement, this.person.name, 'chat-name', 'left');
+        this.leftName.style.color = this.person.color;
         this.leftPortrait = customDiv(this.parentElement, '', 'chat-portrait', 'left');
+        this.leftPortrait.style.backgroundImage = `url(${this.person.image})`;
         this.vignetteBg = customDiv(this.parentElement, '', 'chat-vignette');
         this.vignetteFg = customDiv(this.parentElement, '', 'chat-vignette', 'fg');
         this.wrapperElement = customDiv(this.parentElement, '', 'chat-wrapper');
