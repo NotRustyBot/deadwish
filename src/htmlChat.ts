@@ -4,6 +4,7 @@ import { game, UpdateOrder, type IUpdatable } from "./game";
 export class HTMLChat implements IUpdatable {
     wrapperElement: HTMLElement;
     messagesWrapper: HTMLElement;
+    optionsElement?: HTMLElement;
     private _scrollBottom = 0;
     private _scrollTarget = 0;
     public get scrollTarget() {
@@ -36,15 +37,19 @@ export class HTMLChat implements IUpdatable {
         if (request) msg.classList.add('request');
     }
     addOptions(options: Set<ChatResponseOption>) {
-        const container = this.appearDiv(this.messagesWrapper, "", "chat-options");
+        const container = this.optionsElement ?? this.appearDiv(this.messagesWrapper, "", "chat-options");
+        container.innerHTML = "";
         for (const o of options) {
             const msg = customDiv(container, o.message);
             msg.onclick = () => {
-                this.messagesWrapper.removeChild(container);
-                o.select();
+                //this.messagesWrapper.removeChild(container);
+                //o.select();
+                this.addOptions(options)
             };
         }
         container.style.setProperty("--calc-height", `${container.clientHeight}px`);
+        this.optionsElement = container;
+
     }
     appearDiv(parent: HTMLElement | null, text: string, ...classes: string[]) {
         const appearDiv = customDiv(parent, text, ...classes);
@@ -54,7 +59,7 @@ export class HTMLChat implements IUpdatable {
         setTimeout(() => {
             this.messagesHeight = this.messagesWrapper.offsetHeight;
         }, 600);
-        appearDiv.style.setProperty("--calc-height", `${appearDiv.clientHeight+5}px`);
+        appearDiv.style.setProperty("--calc-height", `${appearDiv.clientHeight + 5}px`);
         this.scrollTarget = 0;
         return appearDiv;
     }
@@ -67,7 +72,7 @@ export class HTMLChat implements IUpdatable {
     }
 }
 
-function customDiv(parent: HTMLElement | null, text: string, ...classes: string[]) {
+export function customDiv(parent: HTMLElement | null, text: string, ...classes: string[]) {
     const div = document.createElement('div');
     div.innerHTML = text;
     if (classes.length > 0)

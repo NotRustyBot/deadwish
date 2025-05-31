@@ -1,7 +1,10 @@
 import { Application, Assets } from "pixi.js";
 import { Game } from "./game";
 import bundle from "./bundle.json";
-import "./style.css";
+import "./style/style.css";
+import "./style/notebook.css";
+import "./style/chat.css";
+
 
 
 

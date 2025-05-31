@@ -1,5 +1,6 @@
 import { Container, HTMLText, Text } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
+import { customDiv } from "./htmlChat";
 
 export enum FactType {
     misc = 0,
@@ -52,6 +53,19 @@ export class Notebook {
     facts = new Set<Fact>();
     container = new Container();
 
+    notebookDiv: HTMLDivElement;
+    notebookContentsDiv: HTMLDivElement;
+    pageLeft: HTMLDivElement;
+    pageRight: HTMLDivElement;
+    private _open = false;
+    public get open() {
+        return this._open;
+    }
+    public set open(value) {
+        this.notebookDiv.classList.toggle('open', value);
+        this._open = value;
+    }
+
     add(fact: Fact) {
         this.facts.add(fact);
         this.render();
@@ -62,6 +76,13 @@ export class Notebook {
         scene.add(Notebook, this);
         game.addUpdatable(UpdateOrder.ui, this);
         game.app.stage.addChild(this.container);
+
+        this.notebookDiv = customDiv(document.body, '', 'notebook-wrapper');
+        this.notebookDiv.addEventListener("mouseenter", () => this.open = true);
+        this.notebookDiv.addEventListener("mouseleave", () => this.open = false);
+        this.notebookContentsDiv = customDiv(this.notebookDiv, '', 'notebook-contents');
+        this.pageLeft = customDiv(this.notebookContentsDiv, '', 'notebook-page');
+        this.pageRight = customDiv(this.notebookContentsDiv, '', 'notebook-page');
     }
 
     update() {
