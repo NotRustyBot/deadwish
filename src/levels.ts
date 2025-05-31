@@ -1,4 +1,6 @@
+import { BagOStuff, CookingPot, Ingredient } from "./cooking";
 import { game } from "./game";
+import { Inventory } from "./inventory";
 import { Fact, FactType, Notebook } from "./notebook";
 import { Person } from "./person";
 import { Scene } from "./scene";
@@ -21,6 +23,11 @@ export function testing() {
         notebook.facts.add(johnsCat);
         notebook.facts.add(cats);
         notebook.render();
+
+
+        const pot = new CookingPot();
+        const bag = new BagOStuff();
+        const inventory = new Inventory();
 
         bob.responses.set(fbob, {
             askAs: "I have a few questions about John. You were his friend, right?",
