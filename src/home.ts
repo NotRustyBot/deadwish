@@ -1,22 +1,32 @@
-import { Assets, FederatedPointerEvent, Rectangle, Sprite } from "pixi.js";
+import { Assets, FederatedPointerEvent, Graphics, Rectangle, Sprite } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 
 export class Home {
     bgSprite: Sprite;
+    graphics: Graphics;
     constructor() {
         this.bgSprite = new Sprite(Assets.get("home-0001"));
         this.bgSprite.anchor.set(0.5);
         game.app.stage.addChild(this.bgSprite);
 
-        this.bgSprite.addEventListener("pointermove", this.mouseMove, true);
+        this.bgSprite.addEventListener("pointermove", (e) => { this.mouseMove(e) }, true);
+        this.bgSprite.interactive = true;
+        this.graphics = new Graphics();
+
         this.setBg();
         scene.add(Home, this);
         game.addUpdatable(UpdateOrder.ui, this);
+        this.bgSprite.addChild(this.graphics);
     }
 
-    mouseMove() {
+    mouseMove(e: FederatedPointerEvent) {
         const crystalBallRect = new Rectangle(0.3 * game.app.screen.width, 0.2 * game.app.screen.height, 0.1 * game.app.screen.width, 0.6 * game.app.screen.height);
-        if (crystalBallRect.contains(game.input.mouse.position.x, game.input.mouse.position.y)) {
+        const localPos = e.getLocalPosition(this.bgSprite);
+
+        this.graphics.clear();
+        this.graphics.rect(crystalBallRect.x, crystalBallRect.y, crystalBallRect.width, crystalBallRect.height);
+        this.graphics.fill(0xffaa00);
+        if (crystalBallRect.contains(localPos.x, localPos.y)) {
             this.setBg(2);
         }
         else {
@@ -30,7 +40,7 @@ export class Home {
 
     update() {
         //fit height
-        this.mouseMove()
+
         const ratio = game.app.screen.height / this.bgSprite.texture.height;
         this.bgSprite.position.set(game.app.screen.width / 2, game.app.screen.height / 2);
         this.bgSprite.scale.set(ratio);
