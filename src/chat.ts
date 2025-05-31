@@ -45,14 +45,15 @@ export class Chat {
 
     options = new Set<ChatResponseOption>();
     showOptions(knownFacts: Set<Fact>) {
-        const options = this.person.filterPossibleOptions(knownFacts);
+        const factOptions = this.person.filterPossibleOptions(knownFacts);
         let y = 0;
-        for (const option of options) {
-            const options = new ChatResponseOption(this, option, this.person.responses.get(option)!.askAs);
-            options.container.y = y;
-            y += options.container.height + 10;
-            this.options.add(options);
+        for (const factOption of factOptions) {
+            const chatOption = new ChatResponseOption(this, factOption, this.person.responses.get(factOption)!.askAs);
+            chatOption.container.y = y;
+            y += chatOption.container.height + 10;
+            this.options.add(chatOption);
         }
+        this.htmlChat.addOptions(this.options);
     }
 
     hideOptions() {
@@ -66,7 +67,7 @@ export class Chat {
 
 function processText(input: string): string {
     const regex = /<(\d+)>(.*?)<\/>/g;
-    
+
     return input.replace(regex, (match, id, content) => {
         const style = factStylelookup(parseInt(id));
         return `<span style="${style}" class="highlight">${content}</span>`;
@@ -74,9 +75,15 @@ function processText(input: string): string {
 }
 
 
-class ChatResponseOption {
+export class ChatResponseOption {
+    chat: Chat
+    fact: Fact;
     container: Container;
+    message: string
     constructor(chat: Chat, fact: Fact, message: string) {
+        this.chat = chat;
+        this.fact = fact;
+        this.message = message;
         this.container = new Container();
 
 
@@ -112,8 +119,11 @@ class ChatResponseOption {
 
         this.container.interactive = true;
         this.container.on("pointertap", () => {
-            chat.person.ask(fact);
+            this.select();
         })
+    }
+    select() {
+        this.chat.person.ask(this.fact);
     }
 
     destroy() {

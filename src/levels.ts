@@ -48,7 +48,7 @@ export function testing() {
         bob.responses.set(cats, {
             askAs: "Do you like cats?",
             response: {
-                text: [`I'm <${bobHatesCat.id}>allergic</>`],
+                text: [`I'm <${bobHatesCat.id}>allergic</>`, `<img src="img/death2.png" />`],
                 facts: [bobHatesCat]
             }
         });

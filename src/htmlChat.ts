@@ -1,3 +1,4 @@
+import type { ChatResponseOption } from "./chat";
 import { game, UpdateOrder, type IUpdatable } from "./game";
 
 export class HTMLChat implements IUpdatable {
@@ -31,19 +32,34 @@ export class HTMLChat implements IUpdatable {
         game.addUpdatable(UpdateOrder.ui, this);
     }
     addMessage(text: string, request: boolean) {
-        const msg = customDiv(null, text, 'chat-message');
-        //msg.style.setProperty("--calc-height", `${msg.clientHeight+45}px`);
-        requestAnimationFrame(() => {
-            msg.classList.add('appear');
-        });
-        this.messagesWrapper.appendChild(msg);
-        msg.style.setProperty("--calc-height", `${msg.clientHeight}px`);
+        const msg = this.appearDiv(this.messagesWrapper, text, 'chat-message');
         if (request) msg.classList.add('request');
+    }
+    addOptions(options: Set<ChatResponseOption>) {
+        const container = this.appearDiv(this.messagesWrapper, "", "chat-options");
+        for (const o of options) {
+            const msg = customDiv(container, o.message);
+            msg.onclick = () => {
+                this.messagesWrapper.removeChild(container);
+                o.select();
+            };
+        }
+        container.style.setProperty("--calc-height", `${container.clientHeight}px`);
+    }
+    appearDiv(parent: HTMLElement | null, text: string, ...classes: string[]) {
+        const appearDiv = customDiv(parent, text, ...classes);
+        requestAnimationFrame(() => {
+            appearDiv.classList.add('appear');
+        });
+        setTimeout(() => {
+            this.messagesHeight = this.messagesWrapper.offsetHeight;
+        }, 600);
+        appearDiv.style.setProperty("--calc-height", `${appearDiv.clientHeight+5}px`);
         this.scrollTarget = 0;
-        this.messagesHeight = this.messagesWrapper.offsetHeight;
+        return appearDiv;
     }
     update() {
-        const realTarget = Math.min(Math.max(this.scrollTarget, -this.messagesHeight + this.wrapperHeight), 0);
+        const realTarget = Math.min(Math.max(this.scrollTarget, -this.messagesHeight + this.wrapperHeight - 100), 0);
         this.scrollTarget += (realTarget - this.scrollTarget) * 50 * game.dt;
 
         if (Math.abs(this.scrollTarget - this.scroll) < 0.1) return;
@@ -60,3 +76,4 @@ function customDiv(parent: HTMLElement | null, text: string, ...classes: string[
         parent.appendChild(div);
     return div;
 }
+

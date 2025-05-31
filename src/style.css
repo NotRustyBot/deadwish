@@ -16,7 +16,7 @@ body {
 
 .chat-wrapper {
     width: 30vw;
-    height: 30vh;
+    height: 50vh;
     overflow-y: hidden;
     overflow-x: hidden;
     color: white;
@@ -25,7 +25,8 @@ body {
     bottom: 0;
     left: 20%;
     user-select: none;
-    transform: translateX(-50%)
+    transform: translateX(-50%);
+    background-color: rgb(22, 22, 22);
 }
 
 .chat-content {
@@ -36,18 +37,50 @@ body {
     bottom: 0;
 }
 
-.chat-message {
+.chat-content > div {
     padding: 10px;
-    background-color: rgb(48, 48, 48);
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     width: fit-content;
-    align-self: flex-start;
-    border-radius: 10px;
-    border-bottom-left-radius: 0px;
     max-width: 80%;
-    --calc-height: 45px;
     margin-top: calc(-1*var(--calc-height));
     transform: translateY(var(--calc-height));
+}
+
+.chat-options div {
+    padding: 10px;
+    margin-bottom: 10px;
+    width: fit-content;
+    align-self: flex-end;
+    background-color: rgb(20, 20, 20);
+    max-width: 80%;
+    outline: 2px solid rgba(255, 255, 255, 0.249);
+    border-radius: 10px;
+}
+
+.chat-options div:hover{
+    background-color: rgb(53, 53, 53);
+    outline: 2px solid rgba(255, 255, 255, 0.831);
+    cursor: pointer;
+}
+
+.chat-content > div.appear {
+    transition: margin-top .5s, transform .5s;
+    margin-top: 0px;
+    transform: translateY(0px);
+}
+
+.chat-options {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end;
+}
+
+.chat-message {
+    background-color: rgb(48, 48, 48);
+    border-radius: 10px;
+    border-bottom-left-radius: 0px;
+    --calc-height: 45px;
 }
 
 .chat-message.request {
@@ -61,10 +94,8 @@ body {
     font-weight: bold;
 }
 
-.chat-message.appear {
-    transition: margin-top .5s, transform .5s;
-    margin-top: 0px;
-    transform: translateY(0px);
+.chat-content img {
+    max-width: 100%;
 }
 
 @keyframes chat-appear {
