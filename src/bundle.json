@@ -1,5 +1,7 @@
 {
+  "ball": "./ball.png",
   "cannon": "./cannon.png",
+  "death2": "./death2.png",
   "light": "./light.png",
   "rect": "./rect.png"
 }

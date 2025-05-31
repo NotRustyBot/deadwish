@@ -1,4 +1,5 @@
 import { BagOStuff, CookingPot, Ingredient } from "./cooking";
+import { CrystalBall } from "./crystalBall";
 import { game } from "./game";
 import { Inventory } from "./inventory";
 import { Fact, FactType, Notebook } from "./notebook";
@@ -8,6 +9,7 @@ import { Scene } from "./scene";
 export function testing() {
     game.scene = Scene.define(scene => {
         const bob = new Person("Bob");
+        bob.knownFromStart = true;
 
         const fbob = new Fact(FactType.person, "John had a friend named Bob.");
         const problemCat = new Fact(FactType.problem, "Johns cat needs a new home.");
@@ -28,6 +30,7 @@ export function testing() {
         const pot = new CookingPot();
         const bag = new BagOStuff();
         const inventory = new Inventory();
+        const ball = new CrystalBall();
 
         bob.responses.set(fbob, {
             askAs: "I have a few questions about John. You were his friend, right?",
@@ -48,7 +51,7 @@ export function testing() {
         bob.responses.set(cats, {
             askAs: "Do you like cats?",
             response: {
-                text: [`I'm <${bobHatesCat.id}>allergic</>`, `<img src="img/death2.png" />`],
+                text: [`I'm <${bobHatesCat.id}>allergic</>`],
                 facts: [bobHatesCat]
             }
         });
@@ -63,8 +66,20 @@ export function testing() {
 
         scene.add(Person, bob);
 
+        const clara = new Person("Clara");
+        clara.knownByFact = fclara;
+        scene.add(Person, clara);
+        clara.responses.set(fclara, {
+            askAs: "Tell me about John's friends.",
+            response: {
+                text: ["There was a person named Bob."],
+                facts: [fbob]
+            }
+        });
+        
+        clara.showOptions();
         bob.showOptions();
-
+        ball.render();
     });
 
     game.scene.setup();

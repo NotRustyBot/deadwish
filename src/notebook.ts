@@ -1,6 +1,7 @@
 import { Container, HTMLText, Text } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { customDiv } from "./htmlChat";
+import { CrystalBall } from "./crystalBall";
 
 export enum FactType {
     misc = 0,
@@ -69,6 +70,9 @@ export class Notebook {
     add(fact: Fact) {
         this.facts.add(fact);
         this.render();
+
+        const crystalBall = scene.getFirst<CrystalBall>(CrystalBall)!;
+        if (crystalBall) crystalBall.render();
     }
 
 
@@ -129,10 +133,10 @@ class RenderFact {
                 fontSize: 24,
                 fill: 0xffffff,
                 wordWrap: true,
-                wordWrapWidth: 400, 
+                wordWrapWidth: 400,
             }
         });
-        if(fact.resolved) text.text = `<s>${fact.text}</s>`
+        if (fact.resolved) text.text = `<s>${fact.text}</s>`
         this.container.addChild(text);
         notebook.container.addChild(this.container);
     }
