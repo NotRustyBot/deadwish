@@ -43,6 +43,7 @@ export class HTMLChat implements IUpdatable {
             const msg = customDiv(container, o.message);
             msg.onclick = () => {
                 this.messagesWrapper.removeChild(container);
+                this.optionsElement = undefined;
                 o.select();
                 //this.addOptions(options)
             };
