@@ -21,6 +21,7 @@ export function factStylelookup(id: number): string {
 
 export function styleLookup(type: FactType): string {
     const styles = {
+        0: 'color: "";',
         1: 'color: #ffaa00;',
         2: 'color: #ff0000;',
         3: 'color: #99ffff;',
@@ -30,6 +31,18 @@ export function styleLookup(type: FactType): string {
     return styles[type as keyof typeof styles] ?? '';
 }
 
+export function titleLookup(type: FactType): string {
+    const personName = "John";
+    const styles = {
+        0: 'Notes',
+        1: `General information`,
+        2: `${personName}'s complaints`,
+        3: `${personName}'s personal details`,
+        4: `Locations`,
+        5: `Items`,
+    };
+    return styles[type as keyof typeof styles] ?? '';
+}
 
 export class Fact {
     static id = 0;
@@ -56,20 +69,23 @@ export class Notebook {
 
     notebookDiv: HTMLDivElement;
     notebookContentsDiv: HTMLDivElement;
-    pageLeft: HTMLDivElement;
-    pageRight: HTMLDivElement;
+    pageLeftWrapper: HTMLDivElement;
+    pageRightWrapper: HTMLDivElement;
+    pages: HTMLDivElement[];
+    pageIndex = 0;
     private _open = false;
     public get open() {
         return this._open;
     }
     public set open(value) {
         this.notebookDiv.classList.toggle('open', value);
+        if(this._open != value) this.generateBook();
         this._open = value;
     }
 
     add(fact: Fact) {
         this.facts.add(fact);
-        this.render();
+        this.generateBook();
 
         const crystalBall = scene.getFirst<CrystalBall>(CrystalBall)!;
         if (crystalBall) crystalBall.render();
@@ -81,41 +97,85 @@ export class Notebook {
         game.addUpdatable(UpdateOrder.ui, this);
         game.app.stage.addChild(this.container);
 
+        this.pages = [];
+
         this.notebookDiv = customDiv(document.body, '', 'notebook-wrapper');
         this.notebookDiv.addEventListener("mouseenter", () => this.open = true);
         this.notebookDiv.addEventListener("mouseleave", () => this.open = false);
         this.notebookContentsDiv = customDiv(this.notebookDiv, '', 'notebook-contents');
-        this.pageLeft = customDiv(this.notebookContentsDiv, '', 'notebook-page');
-        this.pageRight = customDiv(this.notebookContentsDiv, '', 'notebook-page');
+        this.pageLeftWrapper = customDiv(this.notebookContentsDiv, '', 'notebook-page-wrapper');
+        this.pageLeftWrapper.addEventListener("click", () => this.movePage(-2));
+        this.pageRightWrapper = customDiv(this.notebookContentsDiv, '', 'notebook-page-wrapper');
+        this.pageRightWrapper.addEventListener("click", () => this.movePage(2));
+        this.generateBook();
+        this.render();
+    }
+
+    generateBook() {
+        for (const f of this.pages) {
+            f.remove();
+        }
+        this.pages = [];
+
+        let y = 0;
+
+        const sections: string[][] = new Array(6);
+        for (let i = 0; i < sections.length; i++) {
+            sections[i] = new Array();
+        }
+        for (const fact of this.facts) {
+            //sections[fact.type].push(`<span class="highlight" style="${styleLookup(fact.type)}">${fact.text}</span>`);
+            sections[fact.type].push(`<span">${fact.text}</span>`);
+        }
+        for (let i = 0; i < sections.length; i++) {
+            const section = sections[i];
+            const title = titleLookup(i as FactType);
+            const lines = Array.from(section);
+            while (lines.length > 0) {
+                console.log(i+": "+lines.length)
+                const page = this.addPage({ title, list: lines.splice(0, 10) });
+            }
+        }
+        this.render();
+    }
+
+    generatePage(options: { title: string, text?: string, list?: string[] }) {
+        const page = customDiv(null, '', 'notebook-page');
+        page.innerHTML = `<h1>${options.title}</h1>`;
+        if (options.text) page.innerHTML += `<p>${options.text}</p>`;
+        if (options.list) page.innerHTML += `<ul>${options.list.map(l => `<li>${l}</li>`).join('')}</ul>`;
+        return page;
+    }
+
+    addPage(options: { title: string, text?: string, list?: string[] }) {
+        const page = this.generatePage(options);
+        this.pages.push(page);
+        return page;
+    }
+
+    render() {
+        const indexLeft = 2 * Math.round(this.pageIndex / 2);
+        const indexRight = indexLeft + 1;
+        this.pageLeftWrapper.innerHTML = this.pages[indexLeft]?.outerHTML ?? '';
+        this.pageRightWrapper.innerHTML = this.pages[indexRight]?.outerHTML ?? '';
+    }
+
+    movePage(offset: number) {
+        this.pageIndex += offset;
+        this.pageIndex = Math.min(Math.max(this.pageIndex, 0), this.pages.length - 1);
+        this.render();
+    }
+
+    moveToPage(index: number) {
+        this.pageIndex = index;
+        this.render();
     }
 
     update() {
         this.container.x = game.app.screen.width - 500;
     }
 
-    rendered = new Set<RenderFact>();
-    render() {
-        for (const f of this.rendered) {
-            f.destroy();
-        }
-        this.rendered.clear();
-
-        let y = 0;
-        for (const fact of this.facts) {
-            if (fact.type === FactType.misc) continue;
-            const renderFact = new RenderFact(this, fact);
-            y += renderFact.container.height + 20
-            renderFact.container.y = y;
-            this.rendered.add(renderFact);
-        }
-    }
-
     destroy() {
-        for (const f of this.rendered) {
-            f.destroy();
-        }
-        this.rendered.clear();
-
         scene.remove(Notebook, this);
         game.removeUpdatable(UpdateOrder.ui, this);
     }

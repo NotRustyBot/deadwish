@@ -1,4 +1,13 @@
+@font-face {
+    font-family: 'Caveat';
+    src: url('./Caveat-VariableFont_wght.ttf');
+}
+
 .notebook-wrapper {
+    font-family: 'Caveat';
+    font-size: 24px;
+    color: black;
+    user-select: none;
     position: absolute;
     top: 0;
     right: 0;
@@ -10,7 +19,7 @@
     background-position: center;
     background-repeat: no-repeat;
     overflow: hidden;
-    padding: 6% 7% 8% 7%;
+    padding: 7% 7% 8% 7%;
     box-sizing: border-box;
 }
 
@@ -25,17 +34,31 @@
 .notebook-contents {
     width: 100%;
     height: 100%;
-    background-color: tomato;
     display: flex;
 }
 
-.notebook-page {
+.notebook-page-wrapper {
     width: 50%;
     height: 100%;
-    border: 3px solid #000000;
+}
+
+.notebook-page {
+    width: 100%;
+    height: 100%;
+}
+
+.notebook-page.hidden {
+    display: none;
 }
 
 .notebook-page h1 {
     width: 100%;
     text-align: center;
+    font-size: 1em;
+    margin:0;
+    padding: 0;
+}
+
+.notebook-page ul {
+    list-style-type: "- ";
 }
