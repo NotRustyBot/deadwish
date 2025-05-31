@@ -6,10 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "bundle": "npx tsx bundler.ts",
     "preview": "vite preview"
   },
   "devDependencies": {
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "pixi.js": "^8.9.2"
   }
 }

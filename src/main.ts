@@ -1,24 +1,27 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import { Application, Assets } from "pixi.js";
+import { Game } from "./game";
+import bundle from "./bundle.json";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+
+(async () => {
+  const app = new Application();
+  await app.init({ background: "#000", resizeTo: window, antialias: true });
+  document.getElementById("pixi-container")!.appendChild(app.canvas);
+
+  for (const key in bundle) {
+    Assets.add({ alias: key, src: "img/" + bundle[key as keyof typeof bundle] });
+  }
+
+  await Assets.load(Object.keys(bundle));
+
+  /*
+  const rubik = new FontFace("Rubik", "url('./Rubik-Regular.ttf')");
+  await rubik.load();
+  document.fonts.add(rubik);
+  */
+
+  const game = new Game(app);
+  game.init();
+
+})();
