@@ -1,4 +1,41 @@
+@font-face {
+    font-family: "Roboto Slab";
+    src: url("./RobotoSlab-VariableFont_wght.ttf");
+}
+
+.chat-vignette {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background:linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+    z-index: 0;
+    pointer-events: none;
+}
+
+.chat-vignette.fg {
+    background:linear-gradient(rgba(0, 0, 0, 0), rgb(0, 0, 0));
+    z-index: 1;
+    height: 50vh;
+}
+
+.chat-portrait {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50vw;
+    height: 100vh;
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url("img/death/0001.png");
+    pointer-events: none;
+}
+
 .chat-wrapper {
+    font-family: "Roboto Slab";
     width: 30vw;
     height: 50vh;
     overflow-y: hidden;
@@ -10,7 +47,7 @@
     left: 20%;
     user-select: none;
     transform: translateX(-50%);
-    background-color: rgb(22, 22, 22);
+    z-index: 2;
 }
 
 .chat-content {

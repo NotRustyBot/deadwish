@@ -2,8 +2,11 @@ import type { ChatResponseOption } from "./chat";
 import { game, UpdateOrder, type IUpdatable } from "./game";
 
 export class HTMLChat implements IUpdatable {
+    vignetteBg: HTMLElement;
+    vignetteFg: HTMLElement;
     wrapperElement: HTMLElement;
     messagesWrapper: HTMLElement;
+    leftPortrait: HTMLElement;
     optionsElement?: HTMLElement;
     private _scrollBottom = 0;
     private _scrollTarget = 0;
@@ -24,6 +27,9 @@ export class HTMLChat implements IUpdatable {
         this.messagesWrapper.style.bottom = `${this._scrollBottom}px`;
     }
     constructor() {
+        this.leftPortrait = customDiv(document.body, '', 'chat-portrait', 'left');
+        this.vignetteBg = customDiv(document.body, '', 'chat-vignette');
+        this.vignetteFg = customDiv(document.body, '', 'chat-vignette', 'fg');
         this.wrapperElement = customDiv(document.body, '', 'chat-wrapper');
         this.messagesWrapper = customDiv(this.wrapperElement, '', 'chat-content');
         this.wrapperElement.addEventListener("wheel", (e) => {
