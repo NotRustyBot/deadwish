@@ -3,6 +3,8 @@ import { game, scene, UpdateOrder } from "./game";
 import { customDiv } from "./htmlChat";
 import { CrystalBall } from "./crystalBall";
 import { sound } from "@pixi/sound";
+import { recipes } from "./cooking";
+import type { ItemType } from "./inventory";
 
 export enum FactType {
     misc = 0,
@@ -145,6 +147,21 @@ export class Notebook {
                 const page = this.addPage({ title, list: lines.splice(0, 10) });
             }
         }
+
+        for (const name in recipes) {
+            const recipe = recipes[name as ItemType];
+            const smokeDesc = [
+                "white",
+                "blue",
+                "green",
+                "orange",
+                "dark"
+            ]
+            const lines = recipe.map(r => `add ${r.ingredient} when the smoke is ${smokeDesc[r.temperature]}`)
+            const page = this.addPage({ title: `${name} recipe`, list: lines });
+
+        }
+
         this.render();
     }
 
