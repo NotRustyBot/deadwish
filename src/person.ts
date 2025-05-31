@@ -77,7 +77,6 @@ export class Person {
     }
 
     showChat() {
-        this.chat.clearOptions();
         this.chat.showChat();
         this.showOptions();
     }
