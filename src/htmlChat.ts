@@ -32,7 +32,7 @@ export class HTMLChat implements IUpdatable {
     }
     addMessage(text: string, request: boolean) {
         const msg = customDiv(null, text, 'chat-message');
-        msg.style.setProperty("--calc-height", `${msg.clientHeight+45}px`);
+        //msg.style.setProperty("--calc-height", `${msg.clientHeight+45}px`);
         requestAnimationFrame(() => {
             msg.classList.add('appear');
         });
