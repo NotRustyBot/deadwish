@@ -1,7 +1,7 @@
 import type { ChatResponseOption } from "./chat";
 import { CustomColor } from "./color";
 import { game, UpdateOrder, type IUpdatable } from "./game";
-import type { Person } from "./person";
+import { Emotion, type Person } from "./person";
 import type { IDestroyable } from "./scene";
 
 export class HTMLChat implements IUpdatable, IDestroyable {
@@ -44,8 +44,8 @@ export class HTMLChat implements IUpdatable, IDestroyable {
         this.leftName = customDiv(this.parentElement, this.person.name, 'chat-name', 'left');
         this.leftName.style.color = this.person.color;
         this.leftPortrait = customDiv(this.parentElement, '', 'chat-portrait', 'left');
-        this.leftPortrait.style.backgroundImage = `url(${this.person.image})`;
-        this.vignetteBg = customDiv(this.parentElement, '', 'chat-vignette');
+        this.leftPortrait.style.backgroundImage = `url(${this.person.emotionImages[Emotion.neutral]})`;
+        this.vignetteBg = customDiv(this.parentElement, '', 'chat-vignette', "bg");
         this.vignetteFg = customDiv(this.parentElement, '', 'chat-vignette', 'fg');
         this.wrapperElement = customDiv(this.parentElement, '', 'chat-wrapper');
         this.messagesWrapper = customDiv(this.wrapperElement, '', 'chat-content');
@@ -56,7 +56,8 @@ export class HTMLChat implements IUpdatable, IDestroyable {
         game.addUpdatable(UpdateOrder.ui, this);
         game.scene.add(HTMLChat, this);
     }
-    addMessage(text: string, request: boolean) {
+    addMessage(text: string, request: boolean, emotion?: Emotion) {
+        if (emotion !== undefined) this.leftPortrait.style.backgroundImage = `url(${this.person.emotionImages[emotion] ?? this.person.emotionImages[Emotion.neutral]})`;
         const msg = this.appearDiv(this.messagesWrapper, text, 'chat-message');
         if (request) msg.classList.add('request');
     }

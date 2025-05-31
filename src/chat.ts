@@ -1,4 +1,4 @@
-import { Person } from "./person";
+import { Emotion, Person } from "./person";
 import { factStylelookup, type Fact } from "./notebook";
 import { HTMLChat } from "./htmlChat";
 import { scene } from "./game";
@@ -16,9 +16,9 @@ export class Chat {
         this.person = person;
     }
 
-    addMessage(message: string, request: boolean) {
+    addMessage(message: string, request: boolean, emotion?: Emotion) {
         message = processText(message);
-        this.htmlChat.addMessage(message, request);
+        this.htmlChat.addMessage(message, request, emotion);
     }
 
     options = new Set<ChatResponseOption>();

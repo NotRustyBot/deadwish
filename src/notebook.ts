@@ -2,7 +2,7 @@ import { Container, HTMLText, Text } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { customDiv } from "./htmlChat";
 import { CrystalBall } from "./crystalBall";
-import { sound } from "@pixi/sound";
+import { filters, sound } from "@pixi/sound";
 import { recipes } from "./cooking";
 import type { ItemType } from "./inventory";
 
@@ -91,6 +91,7 @@ export class Notebook {
     }
 
     add(fact: Fact) {
+        if (!this.facts.has(fact)) sound.play("sfx-write_fact", { singleInstance: true, volume: .2, filters: [new filters.StereoFilter(.5)] });
         this.facts.add(fact);
         this.generateBook();
 
@@ -144,7 +145,7 @@ export class Notebook {
             const title = titleLookup(i as FactType);
             const lines = Array.from(section);
             while (lines.length > 0) {
-                const page = this.addPage({ title, list: lines.splice(0, 10) });
+                const page = this.addPage({ title, list: lines.splice(0, 4) });
             }
         }
 

@@ -8,13 +8,22 @@ export type Communication = {
     response: PersonResponse;
 }
 
+export enum Emotion {
+    neutral = 0,
+    confused = 1,
+    happy = 2,
+    sad = 3,
+}
+
+export type EmotionImages = { [key in Emotion]?: string };
+
 export class Person {
     name: string;
     knownFromStart = false;
     responses = new Map<Fact, Communication>();
     chat: Chat;
     color: string;
-    image: string;
+    emotionImages: EmotionImages = {};
 
     knownByFact?: Fact;
 
@@ -28,10 +37,11 @@ export class Person {
         return scene.getFirst<Notebook>(Notebook)!;
     }
 
-    constructor(options: { name: string, color?: string, image?: string }) {
+    constructor(options: { name: string, color?: string, image?: string, emotionImages?: EmotionImages }) {
         this.color = options.color ?? '#ffffff';
         this.name = options.name;
-        this.image = options.image ?? 'img/ball.png';
+        const image = options.image ?? 'img/ball.png';
+        this.emotionImages = options.emotionImages ?? { 0: image };
         scene.add(Person, this);
         this.chat = new Chat(this);
         this.chat.hideChat();
@@ -55,17 +65,18 @@ export class Person {
         this.askedFacts.add(fact);
         const convo = this.responses.get(fact)!
         this.chat.addMessage(convo.askAs, true);
-        await TimeManager.wait(1000);
         for await (const text of convo.response.text) {
-            this.chat.addMessage(text, false);
-            await TimeManager.wait(1000);
+            await TimeManager.wait(100);
+            this.chat.addMessage(text, false, convo.response.emotion ?? Emotion.neutral);
         }
-
-        convo.response.event?.();
-
         for (const fact of convo.response.facts ?? []) {
             this.notebook.add(fact);
         }
+        await TimeManager.wait(100);
+
+        convo.response.event?.();
+
+
 
         this.showOptions();
         this.busy = false;
@@ -103,10 +114,21 @@ export class Person {
         scene.remove(Person, this);
         this.chat.destroy();
     }
+
+    static newDeath() {
+        return new Person({
+            name: "Death", color: "#F13A3A", emotionImages: {
+                [Emotion.neutral]: "img/death/0001.png",
+                [Emotion.confused]: "img/death/0002.png",
+                [Emotion.happy]: "img/death/0003.png",
+            }
+        });
+    }
 }
 
 export type PersonResponse = {
     text: string[];
     facts?: Fact[];
+    emotion?: Emotion;
     event?: () => void
 }

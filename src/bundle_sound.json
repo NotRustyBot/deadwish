@@ -20,6 +20,10 @@
     {
       "alias": "sfx-page_turn",
       "src": "./audio/sfx/page_turn.mp3"
+    },
+    {
+      "alias": "sfx-write_fact",
+      "src": "./audio/sfx/write_fact.mp3"
     }
   ]
 }

@@ -4,7 +4,7 @@ import { game } from "./game";
 import { Home } from "./home";
 import { Inventory, ItemType } from "./inventory";
 import { Fact, FactType, Notebook } from "./notebook";
-import { Person } from "./person";
+import { Emotion, Person } from "./person";
 import { Scene } from "./scene";
 import { TimeManager } from "./timeManager";
 
@@ -14,18 +14,19 @@ export function testing() {
         const fbob = new Fact(FactType.person, "John had a friend named Bob");
         const problemCat = new Fact(FactType.problem, "Johns cat needs a new home");
         const johnsCat = new Fact(FactType.misc, "");
-        const bobAlergic = new Fact(FactType.general, "Bob is allergic to cats");
+        const bobAllergic = new Fact(FactType.general, "Bob is allergic to cats");
         const fclara = new Fact(FactType.person, "John had a friend named Clara");
         const cats = new Fact(FactType.misc, "");
         const clarasCat = new Fact(FactType.general, "Clara reluctantly offered to take care of the cat");
         const claraHatesCats = new Fact(FactType.general, "Clara doesn't like cats that much");
         const bobWantsJohnsCat = new Fact(FactType.general, "Bob would take care of the cat if he could");
+        const antiAllergenPossible = new Fact(FactType.general, "You could brew an antiallergen in the alchemy lab.");
 
 
 
-        const antialergenPrepared = new Fact(FactType.misc, "Antialergen is prepared.");
+        const antialergenPrepared = new Fact(FactType.misc, "Antiallergen is prepared.");
 
-        const death = new Person({ name: "Death", color: "#F13A3A", image: "img/death/0001.png" });
+        const death = Person.newDeath();
         death.knownFromStart = true;
         death.chat.addMessage("Hello", false);
         const initial = death.addCommunication({
@@ -38,12 +39,14 @@ export function testing() {
                         askAs: "What does he want?",
                         response: {
                             text: [`His <${problemCat.id}>cat needs a new home</>.`],
+                            emotion: Emotion.confused,
                             facts: [problemCat, johnsCat,
                                 death.addCommunication({
                                     askAs: "Who will take care of it?",
                                     response: {
                                         text: [`Ask <${fbob.id}>Bob</>. His friend.`],
-                                        facts: [fbob]
+                                        facts: [fbob],
+
                                     }
                                 })
                             ]
@@ -53,10 +56,20 @@ export function testing() {
             }
         });
 
+        death.responses.set(bobWantsJohnsCat, {
+            askAs: "Hey, Bob would take care of the cat, but he seems to be allergic to cats.",
+            response: {
+                text: ["The poor guy! Maybe you could help him somehow."],
+                emotion: Emotion.confused,
+                facts: [antiAllergenPossible]
+            }
+        });
+
         death.responses.set(antialergenPrepared, {
             askAs: "Give Bob the antialergen. The cat should live with him.",
             response: {
-                text: ["Okay."],
+                text: ["I'll do that! Thanks man!"],
+                emotion: Emotion.happy,
                 event: () => {
                     death.customLogic = () => { };
                     death.followUp.clear();
@@ -101,17 +114,17 @@ export function testing() {
         bob.responses.set(fbob, {
             askAs: "I have a few questions about John. You were his friend, right?",
             response: {
-                text: ["Yes", "Sure", "What do you want to know?"],
+                text: ["Oh...", "I miss John.", "What do you want to know?"],
                 facts: [
                     bob.addCommunication({
                         askAs: "Tell me about John's friends.",
                         response: {
-                            text: [`There was a person named <${fclara.id}>Clara</>.`],
+                            text: [`There was this woman, <${fclara.id}>Clara</>. I think they were dating.`],
                             facts: [fclara,
                                 bob.addCommunication({
                                     askAs: "Does Clara like cats?",
                                     response: {
-                                        text: [`<${claraHatesCats.id}>No</>`, "not really"],
+                                        text: [`<${claraHatesCats.id}>No</>`, "Not really."],
                                         facts: [claraHatesCats]
                                     }
                                 })]
@@ -137,8 +150,8 @@ export function testing() {
         bob.responses.set(johnsCat, {
             askAs: "Do you know about John's cat?",
             response: {
-                text: [`Not much, Im <${bobAlergic.id}>allergic</>`, "But John liked it a lot.", `<${bobWantsJohnsCat.id}>I wish I could take care of it.</>`],
-                facts: [bobAlergic, bobWantsJohnsCat],
+                text: [`Not much, I'm <${bobAllergic.id}>allergic</>.`, "But John liked it a lot.", `<${bobWantsJohnsCat.id}>I wish I could take care of it.</>`],
+                facts: [bobAllergic, bobWantsJohnsCat],
                 event: onAntialergenMade
             }
         });
@@ -146,8 +159,8 @@ export function testing() {
         bob.responses.set(cats, {
             askAs: "Do you like cats?",
             response: {
-                text: [`I'm <${bobAlergic.id}>allergic</>`],
-                facts: [bobAlergic],
+                text: [`I'm <${bobAllergic.id}>allergic</> so I never had one.`, "They're really cute though."],
+                facts: [bobAllergic],
                 event: onAntialergenMade
             }
         });
@@ -158,7 +171,7 @@ export function testing() {
         clara.responses.set(fclara, {
             askAs: "Tell me about John's friends.",
             response: {
-                text: [`There was a person named <${fbob.id}>Bob</>.`],
+                text: [`Uh, he always used to hang out with this guy, what was his name...`, `Oh, <${fbob.id}>Bob</>.`],
                 facts: [fbob]
             }
         });
@@ -166,7 +179,7 @@ export function testing() {
         clara.responses.set(johnsCat, {
             askAs: "Do you know John's cat?",
             response: {
-                text: [`<${claraHatesCats.id}>ew</>, that ugly thing?`, "I suppose somebody has to take care of it."],
+                text: [`<${claraHatesCats.id}>Ew</>, that ugly thing?`, "I suppose somebody has to take care of it."],
                 facts: [claraHatesCats, clara.addCommunication({
                     askAs: "Will you take care of the cat?",
                     response: {
@@ -202,17 +215,18 @@ function scene2() {
 
             const figureOutWhatsNext = new Fact(FactType.problem, `Summon Karl and figure out what's next.`);
 
-            const death = new Person({ name: "Death", color: "#F13A3A", image: "img/death/0001.png" });
+            const death = Person.newDeath();
             death.knownFromStart = true;
-            death.chat.addMessage("So there is this guy...", false);
+            death.chat.addMessage("So there is this guy...", false, Emotion.confused);
 
             notebook.facts.add(death.addCommunication({
                 askAs: "uh huh",
                 response: {
                     text: [`Yeah I don't really know what he wants.`, `Keeps complaining about his sister, a curse, and whatnot.`, `I figured it would be easier if you summoned him and talked to him.`],
+                    emotion: Emotion.confused,
                     facts: [
                         death.addCommunication({
-                            askAs: "Hot a name at least?",
+                            askAs: "Got a name at least?",
                             response: {
                                 text: [`<${figureOutWhatsNext.id}>Karl</>.`],
                                 facts: [figureOutWhatsNext]
