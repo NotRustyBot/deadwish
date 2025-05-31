@@ -2,6 +2,7 @@ import { Container, HTMLText, Text } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { customDiv } from "./htmlChat";
 import { CrystalBall } from "./crystalBall";
+import { sound } from "@pixi/sound";
 
 export enum FactType {
     misc = 0,
@@ -79,7 +80,11 @@ export class Notebook {
     }
     public set open(value) {
         this.notebookDiv.classList.toggle('open', value);
-        if(this._open != value) this.generateBook();
+        if (this._open != value) {
+            this.generateBook();
+            if (value) sound.play("sfx-book_open");
+            else sound.play("sfx-book_close");
+        }
         this._open = value;
     }
 
@@ -127,12 +132,11 @@ export class Notebook {
             //sections[fact.type].push(`<span class="highlight" style="${styleLookup(fact.type)}">${fact.text}</span>`);
             sections[fact.type].push(`<span">${fact.text}</span>`);
         }
-        for (let i = 0; i < sections.length; i++) {
+        for (let i = 1; i < sections.length; i++) {
             const section = sections[i];
             const title = titleLookup(i as FactType);
             const lines = Array.from(section);
             while (lines.length > 0) {
-                console.log(i+": "+lines.length)
                 const page = this.addPage({ title, list: lines.splice(0, 10) });
             }
         }
@@ -154,15 +158,22 @@ export class Notebook {
     }
 
     render() {
-        const indexLeft = 2 * Math.round(this.pageIndex / 2);
+        const indexLeft = 2 * Math.floor(this.pageIndex / 2);
         const indexRight = indexLeft + 1;
         this.pageLeftWrapper.innerHTML = this.pages[indexLeft]?.outerHTML ?? '';
         this.pageRightWrapper.innerHTML = this.pages[indexRight]?.outerHTML ?? '';
+
+        this.pageLeftWrapper.classList.toggle("active", (indexLeft > 0 && indexLeft <= this.pages.length - 1));
+        this.pageRightWrapper.classList.toggle("active", (indexRight > 0 && indexRight < this.pages.length - 1));
     }
 
     movePage(offset: number) {
         this.pageIndex += offset;
+        if (this.pageIndex >= 0 && this.pageIndex <= this.pages.length - 1) {
+            sound.play("sfx-page_turn");
+        }
         this.pageIndex = Math.min(Math.max(this.pageIndex, 0), this.pages.length - 1);
+        console.log(this.pageIndex);
         this.render();
     }
 

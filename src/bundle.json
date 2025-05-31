@@ -1,7 +1,33 @@
 {
-  "ball": "./ball.png",
-  "cannon": "./cannon.png",
-  "death2": "./death2.png",
-  "light": "./light.png",
-  "rect": "./rect.png"
+  "name": "bundle",
+  "assets": [
+    {
+      "alias": "ball",
+      "src": "./img/ball.png"
+    },
+    {
+      "alias": "cannon",
+      "src": "./img/cannon.png"
+    },
+    {
+      "alias": "death2",
+      "src": "./img/death2.png"
+    },
+    {
+      "alias": "light",
+      "src": "./img/light.png"
+    },
+    {
+      "alias": "notebook",
+      "src": "./img/notebook.png"
+    },
+    {
+      "alias": "notebook_closed",
+      "src": "./img/notebook_closed.png"
+    },
+    {
+      "alias": "rect",
+      "src": "./img/rect.png"
+    }
+  ]
 }

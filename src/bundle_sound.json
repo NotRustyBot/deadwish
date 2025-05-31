@@ -1,0 +1,17 @@
+{
+  "name": "bundle_sound",
+  "assets": [
+    {
+      "alias": "sfx-book_close",
+      "src": "./audio/sfx/book_close.mp3"
+    },
+    {
+      "alias": "sfx-book_open",
+      "src": "./audio/sfx/book_open.mp3"
+    },
+    {
+      "alias": "sfx-page_turn",
+      "src": "./audio/sfx/page_turn.mp3"
+    }
+  ]
+}

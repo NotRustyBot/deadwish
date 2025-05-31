@@ -19,7 +19,7 @@
     background-position: center;
     background-repeat: no-repeat;
     overflow: hidden;
-    padding: 7% 7% 8% 7%;
+    padding: 7vh 7vh 8vh 7vh;
     box-sizing: border-box;
 }
 
@@ -40,6 +40,12 @@
 .notebook-page-wrapper {
     width: 50%;
     height: 100%;
+    transition: background-color 0.1s;
+}
+
+.notebook-page-wrapper.active:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.477);
 }
 
 .notebook-page {
