@@ -57,6 +57,7 @@ export class ContactPerson {
             }
         });
 
+        this.container.addChild(this.text);
         this.container.addChild(this.sprite);
         game.app.stage.addChild(this.container);
 

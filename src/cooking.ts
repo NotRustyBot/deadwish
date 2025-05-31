@@ -204,5 +204,6 @@ export class BagOStuff {
 }
 
 const recipes: Record<ItemType, Recipe> = {
-    [ItemType.nightmarePotion]: [{ ingredient: "light", temperature: 0 }, { ingredient: "cannon", temperature: 1 }]
+    [ItemType.nightmarePotion]: [{ ingredient: "light", temperature: 0 }, { ingredient: "cannon", temperature: 1 }],
+    [ItemType.antialergen]: [{ ingredient: "light", temperature: 0 }, { ingredient: "light", temperature: 0 }],
 }
