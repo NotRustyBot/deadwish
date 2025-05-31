@@ -35,7 +35,7 @@ export class Chat {
     }
 
     hideChat() {
-        this.htmlChat.wrapperElement.style.display = "none";
+        this.htmlChat.parentElement.style.display = "none";
     }
 
     showChat() {
@@ -43,7 +43,7 @@ export class Chat {
         for (const person of people) {
             person.chat.hideChat();
         }
-        this.htmlChat.wrapperElement.style.display = "block";
+        this.htmlChat.parentElement.style.display = "block";
     }
 }
 

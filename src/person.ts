@@ -30,6 +30,7 @@ export class Person {
         this.name = name;
         scene.add(Person, this);
         this.chat = new Chat(this);
+        this.chat.hideChat();
     }
 
     filterPossibleOptions(facts: Set<Fact>, allowReask = false) {

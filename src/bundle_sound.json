@@ -10,6 +10,14 @@
       "src": "./audio/sfx/book_open.mp3"
     },
     {
+      "alias": "sfx-door_close",
+      "src": "./audio/sfx/door_close.mp3"
+    },
+    {
+      "alias": "sfx-door_open",
+      "src": "./audio/sfx/door_open.mp3"
+    },
+    {
       "alias": "sfx-page_turn",
       "src": "./audio/sfx/page_turn.mp3"
     }

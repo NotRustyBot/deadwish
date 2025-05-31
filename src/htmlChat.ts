@@ -1,12 +1,15 @@
 import type { ChatResponseOption } from "./chat";
 import { game, UpdateOrder, type IUpdatable } from "./game";
+import type { IDestroyable } from "./scene";
 
-export class HTMLChat implements IUpdatable {
+export class HTMLChat implements IUpdatable, IDestroyable {
+    parentElement: HTMLElement;
     vignetteBg: HTMLElement;
     vignetteFg: HTMLElement;
     wrapperElement: HTMLElement;
     messagesWrapper: HTMLElement;
     leftPortrait: HTMLElement;
+    leftName: HTMLElement;
     optionsElement?: HTMLElement;
     private _scrollBottom = 0;
     private _scrollTarget = 0;
@@ -27,16 +30,19 @@ export class HTMLChat implements IUpdatable {
         this.messagesWrapper.style.bottom = `${this._scrollBottom}px`;
     }
     constructor() {
-        this.leftPortrait = customDiv(document.body, '', 'chat-portrait', 'left');
-        this.vignetteBg = customDiv(document.body, '', 'chat-vignette');
-        this.vignetteFg = customDiv(document.body, '', 'chat-vignette', 'fg');
-        this.wrapperElement = customDiv(document.body, '', 'chat-wrapper');
+        this.parentElement = customDiv(document.body, '', 'absolute');
+        this.leftName = customDiv(this.parentElement, 'Death', 'chat-name', 'left');
+        this.leftPortrait = customDiv(this.parentElement, '', 'chat-portrait', 'left');
+        this.vignetteBg = customDiv(this.parentElement, '', 'chat-vignette');
+        this.vignetteFg = customDiv(this.parentElement, '', 'chat-vignette', 'fg');
+        this.wrapperElement = customDiv(this.parentElement, '', 'chat-wrapper');
         this.messagesWrapper = customDiv(this.wrapperElement, '', 'chat-content');
         this.wrapperElement.addEventListener("wheel", (e) => {
             this.scrollTarget += e.deltaY;
         })
         this.wrapperHeight = this.wrapperElement.offsetHeight;
         game.addUpdatable(UpdateOrder.ui, this);
+        game.scene.add(HTMLChat, this);
     }
     addMessage(text: string, request: boolean) {
         const msg = this.appearDiv(this.messagesWrapper, text, 'chat-message');
@@ -75,6 +81,10 @@ export class HTMLChat implements IUpdatable {
 
         if (Math.abs(this.scrollTarget - this.scroll) < 0.1) return;
         this.scroll += (this.scrollTarget - this.scroll) * 10 * game.dt;
+    }
+    destroy() {
+        this.parentElement.remove();
+        game.removeUpdatable(UpdateOrder.ui, this);
     }
 }
 
