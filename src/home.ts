@@ -20,7 +20,7 @@ export class Home {
     }
 
     mouseMove(e: FederatedPointerEvent) {
-        const crystalBallRect = new Rectangle(0.3 * game.app.screen.width, 0.2 * game.app.screen.height, 0.1 * game.app.screen.width, 0.6 * game.app.screen.height);
+        const crystalBallRect = new Rectangle(100, 100, 100, 100);
         const localPos = e.getLocalPosition(this.bgSprite);
 
         this.graphics.clear();
