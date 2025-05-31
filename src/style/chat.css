@@ -149,7 +149,7 @@
 }
 
 .chat-message.request {
-    background-color: #272727;
+    background-color: #000000;
     border-color: var(--player-color-semi);
     align-self: flex-end;
     border-bottom-left-radius: 10px;

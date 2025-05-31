@@ -20,6 +20,7 @@ const smoke = [
 ]
 
 export class CookingPot {
+    bgSprite: Sprite;
     sprite: Sprite;
 
     temperature = 0;
@@ -37,6 +38,10 @@ export class CookingPot {
     }
 
     constructor() {
+        this.bgSprite = new Sprite(Assets.get("alchemy-0001"));
+        this.bgSprite.anchor.set(0.5);
+        game.app.stage.addChild(this.bgSprite);
+
         this.sprite = new Sprite(Assets.get("rect"));
         this.sprite.width = 300;
         this.sprite.height = 200;
@@ -86,6 +91,12 @@ export class CookingPot {
     }
 
     update() {
+
+        //fit height
+
+        const ratio = game.app.screen.height / this.bgSprite.texture.height;
+        this.bgSprite.position.set(game.app.screen.width / 2, game.app.screen.height / 2);
+        this.bgSprite.scale.set(ratio);
 
         if (this.currentRecipe.length != 0) {
             this.temperature += game.dt / 5;

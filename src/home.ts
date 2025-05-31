@@ -2,6 +2,7 @@ import { Assets, FederatedPointerEvent, Graphics, Rectangle, Sprite } from "pixi
 import { game, scene, UpdateOrder } from "./game";
 import { sound } from "@pixi/sound";
 import { Chat } from "./chat";
+import { CookingPot } from "./cooking";
 
 export class Home {
     bgSprite: Sprite;
@@ -13,6 +14,7 @@ export class Home {
         game.app.stage.addChild(this.bgSprite);
 
         this.bgSprite.addEventListener("pointermove", (e) => { this.mouseMove(e) }, true);
+        this.bgSprite.addEventListener("click", () => { this.click() }, true);
         this.bgSprite.interactive = true;
         this.graphics = new Graphics();
 
@@ -62,6 +64,13 @@ export class Home {
         }
     }
 
+    click(){
+        if(this.currentNumber === 4) {
+            new CookingPot();
+            this.destroy();
+        }
+    }
+
     update() {
         //fit height
 
@@ -70,6 +79,7 @@ export class Home {
         this.bgSprite.scale.set(ratio);
     }
     destroy() {
+        game.removeUpdatable(UpdateOrder.ui, this);
         game.app.stage.removeChild(this.bgSprite);
         this.bgSprite.destroy();
     }

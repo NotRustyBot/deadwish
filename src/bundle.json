@@ -2,6 +2,34 @@
   "name": "bundle",
   "assets": [
     {
+      "alias": "alchemy-0001",
+      "src": "./img/alchemy/0001.png"
+    },
+    {
+      "alias": "ball",
+      "src": "./img/ball.png"
+    },
+    {
+      "alias": "cannon",
+      "src": "./img/cannon.png"
+    },
+    {
+      "alias": "death-0001",
+      "src": "./img/death/0001.png"
+    },
+    {
+      "alias": "death-0002",
+      "src": "./img/death/0002.png"
+    },
+    {
+      "alias": "death-0003",
+      "src": "./img/death/0003.png"
+    },
+    {
+      "alias": "death2",
+      "src": "./img/death2.png"
+    },
+    {
       "alias": "home-0001",
       "src": "./img/home/0001.png"
     },

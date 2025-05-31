@@ -20,7 +20,8 @@ function scanDirectory(directory: string, dirName: string, basePath: string = ''
             );
 
             // Merge nested results into our result object
-            Object.assign(result, nestedResults);
+            result.push(...nestedResults);
+            //Object.assign(result, nestedResults);
         } else {
             // If it's a file, add it to our results
             // Create the key by removing file extension and replacing any path separators with hyphens
@@ -31,14 +32,12 @@ function scanDirectory(directory: string, dirName: string, basePath: string = ''
                 .join('-');
 
             // Store the path with forward slashes for consistency
-            console.log('./' + dirName + '/');
             result.push({
                 alias: key,
                 src: './' + dirName + '/' + relativePath.split(path.sep).join('/')
             });
         }
     }
-
     return result;
 }
 

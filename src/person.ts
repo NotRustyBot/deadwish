@@ -28,7 +28,7 @@ export class Person {
         return scene.getFirst<Notebook>(Notebook)!;
     }
 
-    constructor(options:{name: string, color?: string, image?: string}) {
+    constructor(options: { name: string, color?: string, image?: string }) {
         this.color = options.color ?? '#ffffff';
         this.name = options.name;
         this.image = options.image ?? 'img/ball.png';
@@ -91,6 +91,10 @@ export class Person {
     }
 
     showChat() {
+        if (this.chat.htmlChat.parentElement.style.display == "block") {
+            this.chat.hideChat();
+            return;
+        }
         this.chat.showChat();
         this.showOptions();
     }
