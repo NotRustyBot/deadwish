@@ -36,7 +36,6 @@
     width: fit-content;
     align-self: flex-end;
     background-color: rgb(20, 20, 20);
-    max-width: 80%;
     outline: 2px solid rgba(255, 255, 255, 0.249);
     border-radius: 10px;
 }

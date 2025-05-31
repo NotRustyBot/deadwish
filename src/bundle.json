@@ -2,16 +2,20 @@
   "name": "bundle",
   "assets": [
     {
-      "alias": "ball",
-      "src": "./img/ball.png"
+      "alias": "home-0001",
+      "src": "./img/home/0001.png"
     },
     {
-      "alias": "cannon",
-      "src": "./img/cannon.png"
+      "alias": "home-0002",
+      "src": "./img/home/0002.png"
     },
     {
-      "alias": "death2",
-      "src": "./img/death2.png"
+      "alias": "home-0003",
+      "src": "./img/home/0003.png"
+    },
+    {
+      "alias": "home-0004",
+      "src": "./img/home/0004.png"
     },
     {
       "alias": "light",

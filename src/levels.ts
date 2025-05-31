@@ -1,6 +1,7 @@
 import { BagOStuff, CookingPot, Ingredient } from "./cooking";
 import { CrystalBall } from "./crystalBall";
 import { game } from "./game";
+import { Home } from "./home";
 import { Inventory, ItemType } from "./inventory";
 import { Fact, FactType, Notebook } from "./notebook";
 import { Person } from "./person";
@@ -88,6 +89,7 @@ export function testing() {
         const bag = new BagOStuff();
         const inventory = new Inventory();
         const ball = new CrystalBall();
+        const home = new Home();
 
 
 

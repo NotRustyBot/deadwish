@@ -130,7 +130,12 @@ export class Notebook {
         }
         for (const fact of this.facts) {
             //sections[fact.type].push(`<span class="highlight" style="${styleLookup(fact.type)}">${fact.text}</span>`);
-            sections[fact.type].push(`<span">${fact.text}</span>`);
+            if (fact.resolved) {
+                sections[fact.type].push(`<strike>${fact.text}</strike>`);
+            }
+            else {
+                sections[fact.type].push(`<span>${fact.text}</span>`);
+            }
         }
         for (let i = 1; i < sections.length; i++) {
             const section = sections[i];
@@ -172,7 +177,7 @@ export class Notebook {
         if (this.pageIndex >= 0 && this.pageIndex <= this.pages.length - 1) {
             sound.play("sfx-page_turn");
         }
-        this.pageIndex = Math.min(Math.max(this.pageIndex, 0), this.pages.length - 1);
+        this.pageIndex = Math.max(Math.min(this.pageIndex, this.pages.length - 1), 0);
         console.log(this.pageIndex);
         this.render();
     }

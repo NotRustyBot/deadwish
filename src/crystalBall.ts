@@ -10,7 +10,7 @@ export class CrystalBall {
         this.sprite = new Sprite(Assets.get("ball"));
         scene.add(CrystalBall, this);
         this.container.addChild(this.sprite);
-        game.app.stage.addChild(this.container);
+        //game.app.stage.addChild(this.container);
     }
 
     contacts = new Set<ContactPerson>();
