@@ -6,6 +6,7 @@ import { Inventory, ItemType } from "./inventory";
 import { Fact, FactType, Notebook } from "./notebook";
 import { Person } from "./person";
 import { Scene } from "./scene";
+import { TimeManager } from "./timeManager";
 
 export function testing() {
     game.scene = Scene.define(scene => {
@@ -59,6 +60,7 @@ export function testing() {
                 event: () => {
                     death.customLogic = () => { };
                     death.followUp.clear();
+                    scene2();
                 }
             }
         });
@@ -70,6 +72,7 @@ export function testing() {
                 event: () => {
                     death.customLogic = () => { };
                     death.followUp.clear();
+                    scene2();
                 }
             }
         });
@@ -135,7 +138,7 @@ export function testing() {
             askAs: "Do you know about John's cat?",
             response: {
                 text: [`Not much, Im <${bobAlergic.id}>allergic</>`, "But John liked it a lot.", `<${bobWantsJohnsCat.id}>I wish I could take care of it.</>`],
-                facts: [bobAlergic],
+                facts: [bobAlergic, bobWantsJohnsCat],
                 event: onAntialergenMade
             }
         });
@@ -183,4 +186,57 @@ export function testing() {
     });
 
     game.scene.setup();
+}
+
+function scene2() {
+    transition(() => {
+        game.scene.clear();
+        game.scene = Scene.define(scene => {
+            const pot = new CookingPot();
+            const bag = new BagOStuff();
+            const inventory = new Inventory();
+            const ball = new CrystalBall();
+            const home = new Home();
+            const notebook = new Notebook();
+
+
+            const figureOutWhatsNext = new Fact(FactType.problem, `Summon Karl and figure out what's next.`);
+
+            const death = new Person({ name: "Death", color: "#F13A3A", image: "img/death/0001.png" });
+            death.knownFromStart = true;
+            death.chat.addMessage("So there is this guy...", false);
+
+            notebook.facts.add(death.addCommunication({
+                askAs: "uh huh",
+                response: {
+                    text: [`Yeah I don't really know what he wants.`, `Keeps complaining about his sister, a curse, and whatnot.`, `I figured it would be easier if you summoned him and talked to him.`],
+                    facts: [
+                        death.addCommunication({
+                            askAs: "Hot a name at least?",
+                            response: {
+                                text: [`<${figureOutWhatsNext.id}>Karl</>.`],
+                                facts: [figureOutWhatsNext]
+                            }
+                        })
+                    ],
+                }
+            }));
+            notebook.render();
+
+            death.showChat();
+
+        });
+        game.scene.setup();
+    });
+}
+
+async function transition(mid: () => void) {
+    TimeManager.animate(0.5, (progress, time) => {
+        game.app.stage.alpha = 1 - progress;
+    })
+    await TimeManager.wait(500);
+    mid();
+    TimeManager.animate(0.5, (progress, time) => {
+        game.app.stage.alpha = progress;
+    })
 }

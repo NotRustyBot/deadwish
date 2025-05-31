@@ -211,6 +211,14 @@ export class Notebook {
     destroy() {
         scene.remove(Notebook, this);
         game.removeUpdatable(UpdateOrder.ui, this);
+        this.notebookDiv.remove();
+        this.container.destroy();
+        this.pageLeftWrapper.remove();
+        this.pageRightWrapper.remove();
+        this.notebookContentsDiv.remove();
+        for (const page of this.pages) {
+            page.remove();
+        }
     }
 }
 

@@ -3,6 +3,7 @@ import { game, scene, UpdateOrder } from "./game";
 import { sound } from "@pixi/sound";
 import { Chat } from "./chat";
 import { CookingPot } from "./cooking";
+import { TimeManager } from "./timeManager";
 
 export class Home {
     bgSprite: Sprite;
@@ -49,6 +50,16 @@ export class Home {
         else {
             this.setBg(1);
         }
+    }
+
+    async transition() {
+        TimeManager.animate(0.5, (progress, time) => {
+            game.app.stage.alpha = 1 - progress;
+        })
+        await TimeManager.wait(500);
+        TimeManager.animate(0.5, (progress, time) => {
+            game.app.stage.alpha = progress;
+        })
     }
 
     setBg(number: 1 | 2 | 3 | 4 = 1) {
