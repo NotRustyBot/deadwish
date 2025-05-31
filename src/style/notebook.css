@@ -26,10 +26,16 @@
     width: 100%;
     height: 100%;
     background-color: tomato;
+    display: flex;
 }
 
 .notebook-page {
     width: 50%;
     height: 100%;
     border: 3px solid #000000;
+}
+
+.notebook-page h1 {
+    width: 100%;
+    text-align: center;
 }
