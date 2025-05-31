@@ -1,31 +1,54 @@
-import { Chat } from "./chat";
 import { game } from "./game";
-import { Fact, FactType } from "./notebook";
+import { Fact, FactType, Notebook } from "./notebook";
 import { Person } from "./person";
 import { Scene } from "./scene";
-import { TimeManager } from "./timeManager";
 
 export function testing() {
     game.scene = Scene.define(scene => {
-        const person1 = new Person("John");
-        const fact1 = new Fact(FactType.misc, "Hello");
-        person1.responses.set(fact1, "Hi");
-        scene.add(Person, person1);
+        const bob = new Person("Bob");
+
+        const fbob = new Fact(FactType.person, "John had a friend named Bob.");
+        const problemCat = new Fact(FactType.problem, "Johns cat needs a new home.");
+        const bobJohnsFriends = new Fact(FactType.misc, "what does bob know about johns friends?");
+        const johnsCat = new Fact(FactType.misc, "John has a cat.");
+        const bobHatesCat = new Fact(FactType.general, "Bob is allergic to cats.");
+        const fclara = new Fact(FactType.person, "John had a friend named Clara.");
 
 
-        (async () => {
-            const chat = new Chat();
-            await TimeManager.wait(3000);
-            chat.addMessage("hello", true);
-            await TimeManager.wait(1000);
-            chat.addMessage("hi", false);
-            await TimeManager.wait(1000);
-            chat.addMessage("I have a few questions about John.", true);
-            await TimeManager.wait(2000);
-            chat.addMessage("who? 😂", false);
-        })()
+        const notebook = new Notebook();
+        notebook.facts.add(fbob);
+        notebook.facts.add(problemCat);
+        notebook.facts.add(johnsCat);
 
+        scene.add(Notebook, notebook);
 
+        bob.responses.set(fbob, {
+            askAs: "I have a few questions about John. You were his friend, right?",
+            response: {
+                text: ["Yes", "Sure", "What do you want to know?"],
+                facts: [bobJohnsFriends]
+            }
+        });
+
+        bob.responses.set(johnsCat, {
+            askAs: "Do you know about John's cat?",
+            response: {
+                text: ["Not much, Im allergic", "But John liked it a lot."],
+                facts: [bobHatesCat]
+            }
+        });
+
+        bob.responses.set(bobJohnsFriends, {
+            askAs: "Tell me about John's friends.",
+            response: {
+                text: ["There was a person named Clara."],
+                facts: [fclara]
+            }
+        });
+
+        scene.add(Person, bob);
+
+        bob.showOptions();
 
     });
 

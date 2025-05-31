@@ -21,4 +21,5 @@ export class Fact {
 
 export class Notebook {
     facts = new Set<Fact>();
+    destroy() {}
 }
