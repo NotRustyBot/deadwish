@@ -4,6 +4,7 @@ import { TimeManager } from "./timeManager";
 import { Easing } from "./easing";
 import type { Person } from "./person";
 import { factStylelookup, type Fact } from "./notebook";
+import { HTMLChat } from "./htmlChat";
 
 const messageWidth = 400;
 const sidegap = 100;
@@ -17,8 +18,10 @@ export class Chat {
     yPosition = 0;
     responseColor = 0x333333;
     person: Person;
+    htmlChat: HTMLChat;
 
     constructor(person: Person) {
+        this.htmlChat = new HTMLChat();
         this.person = person;
         this.container = new Container();
         this.chatContainer = new Container();
@@ -66,7 +69,7 @@ function processText(input: string): string {
     
     return input.replace(regex, (match, id, content) => {
         const style = factStylelookup(parseInt(id));
-        return `<span style="${style}">${content}</span>`;
+        return `<span style="${style}" class="highlight">${content}</span>`;
     });
 }
 
@@ -125,6 +128,8 @@ class ChatMessage {
         this.container = new Container();
 
         message = processText(message);
+
+        chat.htmlChat.addMessage(message, request);
 
         const graphics = new Graphics();
 
