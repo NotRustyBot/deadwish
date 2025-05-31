@@ -45,6 +45,7 @@ export class Chat {
 
     options = new Set<ChatResponseOption>();
     showOptions(knownFacts: Set<Fact>) {
+        this.options.clear();
         const factOptions = this.person.filterPossibleOptions(knownFacts);
         let y = 0;
         for (const factOption of factOptions) {
