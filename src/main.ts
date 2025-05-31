@@ -1,6 +1,7 @@
 import { Application, Assets } from "pixi.js";
 import { Game } from "./game";
 import bundle from "./bundle.json";
+import "./style.css";
 
 
 
