@@ -1,7 +1,8 @@
 import { scene } from "./game";
 
 export enum ItemType {
-    nightmarePotion
+    nightmarePotion = "nightmarePotion",
+    antialergen = "antialergen",
 }
 
 export class Inventory {

@@ -20,9 +20,9 @@ export class Chat {
     }
 
     options = new Set<ChatResponseOption>();
-    showOptions(knownFacts: Set<Fact>) {
+    showOptions(knownFacts: Set<Fact>, allowReask = false) {
         this.options.clear();
-        const factOptions = this.person.filterPossibleOptions(knownFacts);
+        const factOptions = this.person.filterPossibleOptions(knownFacts, allowReask);
         for (const factOption of factOptions) {
             const chatOption = new ChatResponseOption(this, factOption, this.person.responses.get(factOption)!.askAs);
             this.options.add(chatOption);

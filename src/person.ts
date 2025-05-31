@@ -1,6 +1,6 @@
 import { Chat } from "./chat";
 import { scene } from "./game";
-import { Notebook, type Fact } from "./notebook";
+import { Fact, FactType, Notebook } from "./notebook";
 import { TimeManager } from "./timeManager";
 
 export type Communication = {
@@ -32,10 +32,10 @@ export class Person {
         this.chat = new Chat(this);
     }
 
-    filterPossibleOptions(facts: Set<Fact>) {
+    filterPossibleOptions(facts: Set<Fact>, allowReask = false) {
         const result = new Set<Fact>();
         for (const [key, value] of this.responses) {
-            if (this.askedFacts.has(key)) continue;
+            if (this.askedFacts.has(key) && !allowReask) continue;
             if (!facts.has(key)) continue;
             result.add(key);
         }
@@ -68,11 +68,20 @@ export class Person {
 
     followUp = new Set<Fact>();
 
+    addCommunication(communication: Communication) {
+        const fact = new Fact(FactType.misc, "");
+        this.responses.set(fact, communication);
+        return fact;
+    }
+
+    customLogic = () => { }
+
     showOptions() {
+        this.customLogic();
         if (this.followUp.size > 0) {
-            this.chat.showOptions(this.filterPossibleOptions(this.followUp));
+            this.chat.showOptions(this.followUp, true);
         } else {
-            this.chat.showOptions(this.filterPossibleOptions(this.notebook.facts));
+            this.chat.showOptions(this.notebook.facts);
         }
     }
 
