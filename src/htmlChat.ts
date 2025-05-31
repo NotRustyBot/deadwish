@@ -42,14 +42,13 @@ export class HTMLChat implements IUpdatable {
         for (const o of options) {
             const msg = customDiv(container, o.message);
             msg.onclick = () => {
-                //this.messagesWrapper.removeChild(container);
-                //o.select();
-                this.addOptions(options)
+                this.messagesWrapper.removeChild(container);
+                o.select();
+                //this.addOptions(options)
             };
         }
         container.style.setProperty("--calc-height", `${container.clientHeight}px`);
         this.optionsElement = container;
-
     }
     appearDiv(parent: HTMLElement | null, text: string, ...classes: string[]) {
         const appearDiv = customDiv(parent, text, ...classes);
