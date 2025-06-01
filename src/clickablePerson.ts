@@ -22,8 +22,8 @@ export class ClickablePerson implements IUpdatable, IDestroyable {
         game.addUpdatable(UpdateOrder.ui, this);
     }
     update() {
-        this.sprite.scale.set(game.app.screen.height / this.sprite.texture.height * this.scale * 1.3);
-        this.sprite.position.set(game.app.screen.width / 2 - (665 + this.xOffset)*game.app.screen.height / 1080, game.app.screen.height * .7);
+        this.sprite.scale.set(game.app.screen.height / this.sprite.texture.height * this.scale * 1.25);
+        this.sprite.position.set(game.app.screen.width / 2 - (668 + this.xOffset)*game.app.screen.height / 1080, game.app.screen.height * .7);
         this.sprite.visible = !(this.person.chat.htmlChat.parentElement.style.display == "block")
     }
     destroy(): void {
