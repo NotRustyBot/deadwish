@@ -1,11 +1,19 @@
 import { Assets, Container, Sprite, Text } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { MouseButton } from "./input";
+import { fitSprite } from "./utils";
+import { TimeManager } from "./timeManager";
 
 export enum ItemType {
     nightmarePotion = "nightmarePotion",
     antiallergen = "antiallergen",
     summoningPotion = "summoningPotion",
+}
+
+export const itemTypeToTexture = {
+    [ItemType.nightmarePotion]: "item-potion_0",
+    [ItemType.antiallergen]: "item-potion_1",
+    [ItemType.summoningPotion]: "item-potion_2",
 }
 
 export class Inventory {
@@ -26,6 +34,33 @@ export class Inventory {
     isItemSelectMode = false;
     async selectItem(): Promise<undefined | ItemType> {
         if (this.items.length == 0) {
+
+            const text = new Text({
+                text: "You don't have any items",
+                style: {
+                    fontSize: 24,
+                    fill: 0xffffff,
+                    fontFamily: "Caveat",
+                }
+            });
+            text.y = game.app.screen.height / 2 + 100;
+            text.anchor.set(0.5);
+            game.uiContainer.addChild(text);
+            text.alpha = 0;
+            text.x = game.app.screen.width / 2;
+            TimeManager.animate(0.5, (progress, time) => {
+                text.alpha = progress;
+            });
+            TimeManager.wait(1500).then(() => {
+                TimeManager.animate(0.5, (progress, time) => {
+                    text.alpha = 1 - progress;
+                });
+            });
+
+            TimeManager.wait(2000).then(() => {
+                text.destroy();
+            });
+
             return;
         }
         this.isItemSelectMode = true;
@@ -58,14 +93,17 @@ export class Inventory {
                 fontFamily: "Caveat",
             }
         });
+        text.y = -100;
+        text.anchor.set(0.5);
         this.container.addChild(text);
         let i = 0;
         this.items.forEach(item => {
             const inventoryItem = new InventoryItem(item, this.itemSelectionCallback);
-            const x = this.items.length / 2 * 100 + i * 100;
+            const x = this.items.length / 2 * -100 + i * 100 + 50;
             inventoryItem.container.position.set(x, 0);
             this.container.addChild(inventoryItem.container);
             this.inventoryItems.push(inventoryItem);
+            i++;
         });
     }
 
@@ -90,9 +128,12 @@ class InventoryItem {
     background: Sprite;
     constructor(type: ItemType, selectionCallback: (type: ItemType) => void) {
         this.type = type;
-        this.sprite = new Sprite(Assets.get("inventory-" + type));
+        this.sprite = new Sprite(Assets.get(itemTypeToTexture[this.type]));
         this.sprite.anchor.set(0.5);
         this.background = new Sprite(Assets.get("rect"));
+        this.background.width = 95;
+        this.background.height = 95;
+        fitSprite(this.sprite, 100, 100);
         this.background.anchor.set(0.5);
         this.container.addChild(this.background);
         this.container.addChild(this.sprite);
