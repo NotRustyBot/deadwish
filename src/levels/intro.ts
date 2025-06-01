@@ -26,6 +26,7 @@ export function into() {
             pizzaContact: pizzaPlace.setSymbols("302"),
             nightmarePotionPrepared: new Fact(FactType.misc, ""),
             hellbrewReady: new Fact(FactType.misc, ""),
+            pizzaOrdered: new Fact(FactType.misc, ""),
         };
 
         const death = Person.newDeath();
@@ -35,27 +36,9 @@ export function into() {
         death.chat.exitable = false;
         game.roomContainer.alpha = 0;
 
+
         (async () => {
-            await TimeManager.wait(500);
-            death.chat.addMessage("It's time", false);
-            await TimeManager.wait(2000);
-            death.chat.addMessage("Let's go", false);
-            await TimeManager.wait(2000);
-            death.chat.addMessage("get some drinks, and order some food", false);
-            await TimeManager.wait(500);
-
-            let isRoomShown = false;
-            const showRoom = () => {
-                if (isRoomShown) return;
-                isRoomShown = true;
-                TimeManager.animate(0.5, (progress, time) => {
-                    game.roomContainer.alpha = progress;
-                })
-                notebook.show();
-                death.chat.exitable = true;
-            }
-
-            notebook.add(
+            const replyFacts = [
                 death.addCommunication({
                     askAs: "What do you want to get?",
                     response: {
@@ -73,20 +56,19 @@ export function into() {
                             showRoom();
                         }
                     }
-                })
-            );
-            notebook.add(
-                death.addCommunication({
-                    askAs: "What drinks do you want?",
-                    response: {
-                        text: [`There's a brew I'd like to try.`, `It's called <${facts.getDrinks.id}>Hellbew</>.`],
-                        facts: [facts.getDrinks],
-                        event: () => {
-                            showRoom();
-                        }
+                }),
+            ];
+
+            death.responses.set(facts.pizzaOrdered, {
+                askAs: "Pizza ordered. What drinks do you want?",
+                response: {
+                    text: [`There's a brew I'd like to try.`, `It's called <${facts.getDrinks.id}>Hellbew</>.`],
+                    facts: [facts.getDrinks],
+                    event: () => {
+                        showRoom();
                     }
-                })
-            );
+                }
+            });
 
             death.responses.set(facts.getDrinks, {
                 askAs: "How do I make it?",
@@ -121,6 +103,10 @@ export function into() {
                             askAs: "Delivery.",
                             response: {
                                 text: [`Okay, it will be 30 minutes.`],
+                                facts: [facts.pizzaOrdered],
+                                event: () => {
+                                    facts.orderPizza.resolve();
+                                }
                             }
                         })
                     ]
@@ -143,6 +129,55 @@ export function into() {
 
             game.addUpdatable(UpdateOrder.system, factChecker);
             scene.add(factChecker, factChecker);
+
+            const deathResponse = {
+                text: [`The time has come...`],
+                facts: [death.addCommunication({
+                    askAs: "There must have been a-",
+                    response: {
+                        text: [`...for our weekly beer and pizza!`],
+                        emotion: Emotion.happy,
+                        event: () => {
+                            showRoom();
+                        },
+                        facts: [death.addCommunication({
+                            askAs: "Phew! You had me there for a second, man.",
+                            response: {
+                                text: [`I would never!`],
+                                emotion: Emotion.happy,
+                                facts: replyFacts
+                            }
+                        })]
+                    }
+                })]
+            }
+
+            await TimeManager.wait(500);
+            death.chat.addMessage("Good evening, Mage.", false);
+            await TimeManager.wait(2000);
+            notebook.add(
+                death.addCommunication({
+                    askAs: "[Click to reply]<br>I, uh...",
+                    response: deathResponse
+                })
+            )
+
+            //death.chat.addMessage("Let's go", false);
+            //await TimeManager.wait(2000);
+            //death.chat.addMessage("get some drinks, and order some food", false);
+            //await TimeManager.wait(500);
+
+            let isRoomShown = false;
+            const showRoom = () => {
+                if (isRoomShown) return;
+                isRoomShown = true;
+                TimeManager.animate(0.5, (progress, time) => {
+                    game.roomContainer.alpha = progress;
+                })
+                notebook.show();
+                death.chat.exitable = true;
+            }
+
 
             death.chat.htmlChat.removeOptions();
             death.showOptions();
