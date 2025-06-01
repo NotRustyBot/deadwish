@@ -58,7 +58,7 @@ export class Game {
 
     init() {
         TimeManager.init();
-        testing();
+        scene2();
         this.app.stage.addChild(this.roomContainer);
         this.app.stage.addChild(this.uiContainer);
     }

@@ -1,5 +1,6 @@
-import { Assets, Container, Sprite } from "pixi.js";
+import { Assets, Container, Sprite, Text } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
+import { MouseButton } from "./input";
 
 export enum ItemType {
     nightmarePotion = "nightmarePotion",
@@ -18,7 +19,6 @@ export class Inventory {
 
     add(item: ItemType) {
         this.items.push(item);
-
     }
 
     private itemSelectionCallback(item?: ItemType) { }
@@ -33,22 +33,36 @@ export class Inventory {
 
         return new Promise((resolve) => {
             this.itemSelectionCallback = (item?: ItemType) => {
-                this.isItemSelectMode = false;
-                [...this.inventoryItems].forEach(item => item.destroy());
-                this.inventoryItems = [];
+                this.hideItemSelection();
+                this.items = this.items.filter(i => i != item);
                 resolve(item);
             };
             this.renderItems();
         })
     }
 
+    hideItemSelection() {
+        this.isItemSelectMode = false;
+        [...this.inventoryItems].forEach(item => item.destroy());
+        this.inventoryItems = [];
+    }
+
     inventoryItems: InventoryItem[] = [];
     renderItems() {
         this.container.removeChildren();
+        const text = new Text({
+            text: "Select an item",
+            style: {
+                fontSize: 24,
+                fill: 0xffffff,
+                fontFamily: "Caveat",
+            }
+        });
+        this.container.addChild(text);
         let i = 0;
         this.items.forEach(item => {
             const inventoryItem = new InventoryItem(item, this.itemSelectionCallback);
-            const x = this.items.length/2 * 100 + i * 100;
+            const x = this.items.length / 2 * 100 + i * 100;
             inventoryItem.container.position.set(x, 0);
             this.container.addChild(inventoryItem.container);
             this.inventoryItems.push(inventoryItem);
@@ -59,7 +73,6 @@ export class Inventory {
         this.container.visible = this.isItemSelectMode;
         if (!this.isItemSelectMode) return;
         this.container.position.set(game.app.screen.width / 2, game.app.screen.height / 2);
-
     }
 
     destroy() {

@@ -94,6 +94,10 @@
       "src": "./img/home_sign.png"
     },
     {
+      "alias": "inventory-antiallergen",
+      "src": "./img/inventory/antiallergen.png"
+    },
+    {
       "alias": "light",
       "src": "./img/light.png"
     },

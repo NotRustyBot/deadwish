@@ -26,16 +26,22 @@ export class Ritual extends Room {
         this.graphics = new Graphics();
         this.itemSprite = new Sprite();
         this.itemSprite.anchor.set(0.5);
-        this.container.addChild(this.itemSprite);
+
 
         this.itemStand = new Sprite(Assets.get("ritual-ritual_circle"));
         this.itemStand.anchor.set(0.5);
         this.itemStand.interactive = true;
         this.itemStand.on("pointerdown", () => {
+            if (this.itemHeld) this.inventory.add(this.itemHeld);
+            this.itemHeld = undefined;
+            this.itemSprite.texture = Assets.get("inventory-none");
             this.inventory.selectItem().then(item => this.itemSelectedCallback(item));
         })
+
         this.container.addChild(this.itemStand);
         this.container.addChild(this.graphics);
+        this.container.addChild(this.itemSprite);
+
         scene.add(Ritual, this);
         game.roomContainer.addChild(this.container);
 
@@ -55,7 +61,7 @@ export class Ritual extends Room {
 
     itemSelectedCallback(item?: ItemType) {
         this.itemHeld = item;
-        this.itemSprite.texture = Assets.get("ritual-" + item);
+        this.itemSprite.texture = Assets.get("inventory-" + item);
         this.checkConditions();
     }
 

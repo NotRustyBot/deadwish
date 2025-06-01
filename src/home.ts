@@ -7,8 +7,9 @@ import { TimeManager } from "./timeManager";
 import type { IDestroyable } from "./scene";
 import { Ritual } from "./ritual";
 import { Room } from "./room";
+import { Inventory } from "./inventory";
 
-export class Home extends Room{
+export class Home extends Room {
     graphics: Graphics;
     currentNumber = 1;
     static instance?: Home;
@@ -113,7 +114,8 @@ export function createHomeSign(room: Room, className?: string) {
     homeSign.addEventListener("mouseleave", () => sound.play("sfx-door_close", { volume: 0.4, singleInstance: true }));
     homeSign.addEventListener("click", () => {
         room.hide();
-        if(Home.instance) Home.instance.show();
+        scene.getFirst<Inventory>(Inventory)?.hideItemSelection();
+        if (Home.instance) Home.instance.show();
         else new Home();
     });
 
