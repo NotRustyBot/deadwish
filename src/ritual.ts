@@ -5,6 +5,7 @@ import { TimeManager } from "./timeManager";
 import { createHomeSign } from "./home";
 import { Room } from "./room";
 import { randomRange } from "./utils";
+import { sound } from "@pixi/sound";
 
 export class Ritual extends Room {
     container: Container;
@@ -156,6 +157,7 @@ export class RitualCandle {
 
         this.sprite.interactive = true;
         this.sprite.on("pointerdown", () => {
+            sound.play("sfx-candle_light");
             this.setLit(!this.isLit);
             ritual.checkConditions();
         });
@@ -170,6 +172,7 @@ export class RitualCandle {
     }
 
     setLit(state: boolean) {
+        
         this.isLit = state;
         this.sprite.texture = this.isLit ? Assets.get("ritual-candle_lit") : Assets.get("ritual-candle_unlit");
         this.sprite.tint = this.isLit ? 0xffffff : 0x996699;

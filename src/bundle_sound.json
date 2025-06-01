@@ -14,6 +14,10 @@
       "src": "./audio/sfx/book_open.mp3"
     },
     {
+      "alias": "sfx-candle_light",
+      "src": "./audio/sfx/candle_light.mp3"
+    },
+    {
       "alias": "sfx-door_close",
       "src": "./audio/sfx/door_close.mp3"
     },
@@ -28,6 +32,10 @@
     {
       "alias": "sfx-potion_success",
       "src": "./audio/sfx/potion_success.mp3"
+    },
+    {
+      "alias": "sfx-rune",
+      "src": "./audio/sfx/rune.mp3"
     },
     {
       "alias": "sfx-sizzle",

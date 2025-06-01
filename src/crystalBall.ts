@@ -2,6 +2,7 @@ import { Assets, Container, Sprite, Text } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { Person, PersonType } from "./person";
 import { Room } from "./room";
+import { sound } from "@pixi/sound";
 
 export class CrystalBall extends Room {
     container: Container;
@@ -63,6 +64,7 @@ export class CrystalBall extends Room {
     }
 
     show() {
+        this.render();
         this.container.visible = true;
         super.show();
     }
@@ -74,8 +76,6 @@ export class CrystalBall extends Room {
     update() {
         super.update();
     }
-
-
 
     destroy() {
         CrystalBall.instance = undefined;
@@ -115,6 +115,7 @@ export class DialSymbol {
 
         this.container.interactive = true;
         this.container.on("pointerdown", () => {
+            sound.play("sfx-rune");
             this.symbol++;
             if (this.symbol >= this.textures.length) this.symbol = 0;
             this.sprite.texture = this.textures[this.symbol];
