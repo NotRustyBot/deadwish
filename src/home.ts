@@ -1,4 +1,4 @@
-import { Assets, FederatedPointerEvent, Graphics, Rectangle } from "pixi.js";
+import { Assets, Container, FederatedPointerEvent, Graphics, Rectangle } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { sound } from "@pixi/sound";
 import { Chat } from "./chat";
@@ -8,19 +8,25 @@ import { Ritual } from "./ritual";
 import { Room } from "./room";
 import { CrystalBall } from "./crystalBall";
 import { Inventory } from "./inventory";
+import { ClickablePerson } from "./clickablePerson";
+import { Person, PersonType } from "./person";
 
 export class Home extends Room {
     graphics: Graphics;
     currentNumber = 1;
     static instance?: Home;
+    container: Container;
     constructor() {
         super("home-0001", true);
         Home.instance = this;
-
+        this.container = new Container();
+        game.roomContainer.addChild(this.container);
         this.bgSprite.addEventListener("pointermove", (e) => { this.mouseMove(e) }, true);
         this.bgSprite.addEventListener("click", () => { this.click() }, true);
         this.bgSprite.interactive = true;
         this.graphics = new Graphics();
+
+        
 
         this.setBg();
         scene.add(Home, this);
@@ -100,7 +106,16 @@ export class Home extends Room {
     update() {
         super.update();
     }
+    show(): void {
+        this.container.visible = true;
+        super.show();
+    }
+    hide(): void {
+        this.container.visible = false;
+        super.hide();
+    }
     destroy() {
+        this.container.destroy();
         game.removeUpdatable(UpdateOrder.ui, this);
         super.destroy();
         Home.instance = undefined;

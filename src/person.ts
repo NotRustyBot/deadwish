@@ -1,5 +1,7 @@
 import { Chat } from "./chat";
+import { ClickablePerson } from "./clickablePerson";
 import { scene } from "./game";
+import { Home } from "./home";
 import { Fact, FactType, Notebook } from "./notebook";
 import { TimeManager } from "./timeManager";
 
@@ -13,6 +15,7 @@ export enum Emotion {
     confused = 1,
     happy = 2,
     sad = 3,
+    standing = 4,
 }
 
 export enum PersonType {
@@ -34,6 +37,7 @@ export class Person {
     symbols = "";
     get symbolsHtml() { return this.symbols.split('').map(symbol => `<i class=" s${symbol}"></i>`).join(''); }
     knownByFact?: Fact;
+    clickablePerson?: ClickablePerson;
 
     get isKnown() {
         return this.knownFromStart || (this.knownByFact && this.notebook.facts.has(this.knownByFact));
@@ -45,7 +49,8 @@ export class Person {
         return scene.getFirst<Notebook>(Notebook)!;
     }
 
-    constructor(options: { name: string, color?: string, image?: string, emotionImages?: EmotionImages }) {
+    constructor(options: { name: string, color?: string, image?: string, emotionImages?: EmotionImages, type: PersonType }) {
+        this.type = options.type;
         this.color = options.color ?? '#ffffff';
         this.name = options.name;
         const image = options.image ?? 'img/ball.png';
@@ -53,6 +58,9 @@ export class Person {
         scene.add(Person, this);
         this.chat = new Chat(this);
         this.chat.hideChat();
+        if (this.type === PersonType.death && Home.instance) {
+            this.clickablePerson = new ClickablePerson(this, Home.instance?.container);
+        }
     }
 
     setSymbols(symbols: string) {
@@ -132,13 +140,13 @@ export class Person {
 
     static newDeath() {
         const death = new Person({
-            name: "Death", color: "#F13A3A", emotionImages: {
+            name: "Death", type: PersonType.death, color: "#F13A3A", emotionImages: {
                 [Emotion.neutral]: "img/death/0001.png",
                 [Emotion.confused]: "img/death/0002.png",
                 [Emotion.happy]: "img/death/0003.png",
+                [Emotion.standing]: "img/death/0000.png",
             }
         });
-        death.type = PersonType.death;
         return death;
     }
 }

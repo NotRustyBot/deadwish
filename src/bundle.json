@@ -70,6 +70,10 @@
       "src": "./img/cross.png"
     },
     {
+      "alias": "death-0000",
+      "src": "./img/death/0000.png"
+    },
+    {
       "alias": "death-0001",
       "src": "./img/death/0001.png"
     },

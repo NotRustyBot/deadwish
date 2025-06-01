@@ -30,10 +30,10 @@ export function testing() {
 
         const antiallergenPrepared = new Fact(FactType.misc, "Antiallergen is prepared.");
 
-        const bob = new Person({ name: "Bob", color: "#39B3B3" });
+        const bob = new Person({ name: "Bob", color: "#39B3B3", type: PersonType.ball });
         const bobContact = bob.setSymbols("121");
 
-        const clara = new Person({ name: "Clara", color: "#39B3B3" });
+        const clara = new Person({ name: "Clara", color: "#39B3B3", type: PersonType.ball });
         const claraContact = clara.setSymbols("410");
 
         const death = Person.newDeath();
@@ -222,15 +222,15 @@ export function scene2() {
             const inventory = new Inventory();
             const ball = new CrystalBall();
             const home = new Home();
-            
-            
-            
-            
+
+
+
+
             const figureOutWhatsNext = new Fact(FactType.problem, `Summon Karl and figure out what's next.`);
             const summoningRitual = new Fact(FactType.general, `You summoned Karl via the ritual.`);
-            
-            
-            
+
+
+
             const death = Person.newDeath();
             const notebook = new Notebook();
             death.knownFromStart = true;
@@ -258,9 +258,8 @@ export function scene2() {
             }));
 
 
-            const karl = new Person({ name: "Karl", color: "#39B3B3" });
+            const karl = new Person({ name: "Karl", type: PersonType.ghost, color: "#39B3B3" });
             karl.knownByFact = summoningRitual;
-            karl.type = PersonType.ghost;
             notebook.facts.add(karl.addCommunication({
                 askAs: "Hello Karl. What seems to be the problem?",
                 response: {
