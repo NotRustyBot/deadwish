@@ -59,8 +59,10 @@ export class Ritual extends Room {
         if (this.itemHeld) this.inventory.add(this.itemHeld);
         this.itemHeld = undefined;
 
+        let i = 0;
         for (const candle of this.candles) {
-            TimeManager.wait(1000 * Math.random()).then(() => candle.isLit = false);
+            i++;
+            TimeManager.wait(300 * i).then(() => candle.setLit(false));
         }
     }
 
