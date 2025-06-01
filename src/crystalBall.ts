@@ -13,7 +13,7 @@ export class CrystalBall {
         scene.add(CrystalBall, this);
         this.container.addChild(this.sprite);
         this.container.addChild(this.dialButton);
-        game.app.stage.addChild(this.container);
+        game.roomContainer.addChild(this.container);
 
 
         this.dialButton.interactive = true;
@@ -73,7 +73,7 @@ export class DialSymbol {
         this.sprite = new Sprite(this.textures[0]);
 
         this.container.addChild(this.sprite);
-        game.app.stage.addChild(this.container);
+        game.roomContainer.addChild(this.container);
 
         this.container.interactive = true;
         this.container.on("pointerdown", () => {

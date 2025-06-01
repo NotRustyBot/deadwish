@@ -1,4 +1,4 @@
-import type { Application } from "pixi.js";
+import { Container, type Application } from "pixi.js";
 import type { Scene } from "./scene";
 import { scene2, testing } from "./levels";
 import { TimeManager } from "./timeManager";
@@ -29,6 +29,9 @@ export class Game {
 
     input = new Input();
 
+    roomContainer = new Container();
+    uiContainer = new Container();
+
     updateOrder: Array<UpdateOrder> = Object.keys(UpdateOrder).filter(k => isNaN(parseInt(k))).map(k => UpdateOrder[k as keyof typeof UpdateOrder]);
     toUpdate = new Map<UpdateOrder, Array<IUpdatable>>();
 
@@ -56,6 +59,8 @@ export class Game {
     init() {
         TimeManager.init();
         testing();
+        this.app.stage.addChild(this.roomContainer);
+        this.app.stage.addChild(this.uiContainer);
     }
 
     update() {

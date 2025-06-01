@@ -9,7 +9,7 @@ export class Room implements IDestroyable, IUpdatable {
     constructor(asset: string, isHome = false) {
         this.bgSprite = new Sprite(Assets.get(asset));
         this.bgSprite.anchor.set(0.5);
-        game.app.stage.addChild(this.bgSprite);
+        game.roomContainer.addChild(this.bgSprite);
         if (!isHome)
             this.homeSign = createHomeSign(this);
     }

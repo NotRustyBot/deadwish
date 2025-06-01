@@ -54,7 +54,7 @@ export class CookingPot extends Room {
         CookingPot.instance = this;
 
         this.bagContainer = new Container();
-        game.app.stage.addChild(this.bagContainer);
+        game.roomContainer.addChild(this.bagContainer);
         this.particleContainer = new Container({
         })
 
@@ -71,7 +71,7 @@ export class CookingPot extends Room {
         this.frontSprite.width = 300;
         this.frontSprite.anchor.set(0.5, 1);
         this.potContainer.addChild(this.frontSprite);
-        game.app.stage.addChild(this.potContainer);
+        game.roomContainer.addChild(this.potContainer);
 
 
         this.recipeText = new Text({
@@ -83,7 +83,7 @@ export class CookingPot extends Room {
         });
 
         this.recipeText.resolution = 2;
-        game.app.stage.addChild(this.recipeText);
+        game.roomContainer.addChild(this.recipeText);
 
         this.recipeText.y = 200;
 

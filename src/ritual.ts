@@ -32,12 +32,12 @@ export class Ritual extends Room {
         this.itemStand.anchor.set(0.5);
         this.itemStand.interactive = true;
         this.itemStand.on("pointerdown", () => {
-            this.itemSelectedCallback(ItemType.summoningPotion);
+            this.inventory.selectItem().then(item => this.itemSelectedCallback(item));
         })
         this.container.addChild(this.itemStand);
         this.container.addChild(this.graphics);
         scene.add(Ritual, this);
-        game.app.stage.addChild(this.container);
+        game.roomContainer.addChild(this.container);
 
         for (let index = 0; index < 6; index++) {
             const angle = index * Math.PI * 2 / 6;
