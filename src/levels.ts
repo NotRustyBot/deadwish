@@ -218,17 +218,17 @@ export function scene2() {
             const inventory = new Inventory();
             const ball = new CrystalBall();
             const home = new Home();
-            const notebook = new Notebook();
-
-
-
-
+            
+            
+            
+            
             const figureOutWhatsNext = new Fact(FactType.problem, `Summon Karl and figure out what's next.`);
             const summoningRitual = new Fact(FactType.general, `You summoned Karl via the ritual.`);
-
-
-
+            
+            
+            
             const death = Person.newDeath();
+            const notebook = new Notebook();
             death.knownFromStart = true;
             death.chat.addMessage("So there is this guy...", false, Emotion.confused);
 
