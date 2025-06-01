@@ -50,6 +50,10 @@
       "src": "./audio/sfx/splash.mp3"
     },
     {
+      "alias": "sfx-summon",
+      "src": "./audio/sfx/summon.mp3"
+    },
+    {
       "alias": "sfx-write_fact",
       "src": "./audio/sfx/write_fact.mp3"
     }

@@ -70,6 +70,10 @@ export class Ritual extends Room {
         return string === this.candles.map(candle => candle.isLit ? 1 : 0).join("");
     }
 
+    ritualSuccess(){
+        sound.play("sfx-summon");
+    }
+
     itemSelectedCallback(item?: ItemType) {
         this.itemHeld = item;
         if (item) {

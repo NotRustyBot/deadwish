@@ -279,6 +279,7 @@ export function scene2() {
             const ritual = new Ritual();
             ritual.customLogic = (t: Ritual) => {
                 if (t.itemHeld == ItemType.summoningPotion && t.matchPattern(summoningPattern)) {
+                    t.ritualSuccess();
                     notebook.add(summoningRitual);
                     figureOutWhatsNext.resolve();
                     karl.showChat();
