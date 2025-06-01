@@ -163,7 +163,7 @@ export class Notebook {
             }
         }
 
-        this.addPage({ title: `<br><br><br><br><br><br><strike>COOKING RECIPES</strike><br><br>ALCHEMY<br><br>`, text: `Drag ingredients from the bag into the cauldron. All the ingredients are randomly mixed in one bag.` });
+        this.addPage({ title: `<br><br><br><br><br><br><strike>COOKING RECIPES</strike><br><br>-ALCHEMY-<br><br>`, text: `Drag ingredients from the bag into the cauldron. All the ingredients are randomly mixed in one bag.` });
 
         for (const name in recipes) {
             const recipe = recipes[name as keyof typeof recipes] as Recipe;
@@ -181,6 +181,12 @@ export class Notebook {
             const page = this.addPage({ title: `${nameFromCamelCase}`, list: lines });
 
         }
+
+        this.addPage({ title: `<br><br><br><br><br><br>-RITUALS-<br><br><br>`, text: `Light the candles in the required shape and add a focus item.` });
+        this.addPage({ title: `Summoning`, text: `Used to summon ghosts and spirits.<br><br><img class="ritual-shape" src="img/ritual-shape/star.png">` });
+        this.addPage({ title: `Transmutation`, text: `Changes the nature of a potion or object.<br><br><img class="ritual-shape" src="img/ritual-shape/tri-down.png">` });
+        this.addPage({ title: `Purification`, text: `Purifies curses from objects.<br><br><img class="ritual-shape" src="img/ritual-shape/tri-up.png">` });
+
 
         this.render();
     }
