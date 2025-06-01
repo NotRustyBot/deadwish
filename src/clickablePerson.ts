@@ -8,7 +8,7 @@ export class ClickablePerson implements IUpdatable, IDestroyable {
     sprite: Sprite;
     constructor(person: Person, container: Container) {
         this.person = person;
-        let textureName = (person.emotionImages[Emotion.standing] ?? person.emotionImages[Emotion.neutral]!).slice(4).replace("/","-").replace(".png","");
+        let textureName = (person.emotionImages[Emotion.standing] ?? person.emotionImages[Emotion.neutral]!).slice(4).replace("/", "-").replace(".png", "");
         this.sprite = new Sprite(Assets.get(textureName));
         this.sprite.anchor.set(0.5);
         this.sprite.scale.set(0.8);
@@ -18,7 +18,8 @@ export class ClickablePerson implements IUpdatable, IDestroyable {
         game.addUpdatable(UpdateOrder.ui, this);
     }
     update() {
-        this.sprite.position.set(200, game.app.screen.height/2);
+        this.sprite.position.set(200, game.app.screen.height / 2);
+        this.sprite.visible = !(this.person.chat.htmlChat.parentElement.style.display == "block")
     }
     destroy(): void {
         this.sprite.destroy();
