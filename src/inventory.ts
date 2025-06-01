@@ -9,12 +9,14 @@ export enum ItemType {
     antiallergen = "antiallergen",
     summoningPotion = "summoningPotion",
     amulet = "amulet",
+    hellbrew = "hellbrew",
 }
 
 export const itemTypeToTexture = {
     [ItemType.nightmarePotion]: "item-potion_0",
     [ItemType.antiallergen]: "item-potion_1",
     [ItemType.summoningPotion]: "item-potion_2",
+    [ItemType.hellbrew]: "item-potion_3",
     [ItemType.amulet]: "item-amulet",
 }
 

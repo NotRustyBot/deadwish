@@ -1,11 +1,11 @@
 import { ClickablePerson } from "../clickablePerson";
 import { CrystalBall } from "../crystalBall";
-import { game } from "../game";
+import { game, UpdateOrder } from "../game";
 import { Home } from "../home";
 import { Inventory, ItemType } from "../inventory";
 import { Fact, FactType, Notebook } from "../notebook";
 import { Emotion, Person, PersonType } from "../person";
-import { Ritual } from "../ritual";
+import { Ritual, transmutationPattern } from "../ritual";
 import { Scene } from "../scene";
 import { TimeManager } from "../timeManager";
 
@@ -15,13 +15,18 @@ export function into() {
         const inventory = new Inventory();
         const home = new Home();
         const ball = new CrystalBall();
+        const ritual = new Ritual();
 
         const pizzaPlace = Person.newBall("Pizza Place", "#39B3B3");
 
         const facts = {
             orderPizza: new Fact(FactType.problem, `Order a pizza via crystal ball.`),
             getDrinks: new Fact(FactType.problem, `Get Hellbew.`),
-            pizzaContact: pizzaPlace.setSymbols("302")
+            getNightmarePotion: new Fact(FactType.problem, `Brew a Nightmare Potion.`),
+            pizzaContact: pizzaPlace.setSymbols("302"),
+            nightmarePotionPrepared: new Fact(FactType.misc, ""),
+            hellbrewReady: new Fact(FactType.misc, ""),
+            pizzaOrdered: new Fact(FactType.misc, ""),
         };
 
         const death = Person.newDeath();
@@ -30,6 +35,7 @@ export function into() {
         death.knownFromStart = true;
         death.chat.exitable = false;
         game.roomContainer.alpha = 0;
+
 
         (async () => {
             const replyFacts = [
@@ -51,17 +57,79 @@ export function into() {
                         }
                     }
                 }),
-                death.addCommunication({
-                    askAs: "What drinks do you want?",
-                    response: {
-                        text: [`There's a brew I'd like to try.`, `It's called <${facts.getDrinks.id}>Hellbew</>.`, `It's a transmutation of Nightmare Potion.`],
-                        facts: [facts.getDrinks],
-                        event: () => {
-                            showRoom();
-                        }
+            ];
+
+            death.responses.set(facts.pizzaOrdered, {
+                askAs: "Pizza ordered. What drinks do you want?",
+                response: {
+                    text: [`There's a brew I'd like to try.`, `It's called <${facts.getDrinks.id}>Hellbew</>.`],
+                    facts: [facts.getDrinks],
+                    event: () => {
+                        showRoom();
                     }
-                })
-            ]
+                }
+            });
+
+            death.responses.set(facts.getDrinks, {
+                askAs: "How do I make it?",
+                response: {
+                    text: [`First, you'll need to brew a <${facts.getNightmarePotion.id}>Nightmare Potion</>.`],
+                    facts: [facts.getNightmarePotion],
+                }
+            })
+
+            death.responses.set(facts.nightmarePotionPrepared, {
+                askAs: "Got the Nightmare. What's next?",
+                response: {
+                    text: [`Now, using a Transmutation ritual, make it into Hellbrew.`],
+                    facts: [facts.pizzaContact],
+                }
+            })
+
+            death.responses.set(facts.hellbrewReady, {
+                askAs: "I think I got it.",
+                response: {
+                    text: [`Lets's try it out!`],
+                }
+            })
+
+            pizzaPlace.chat.addMessage("Pizza Place, can I take your order?", false);
+            pizzaPlace.responses.set(facts.orderPizza, {
+                askAs: "Yea, I'd like to get two medium pizzas.",
+                response: {
+                    text: [`Ofcorse.`, `Pickup or delivery?`],
+                    facts: [
+                        pizzaPlace.addCommunication({
+                            askAs: "Delivery.",
+                            response: {
+                                text: [`Okay, it will be 30 minutes.`],
+                                facts: [facts.pizzaOrdered],
+                                event: () => {
+                                    facts.orderPizza.resolve();
+                                }
+                            }
+                        })
+                    ]
+                }
+            })
+
+
+            const factChecker = {
+                update() {
+                    if (!notebook.facts.has(facts.nightmarePotionPrepared) && inventory.items.some(i => i == ItemType.nightmarePotion)) {
+                        notebook.facts.add(facts.nightmarePotionPrepared);
+                        facts.getNightmarePotion.resolve();
+                    }
+                },
+                destroy() {
+                    game.removeUpdatable(UpdateOrder.system, factChecker);
+                    scene.remove(factChecker, factChecker);
+                }
+            }
+
+            game.addUpdatable(UpdateOrder.system, factChecker);
+            scene.add(factChecker, factChecker);
+
             const deathResponse = {
                 text: [`The time has come...`],
                 facts: [death.addCommunication({
@@ -113,8 +181,17 @@ export function into() {
 
             death.chat.htmlChat.removeOptions();
             death.showOptions();
-
         })();
+
+        ritual.customLogic = () => {
+            if (ritual.itemHeld == ItemType.nightmarePotion && ritual.matchPattern(transmutationPattern)) {
+                notebook.add(facts.hellbrewReady);
+                ritual.ritualSuccess();
+                facts.getDrinks.resolve();
+                ritual.itemSelectedCallback(ItemType.hellbrew);
+            }
+        };
+
 
         death.showChat();
         ball.render();
