@@ -1,4 +1,4 @@
-import { AnimatedSprite, Assets, Container, Sprite, Text } from "pixi.js";
+import { Assets, Container, Sprite, Text } from "pixi.js";
 import { game, scene } from "./game";
 import { Person } from "./person";
 

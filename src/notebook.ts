@@ -1,4 +1,4 @@
-import { Container, HTMLText, Text } from "pixi.js";
+import { Container, HTMLText } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { customDiv } from "./htmlChat";
 import { CrystalBall } from "./crystalBall";

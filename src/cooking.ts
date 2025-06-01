@@ -1,4 +1,4 @@
-import { Assets, Container, Particle, ParticleContainer, Sprite, Text } from "pixi.js";
+import { Assets, Container, Sprite, Text } from "pixi.js";
 import { Vector } from "./vector";
 import { game, scene, UpdateOrder, type IUpdatable } from "./game";
 import { MouseButton } from "./input";
