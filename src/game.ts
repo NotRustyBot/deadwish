@@ -67,7 +67,7 @@ export class Game {
         });
 
         TimeManager.init();
-        client2();
+        into();
         this.app.stage.addChild(this.roomContainer);
         this.app.stage.addChild(this.uiContainer);
     }

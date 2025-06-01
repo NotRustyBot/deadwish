@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "bundle": "npx tsx bundler.ts",
+    "upload": "npm run build && 7z a -tzip static.zip .\\dist\\* && butler push static.zip notrustybot/deathwish:web",
     "preview": "vite preview"
   },
   "devDependencies": {

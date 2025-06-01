@@ -98,7 +98,7 @@ export function client2() {
                             emotion: Emotion.sad,
                             facts: [karlAmuletCursed],
                             event: () => {
-                                inventory.add(ItemType.amulet);
+                                inventory.addItem(ItemType.amulet);
                                 karlCursed.resolve();
                             },
                         }

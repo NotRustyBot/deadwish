@@ -1,4 +1,8 @@
-.s0, .s1, .s2, .s3, .s4 {
+.s0,
+.s1,
+.s2,
+.s3,
+.s4 {
     display: inline-block;
     height: 1lh;
     width: 1lh;
@@ -8,41 +12,41 @@
 }
 
 .s0 {
-    background-image: url("img/symbols/white/0.png");
+    background-image: url("../img/symbols/white/0.png");
 }
 
 .s1 {
-    background-image: url("img/symbols/white/1.png");
+    background-image: url("../img/symbols/white/1.png");
 }
 
 .s2 {
-    background-image: url("img/symbols/white/2.png");
+    background-image: url("../img/symbols/white/2.png");
 }
 
 .s3 {
-    background-image: url("img/symbols/white/3.png");
+    background-image: url("../img/symbols/white/3.png");
 }
 
 .s4 {
-    background-image: url("img/symbols/white/4.png");
+    background-image: url("../img/symbols/white/4.png");
 }
 
 .notebook-page .s0 {
-    background-image: url("img/symbols/black/0.png");
+    background-image: url("../img/symbols/black/0.png");
 }
 
 .notebook-page .s1 {
-    background-image: url("img/symbols/black/1.png");
+    background-image: url("../img/symbols/black/1.png");
 }
 
 .notebook-page .s2 {
-    background-image: url("img/symbols/black/2.png");
+    background-image: url("../img/symbols/black/2.png");
 }
 
 .notebook-page .s3 {
-    background-image: url("img/symbols/black/3.png");
+    background-image: url("../img/symbols/black/3.png");
 }
 
 .notebook-page .s4 {
-    background-image: url("img/symbols/black/4.png");
+    background-image: url("../img/symbols/black/4.png");
 }
