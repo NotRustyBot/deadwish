@@ -6,9 +6,9 @@ import { Room } from "./room";
 import { sound } from "@pixi/sound";
 import { fitSprite, randomRange } from "./utils";
 
-export const transmutationPattern = "101010";
+export const transmutationPattern = "010101";
 export const summoningPattern = "111111";
-export const cursePattern = "010101";
+export const purification = "101010";
 
 export class Ritual extends Room {
     personContainer: Container;
@@ -74,7 +74,7 @@ export class Ritual extends Room {
         return string === this.candles.map(candle => candle.isLit ? 1 : 0).join("");
     }
 
-    ritualSuccess(){
+    ritualSuccess() {
         sound.play("sfx-summon");
     }
 
