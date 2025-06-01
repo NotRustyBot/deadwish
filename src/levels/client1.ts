@@ -6,6 +6,7 @@ import { Fact, FactType, Notebook } from "../notebook";
 import { Emotion, Person, PersonType } from "../person";
 import { Scene } from "../scene";
 import { client2 } from "./client2";
+import { interlude } from "./transition";
 
 
 export function client1() {
@@ -80,7 +81,7 @@ export function client1() {
                 event: () => {
                     death.customLogic = () => { };
                     death.followUp.clear();
-                    client2();
+                    interlude(client2, "The next day");
                 }
             }
         });
@@ -92,7 +93,7 @@ export function client1() {
                 event: () => {
                     death.customLogic = () => { };
                     death.followUp.clear();
-                    client2();
+                    interlude(client2, "The next day");
                 }
             }
         });

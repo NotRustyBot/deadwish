@@ -25,7 +25,7 @@ export function intro() {
 
         const facts = {
             orderPizza: new Fact(FactType.problem, `Order a pizza via crystal ball.`),
-            getDrinks: new Fact(FactType.problem, `Get Hellbew.`),
+            getDrinks: new Fact(FactType.problem, `Get Hellbrew.`),
             getNightmarePotion: new Fact(FactType.problem, `Brew a Nightmare Potion.`),
             pizzaContact: pizzaPlace.setSymbols("302"),
             nightmarePotionPrepared: new Fact(FactType.misc, ""),
@@ -33,6 +33,7 @@ export function intro() {
             pizzaOrdered: new Fact(FactType.misc, ""),
             ballRoomEntered: new Fact(FactType.misc, ""),
             potionRoomEntered: new Fact(FactType.misc, ""),
+            ritualRoomEntered: new Fact(FactType.misc, ""),
         };
 
         const death = Person.newDeath();
@@ -60,7 +61,7 @@ export function intro() {
             death.responses.set(facts.pizzaOrdered, {
                 askAs: "Pizza ordered. What drinks do you want?",
                 response: {
-                    text: [`There's a brew I'd like to try.`, `It's called <${facts.getDrinks.id}>Hellbew</>.`],
+                    text: [`There's a brew I'd like to try.`, `It's called <${facts.getDrinks.id}>Hellbrew</>.`],
                     facts: [facts.getDrinks],
                     event: () => {
                         showRoom();
@@ -89,7 +90,7 @@ export function intro() {
                 response: {
                     text: [`Lets's try it out!`],
                     event: () => {
-                        interlude(client1,"The next day");
+                        interlude(client1, "The next day");
                     }
                 }
             })
@@ -100,7 +101,7 @@ export function intro() {
             pizzaPlace.responses.set(facts.orderPizza, {
                 askAs: "Yea, I'd like to get two medium pizzas.",
                 response: {
-                    text: [`Ofcorse.`, `Pickup or delivery?`],
+                    text: [`Of course.`, `Pickup or delivery?`],
                     facts: [
                         pizzaPlace.addCommunication({
                             askAs: "Delivery.",
@@ -148,6 +149,22 @@ export function intro() {
                             death.showChat();
                             await TimeManager.wait(600);
                             death.chat.addMessage(`Check your book for the recepie`, false);
+                            death.chat.htmlChat.removeOptions();
+                            await TimeManager.wait(600);
+                            death.chat.addMessage(`Click the alchemy station after you follow all the steps in the recepie. Or when you mess up, click it to start again.`, false);
+                            death.chat.htmlChat.removeOptions();
+                        });
+                    }
+
+                    if (!notebook.facts.has(facts.ritualRoomEntered) && ritual.container.visible && notebook.facts.has(facts.nightmarePotionPrepared)) {
+                        notebook.add(facts.ritualRoomEntered);
+                        TimeManager.wait(1000).then(async () => {
+                            death.chat.addNarration(`Ritual Room`);
+                            death.chat.addMessage(`As with any ritual, you need to light the correct candles, and place an item in the center.`, false);
+                            death.chat.htmlChat.removeOptions();
+                            death.showChat();
+                            await TimeManager.wait(600);
+                            death.chat.addMessage(`Find Transmutation ritual in your book`, false);
                             death.chat.htmlChat.removeOptions();
                         });
                     }

@@ -10,6 +10,7 @@ import { purificationPattern, Ritual, summoningPattern } from "../ritual";
 import { Scene } from "../scene";
 import { TimeManager } from "../timeManager";
 import { client1 } from "./client1";
+import { interlude } from "./transition";
 
 export function client2() {
     transition(() => {
@@ -262,7 +263,7 @@ export function client2() {
                             event: () => {
                                 death.chat.addNarration("Death takes Karl to the realm of eternal peace.");
                                 setTimeout(() => {
-                                    client1();
+                                    interlude(()=>{}, "Thanks for playing!");
                                 }, 5000)
                             }
                         }
