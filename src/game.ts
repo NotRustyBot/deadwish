@@ -79,6 +79,7 @@ export class Game {
                 updatable.update();
             }
         }
+
     }
 
 }
