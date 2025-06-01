@@ -1,4 +1,5 @@
 import { ClickablePerson } from "../clickablePerson";
+import { CookingPot } from "../cooking";
 import { CrystalBall } from "../crystalBall";
 import { game, UpdateOrder } from "../game";
 import { Home } from "../home";
@@ -8,6 +9,7 @@ import { Emotion, Person, PersonType } from "../person";
 import { Ritual, transmutationPattern } from "../ritual";
 import { Scene } from "../scene";
 import { TimeManager } from "../timeManager";
+import { client1 } from "./client1";
 
 
 export function into() {
@@ -16,6 +18,7 @@ export function into() {
         const home = new Home();
         const ball = new CrystalBall();
         const ritual = new Ritual();
+        const cooking = new CookingPot();
 
         const pizzaPlace = Person.newBall("Pizza Place", "#39B3B3");
 
@@ -27,6 +30,8 @@ export function into() {
             nightmarePotionPrepared: new Fact(FactType.misc, ""),
             hellbrewReady: new Fact(FactType.misc, ""),
             pizzaOrdered: new Fact(FactType.misc, ""),
+            ballRoomEntered: new Fact(FactType.misc, ""),
+            potionRoomEntered: new Fact(FactType.misc, ""),
         };
 
         const death = Person.newDeath();
@@ -43,15 +48,7 @@ export function into() {
                     askAs: "What do you want to get?",
                     response: {
                         text: [`Let's try the new Pizza Place.`, `They take <${facts.orderPizza.id}>orders via crystal ball</>.`],
-                        facts: [facts.orderPizza,
-                        death.addCommunication({
-                            askAs: "What's the magic address?",
-                            response: {
-                                text: [`<${facts.pizzaContact.id}>it's</> ${pizzaPlace.symbolsHtml}.`],
-                                facts: [facts.pizzaContact],
-                            },
-                        }),
-                        ],
+                        facts: [facts.orderPizza],
                         event: () => {
                             showRoom();
                         }
@@ -73,7 +70,7 @@ export function into() {
             death.responses.set(facts.getDrinks, {
                 askAs: "How do I make it?",
                 response: {
-                    text: [`First, you'll need to brew a <${facts.getNightmarePotion.id}>Nightmare Potion</>.`],
+                    text: [`Let's go to the alchemy station.`],
                     facts: [facts.getNightmarePotion],
                 }
             })
@@ -90,6 +87,10 @@ export function into() {
                 askAs: "I think I got it.",
                 response: {
                     text: [`Lets's try it out!`],
+                    event: () => {
+                        scene.clear();
+                        client1();
+                    }
                 }
             })
 
@@ -120,6 +121,34 @@ export function into() {
                         notebook.facts.add(facts.nightmarePotionPrepared);
                         facts.getNightmarePotion.resolve();
                     }
+
+                    if (!notebook.facts.has(facts.ballRoomEntered) && ball.container.visible) {
+                        notebook.add(facts.ballRoomEntered);
+                        TimeManager.wait(1000).then(async () => {
+                            death.chat.htmlChat.removeOptions();
+                            death.showChat();
+                            death.chat.htmlChat.removeOptions();
+                            await TimeManager.wait(600);
+                            death.chat.addMessage(`Click the symbols to set the right magic address.`, false);
+                            await TimeManager.wait(600);
+                            death.showOptions();
+
+                        });
+                    }
+
+                    if (!notebook.facts.has(facts.potionRoomEntered) && cooking.sprite.visible && facts.getNightmarePotion) {
+                        notebook.add(facts.potionRoomEntered);
+                        TimeManager.wait(1000).then(async () => {
+                            death.chat.addMessage(`First, you'll need to brew a <${facts.getNightmarePotion.id}>Nightmare Potion</>.`, false);
+                            death.chat.htmlChat.removeOptions();
+                            death.showChat();
+                            await TimeManager.wait(600);
+                            death.chat.addMessage(`Check your book for the recepie`, false);
+                            death.chat.htmlChat.removeOptions();
+                        });
+                    }
+
+
                 },
                 destroy() {
                     game.removeUpdatable(UpdateOrder.system, factChecker);
@@ -127,7 +156,16 @@ export function into() {
                 }
             }
 
-            game.addUpdatable(UpdateOrder.system, factChecker);
+            death.responses.set(facts.ballRoomEntered, {
+                askAs: "What's the magic address?",
+                response: {
+                    text: [`<${facts.pizzaContact.id}>it's</> ${pizzaPlace.symbolsHtml}.`, `Write it down into your notebook for the next time.`, `Enter it and click the ball.`],
+                    facts: [facts.pizzaContact],
+                },
+            }),
+
+
+                game.addUpdatable(UpdateOrder.system, factChecker);
             scene.add(factChecker, factChecker);
 
             const deathResponse = {
