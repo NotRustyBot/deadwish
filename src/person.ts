@@ -59,7 +59,7 @@ export class Person {
         this.chat = new Chat(this);
         this.chat.hideChat();
         if (this.type === PersonType.death && Home.instance) {
-            this.clickablePerson = new ClickablePerson(this, Home.instance?.container);
+            this.clickablePerson = new ClickablePerson(this, Home.instance?.container,0.7,160);
         }
     }
 
@@ -144,6 +144,7 @@ export class Person {
                 [Emotion.neutral]: "img/death/0001.png",
                 [Emotion.confused]: "img/death/0002.png",
                 [Emotion.happy]: "img/death/0003.png",
+                [Emotion.sad]: "img/death/0002.png",
                 [Emotion.standing]: "img/death/0000.png",
             }
         });
@@ -156,10 +157,22 @@ export class Person {
                 [Emotion.neutral]: `img/ghost/${ghostNumber}/0001.png`,
                 [Emotion.confused]: `img/ghost/${ghostNumber}/0002.png`,
                 [Emotion.happy]: `img/ghost/${ghostNumber}/0003.png`,
-                [Emotion.standing]: `img/ghost/${ghostNumber}/0004.png`,
+                [Emotion.sad]: `img/ghost/${ghostNumber}/0004.png`,
             }
         });
         return ghost;
+    }
+
+    static newBall(name: string, color: string) {
+        const ball = new Person({
+            name, type: PersonType.ball, color, emotionImages: {
+                [Emotion.neutral]: `img/crystal-ball-talk/0001.png`,
+                [Emotion.confused]: `img/crystal-ball-talk/0002.png`,
+                [Emotion.happy]: `img/crystal-ball-talk/0003.png`,
+                [Emotion.sad]: `img/crystal-ball-talk/0004.png`,
+            }
+        });
+        return ball;
     }
 }
 
