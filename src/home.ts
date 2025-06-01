@@ -1,10 +1,9 @@
-import { Assets, FederatedPointerEvent, Graphics, Rectangle, Sprite } from "pixi.js";
+import { Assets, FederatedPointerEvent, Graphics, Rectangle } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { sound } from "@pixi/sound";
 import { Chat } from "./chat";
-import { BagOStuff, CookingPot } from "./cooking";
+import { CookingPot } from "./cooking";
 import { TimeManager } from "./timeManager";
-import type { IDestroyable } from "./scene";
 import { Ritual } from "./ritual";
 import { Room } from "./room";
 import { CrystalBall } from "./crystalBall";
