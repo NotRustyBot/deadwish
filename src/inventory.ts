@@ -29,7 +29,7 @@ export class Inventory {
         game.uiContainer.addChild(this.container);
     }
 
-    add(item: ItemType) {
+    addSilently(item: ItemType) {
         this.items.push(item);
     }
 
@@ -84,6 +84,42 @@ export class Inventory {
         this.isItemSelectMode = false;
         [...this.inventoryItems].forEach(item => item.destroy());
         this.inventoryItems = [];
+    }
+
+    addItem(type: ItemType) {
+        this.items.push(type);
+        const tempContainer = new Container();
+        const sprite = new Sprite(Assets.get(itemTypeToTexture[type]));
+        let nameFromCamelCase = type.replace(/([A-Z])/g, ' $1').trim();
+        const text = new Text({
+            text: "You got " + nameFromCamelCase + "!",
+            style: {
+                fontSize: 48,
+                fill: 0xffffff,
+                fontFamily: "Caveat",
+            }
+        })
+        text.anchor.set(0.5);
+        tempContainer.addChild(text);
+        text.y -= 150;
+        fitSprite(sprite, 200, 200);
+        sprite.anchor.set(0.5);
+        tempContainer.addChild(sprite);
+        tempContainer.position.set(game.app.screen.width / 2, game.app.screen.height / 2);
+        game.uiContainer.addChild(tempContainer);
+        TimeManager.animate(0.5, (progress, time) => {
+            tempContainer.alpha = progress;
+            tempContainer.y = game.app.screen.height / 2 - 100 * progress + 100;
+        })
+        TimeManager.wait(3500).then(() => {
+            TimeManager.animate(0.5, (progress, time) => {
+                tempContainer.alpha = 1 - progress;
+                tempContainer.y = game.app.screen.height / 2 - 100 * progress;
+            })
+        });
+        TimeManager.wait(4100).then(() => {
+            tempContainer.destroy();
+        });
     }
 
     inventoryItems: InventoryItem[] = [];

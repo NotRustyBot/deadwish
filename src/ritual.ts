@@ -39,7 +39,7 @@ export class Ritual extends Room {
         this.itemStand.interactive = true;
         this.itemStand.on("pointerdown", () => {
             if (this.itemHeld) {
-                this.inventory.add(this.itemHeld);
+                this.inventory.addSilently(this.itemHeld);
                 this.itemHeld = undefined;
                 this.itemSprite.texture = Assets.get("inventory-none");
                 return;
@@ -92,7 +92,7 @@ export class Ritual extends Room {
     }
 
     failRitual() {
-        if (this.itemHeld) this.inventory.add(this.itemHeld);
+        if (this.itemHeld) this.inventory.addSilently(this.itemHeld);
         this.itemHeld = undefined;
 
         let i = 0;

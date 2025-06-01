@@ -101,7 +101,7 @@ export class CookingPot extends Room {
         let madeRecipe = false;
         for (const key in recipes) {
             if (JSON.stringify(this.currentRecipe) == JSON.stringify(recipes[key as unknown as ItemType])) {
-                this.inventory.add(key as unknown as ItemType);
+                this.inventory.addItem(key as unknown as ItemType);
                 madeRecipe = true;
             }
         }
