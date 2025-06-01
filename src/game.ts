@@ -66,7 +66,7 @@ export class Game {
         });
 
         TimeManager.init();
-        testing();
+        scene2();
         this.app.stage.addChild(this.roomContainer);
         this.app.stage.addChild(this.uiContainer);
     }
@@ -79,7 +79,5 @@ export class Game {
                 updatable.update();
             }
         }
-
     }
-
 }

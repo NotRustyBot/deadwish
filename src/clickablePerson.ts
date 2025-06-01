@@ -8,7 +8,7 @@ export class ClickablePerson implements IUpdatable, IDestroyable {
     sprite: Sprite;
     constructor(person: Person, container: Container) {
         this.person = person;
-        let textureName = (person.emotionImages[Emotion.standing] ?? person.emotionImages[Emotion.neutral]!).slice(4).replace("/", "-").replace(".png", "");
+        let textureName = (person.emotionImages[Emotion.standing] ?? person.emotionImages[Emotion.neutral]!).slice(4).replaceAll("/", "-").replace(".png", "");
         this.sprite = new Sprite(Assets.get(textureName));
         this.sprite.anchor.set(0.5);
         this.sprite.scale.set(0.8);

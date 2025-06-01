@@ -6,7 +6,6 @@ import { pickRandom, randomRange } from "./utils";
 import { Inventory, ItemType } from "./inventory";
 import { sound } from "@pixi/sound";
 import type { IDestroyable } from "./scene";
-import { createHomeSign } from "./home";
 import { Room } from "./room";
 
 

@@ -1,3 +1,4 @@
+import { ClickablePerson } from "./clickablePerson";
 import { CrystalBall } from "./crystalBall";
 import { game } from "./game";
 import { Home } from "./home";
@@ -260,7 +261,7 @@ export function scene2() {
             }));
 
 
-            const karl = new Person({ name: "Karl", type: PersonType.ghost, color: "#39B3B3" });
+            const karl = Person.newGhost("Karl", "#39B3B3");
             karl.knownByFact = summoningRitual;
             notebook.facts.add(karl.addCommunication({
                 askAs: "Hello Karl. What seems to be the problem?",
@@ -275,6 +276,7 @@ export function scene2() {
                     notebook.add(summoningRitual);
                     figureOutWhatsNext.resolve();
                     karl.showChat();
+                    karl.clickablePerson = new ClickablePerson(karl, t.personContainer);
                 }
             };
 

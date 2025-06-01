@@ -2,12 +2,12 @@ import { Assets, Container, Graphics, Rectangle, Sprite } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { Inventory, ItemType, itemTypeToTexture } from "./inventory";
 import { TimeManager } from "./timeManager";
-import { createHomeSign } from "./home";
 import { Room } from "./room";
 import { sound } from "@pixi/sound";
 import { fitSprite, randomRange } from "./utils";
 
 export class Ritual extends Room {
+    personContainer: Container;
     container: Container;
     candles: RitualCandle[] = [];
     itemStand: Sprite;
@@ -24,6 +24,7 @@ export class Ritual extends Room {
         Ritual.instance = this;
 
         this.container = new Container();
+        this.personContainer = new Container();
         this.graphics = new Graphics();
         this.itemSprite = new Sprite();
         this.itemSprite.anchor.set(0.5, 1);
@@ -49,6 +50,7 @@ export class Ritual extends Room {
 
         scene.add(Ritual, this);
         game.roomContainer.addChild(this.container);
+        game.roomContainer.addChild(this.personContainer);
 
         for (let index = 0; index < 6; index++) {
             const angle = index * Math.PI * 2 / 6 + Math.PI / 6;
@@ -94,12 +96,14 @@ export class Ritual extends Room {
 
     customLogic = (ritual: Ritual) => { };
 
-    show() {
+    override show() {
         this.container.visible = true;
+        this.personContainer.visible = true;
         super.show();
     }
-    hide() {
+    override hide() {
         this.container.visible = false;
+        this.personContainer.visible = false;
         super.hide();
     }
 

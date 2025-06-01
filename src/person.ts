@@ -149,6 +149,18 @@ export class Person {
         });
         return death;
     }
+
+    static newGhost(name: string, color: string, ghostNumber = 1) {
+        const ghost = new Person({
+            name, type: PersonType.ghost, color, emotionImages: {
+                [Emotion.neutral]: `img/ghost/${ghostNumber}/0001.png`,
+                [Emotion.confused]: `img/ghost/${ghostNumber}/0002.png`,
+                [Emotion.happy]: `img/ghost/${ghostNumber}/0003.png`,
+                [Emotion.standing]: `img/ghost/${ghostNumber}/0004.png`,
+            }
+        });
+        return ghost;
+    }
 }
 
 export type PersonResponse = {

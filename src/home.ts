@@ -32,6 +32,7 @@ export class Home extends Room {
 
         this.setBg();
         scene.add(Home, this);
+        scene.add("home", this);
         game.addUpdatable(UpdateOrder.ui, this);
         this.bgSprite.addChild(this.graphics);
         this.show();
@@ -119,26 +120,9 @@ export class Home extends Room {
     destroy() {
         this.container.destroy();
         game.removeUpdatable(UpdateOrder.ui, this);
+        scene.remove(Home, this);
+        scene.remove("home", this);
         super.destroy();
         Home.instance = undefined;
     }
-}
-
-export function createHomeSign(room: Room, className?: string) {
-    const homeSign = new Image();
-    homeSign.src = "img/home_sign.png";
-    document.getElementById("app")!.after(homeSign);
-    homeSign.classList.add("home-sign");
-    if (className) homeSign.classList.add(className);
-
-    homeSign.addEventListener("mouseenter", () => sound.play("sfx-door_open", { volume: 0.4, singleInstance: true }));
-    homeSign.addEventListener("mouseleave", () => sound.play("sfx-door_close", { volume: 0.4, singleInstance: true }));
-    homeSign.addEventListener("click", () => {
-        room.hide();
-        scene.getFirst<Inventory>(Inventory)?.hideItemSelection();
-        if (Home.instance) Home.instance.show();
-        else new Home();
-    });
-
-    return homeSign;
 }
