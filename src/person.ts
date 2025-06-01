@@ -15,6 +15,12 @@ export enum Emotion {
     sad = 3,
 }
 
+export enum PersonType {
+    death = "death",
+    ball = "ball",
+    ghost = "ghost",
+}
+
 export type EmotionImages = { [key in Emotion]?: string };
 
 export class Person {
@@ -24,7 +30,9 @@ export class Person {
     chat: Chat;
     color: string;
     emotionImages: EmotionImages = {};
-
+    type = PersonType.ball;
+    symbols = "";
+    get symbolsHtml() { return this.symbols.split('').map(symbol => `<i class=" s${symbol}"></i>`).join(''); }
     knownByFact?: Fact;
 
     get isKnown() {
@@ -45,6 +53,13 @@ export class Person {
         scene.add(Person, this);
         this.chat = new Chat(this);
         this.chat.hideChat();
+    }
+
+    setSymbols(symbols: string) {
+        this.symbols = symbols;
+        const knownByFact = new Fact(FactType.contact, `${this.name} — ${this.symbolsHtml}`);
+        this.knownByFact = knownByFact;
+        return knownByFact;
     }
 
     filterPossibleOptions(facts: Set<Fact>, allowReask = false) {
@@ -116,13 +131,15 @@ export class Person {
     }
 
     static newDeath() {
-        return new Person({
+        const death = new Person({
             name: "Death", color: "#F13A3A", emotionImages: {
                 [Emotion.neutral]: "img/death/0001.png",
                 [Emotion.confused]: "img/death/0002.png",
                 [Emotion.happy]: "img/death/0003.png",
             }
         });
+        death.type = PersonType.death;
+        return death;
     }
 }
 

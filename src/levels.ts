@@ -1,4 +1,3 @@
-import { BagOStuff, CookingPot, Ingredient } from "./cooking";
 import { CrystalBall } from "./crystalBall";
 import { game } from "./game";
 import { Home } from "./home";
@@ -8,6 +7,8 @@ import { Emotion, Person } from "./person";
 import { Ritual } from "./ritual";
 import { Scene } from "./scene";
 import { TimeManager } from "./timeManager";
+
+
 
 export function testing() {
     game.scene = Scene.define(scene => {
@@ -23,9 +24,13 @@ export function testing() {
         const bobWantsJohnsCat = new Fact(FactType.general, "Bob would take care of the cat if he could");
         const antiAllergenPossible = new Fact(FactType.general, "You could brew an antiallergen in the alchemy lab.");
 
-
-
         const antiallergenPrepared = new Fact(FactType.misc, "Antiallergen is prepared.");
+
+        const bob = new Person({ name: "Bob", color: "#39B3B3" });
+        const bobContact = bob.setSymbols("121");
+
+        const clara = new Person({ name: "Clara", color: "#39B3B3" });
+        const claraContact = clara.setSymbols("410");
 
         const death = Person.newDeath();
         death.knownFromStart = true;
@@ -45,9 +50,8 @@ export function testing() {
                                 death.addCommunication({
                                     askAs: "Who will take care of it?",
                                     response: {
-                                        text: [`Ask <${fbob.id}>Bob</>. His friend.`],
-                                        facts: [fbob],
-
+                                        text: [`Ask <${fbob.id}>Bob</>. His friend.`, `<${bobContact.id}>Crystal ball symbols</> are ${bob.symbolsHtml}`],
+                                        facts: [fbob, bobContact],
                                     }
                                 })
                             ]
@@ -93,9 +97,7 @@ export function testing() {
 
 
 
-        const bob = new Person({ name: "Bob", color: "#39B3B3" });
 
-        bob.knownByFact = fbob;
 
         const notebook = new Notebook();
         notebook.facts.add(cats);
@@ -107,8 +109,8 @@ export function testing() {
         //const pot = new CookingPot();
         //const bag = new BagOStuff();
         const inventory = new Inventory();
-        const ball = new CrystalBall();
         const home = new Home();
+        const ball = new CrystalBall();
 
 
 
@@ -127,6 +129,13 @@ export function testing() {
                                     response: {
                                         text: [`<${claraHatesCats.id}>No</>`, "Not really."],
                                         facts: [claraHatesCats]
+                                    }
+                                }),
+                                bob.addCommunication({
+                                    askAs: "How do I reach her?",
+                                    response: {
+                                        text: [`Her <${claraContact.id}>symbols are</> ${clara.symbolsHtml}`],
+                                        facts: [claraContact]
                                     }
                                 })]
                         }
@@ -167,8 +176,8 @@ export function testing() {
         });
 
 
-        const clara = new Person({ name: "Clara", color: "#39B3B3" });
-        clara.knownByFact = fclara;
+
+
         clara.responses.set(fclara, {
             askAs: "Tell me about John's friends.",
             response: {
