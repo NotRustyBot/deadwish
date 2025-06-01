@@ -103,7 +103,7 @@ export class Notebook {
     constructor() {
         scene.add(Notebook, this);
         game.addUpdatable(UpdateOrder.ui, this);
-        game.app.stage.addChild(this.container);
+        game.uiContainer.addChild(this.container);
 
         this.pages = [];
 

@@ -8,8 +8,9 @@ import type { IDestroyable } from "./scene";
 import { Ritual } from "./ritual";
 import { Room } from "./room";
 import { CrystalBall } from "./crystalBall";
+import { Inventory } from "./inventory";
 
-export class Home extends Room{
+export class Home extends Room {
     graphics: Graphics;
     currentNumber = 1;
     static instance?: Home;
@@ -58,11 +59,11 @@ export class Home extends Room{
 
     async transition() {
         TimeManager.animate(0.5, (progress, time) => {
-            game.app.stage.alpha = 1 - progress;
+            game.roomContainer.alpha = 1 - progress;
         })
         await TimeManager.wait(500);
         TimeManager.animate(0.5, (progress, time) => {
-            game.app.stage.alpha = progress;
+            game.roomContainer.alpha = progress;
         })
     }
 
@@ -118,7 +119,8 @@ export function createHomeSign(room: Room, className?: string) {
     homeSign.addEventListener("mouseleave", () => sound.play("sfx-door_close", { volume: 0.4, singleInstance: true }));
     homeSign.addEventListener("click", () => {
         room.hide();
-        if(Home.instance) Home.instance.show();
+        scene.getFirst<Inventory>(Inventory)?.hideItemSelection();
+        if (Home.instance) Home.instance.show();
         else new Home();
     });
 

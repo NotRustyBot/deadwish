@@ -54,7 +54,7 @@ export class CookingPot extends Room {
         CookingPot.instance = this;
 
         this.bagContainer = new Container();
-        game.app.stage.addChild(this.bagContainer);
+        game.roomContainer.addChild(this.bagContainer);
         this.particleContainer = new Container({
         })
 
@@ -71,7 +71,7 @@ export class CookingPot extends Room {
         this.frontSprite.width = 300;
         this.frontSprite.anchor.set(0.5, 1);
         this.potContainer.addChild(this.frontSprite);
-        game.app.stage.addChild(this.potContainer);
+        game.roomContainer.addChild(this.potContainer);
 
 
         this.recipeText = new Text({
@@ -83,7 +83,7 @@ export class CookingPot extends Room {
         });
 
         this.recipeText.resolution = 2;
-        game.app.stage.addChild(this.recipeText);
+        game.roomContainer.addChild(this.recipeText);
 
         this.recipeText.y = 200;
 
@@ -279,7 +279,6 @@ export class Ingredient {
         if (Ingredient.clicked == this) {
             if (game.input.mouse.getButtonDown(MouseButton.Left) === false) {
                 this.position.set(Vector.lerp(this.position, game.input.mouse.position, 0.25));
-                this.velocity = this.position.diff(startingposition);
 
             } else {
                 Ingredient.clicked = undefined;
@@ -288,6 +287,7 @@ export class Ingredient {
         else {
             this.sprite.angle += game.dt * this.velocity.length() * 5;
         }
+        this.velocity = this.position.diff(startingposition).mult(1 / rate);
 
         if (this.position.x < 0 || this.position.x > game.app.screen.width) {
             this.destroy();
@@ -300,8 +300,6 @@ export class Ingredient {
         this.sprite.destroy();
     }
 }
-
-
 
 export class BagOStuff implements IUpdatable, IDestroyable {
     sprite: Sprite;
@@ -318,6 +316,7 @@ export class BagOStuff implements IUpdatable, IDestroyable {
         this.sprite.interactive = true;
         this.sprite.on("pointerdown", () => {
             Ingredient.clicked = new Ingredient(pickRandom(Ingredient.types), this.parentContainer);
+            Ingredient.clicked.position.set(game.input.mouse.position.x, game.input.mouse.position.y);
         });
     }
 

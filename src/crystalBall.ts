@@ -17,7 +17,7 @@ export class CrystalBall extends Room {
         this.sprite.y = -20;
         this.sprite.tint = 0x887766;
         scene.add(CrystalBall, this);
-        game.app.stage.addChild(this.container);
+        game.roomContainer.addChild(this.container);
 
 
         this.sprite.interactive = true;
@@ -108,7 +108,7 @@ export class DialSymbol {
         this.sprite.anchor.set(0.5);
 
         this.container.addChild(this.sprite);
-        game.app.stage.addChild(this.container);
+        game.roomContainer.addChild(this.container);
 
         this.sprite.tint = 0x2288ff;
         this.sprite.scale = 1.5;

@@ -264,6 +264,7 @@ export function scene2() {
                 if (t.itemHeld == ItemType.summoningPotion) {
                     notebook.add(summoningRitual);
                     figureOutWhatsNext.resolve();
+                    karl.showChat();
                     return true;
                 }
                 return false;
