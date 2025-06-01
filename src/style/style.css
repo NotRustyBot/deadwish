@@ -22,8 +22,8 @@ body {
 
 .home-sign {
     position: absolute;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     width: 500px;
     transform: translateY(-30px);
 }
@@ -32,4 +32,31 @@ body {
     cursor: pointer;
     transform: rotate(-5deg) translateY(-10px);
     filter: brightness(1.8);
+}
+
+.s0, .s1, .s2, .s3, .s4 {
+    display: inline-block;
+    height: 1lh;
+    width: 1lh;
+    background-size: contain;
+}
+
+.s0 {
+    background-image: url("img/ball/symbol_0.png");
+}
+
+.s1 {
+    background-image: url("img/ball/symbol_1.png");
+}
+
+.s2 {
+    background-image: url("img/ball/symbol_2.png");
+}
+
+.s3 {
+    background-image: url("img/ball/symbol_3.png");
+}
+
+.s4 {
+    background-image: url("img/ball/symbol_4.png");
 }

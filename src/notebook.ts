@@ -12,7 +12,8 @@ export enum FactType {
     problem = 2,
     person = 3,
     location = 4,
-    item = 5
+    item = 5,
+    contact = 6,
 }
 
 export function factStylelookup(id: number): string {
@@ -30,6 +31,7 @@ export function styleLookup(type: FactType): string {
         3: 'color: #99ffff;',
         4: 'color: #55ff55;',
         5: 'color: #ff55ff;',
+        6: 'color: #0055ff;',
     };
     return styles[type as keyof typeof styles] ?? '';
 }
@@ -43,6 +45,7 @@ export function titleLookup(type: FactType): string {
         3: `Personal details`,
         4: `Locations`,
         5: `Items`,
+        6: `Contacts`,
     };
     return styles[type as keyof typeof styles] ?? '';
 }
@@ -138,7 +141,7 @@ export class Notebook {
 
         let y = 0;
 
-        const sections: string[][] = new Array(6);
+        const sections: string[][] = new Array(7);
         for (let i = 0; i < sections.length; i++) {
             sections[i] = new Array();
         }

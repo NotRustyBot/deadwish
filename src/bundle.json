@@ -30,6 +30,26 @@
       "src": "./img/alchemy/pot_front.png"
     },
     {
+      "alias": "ball-symbol_0",
+      "src": "./img/ball/symbol_0.png"
+    },
+    {
+      "alias": "ball-symbol_1",
+      "src": "./img/ball/symbol_1.png"
+    },
+    {
+      "alias": "ball-symbol_2",
+      "src": "./img/ball/symbol_2.png"
+    },
+    {
+      "alias": "ball-symbol_3",
+      "src": "./img/ball/symbol_3.png"
+    },
+    {
+      "alias": "ball-symbol_4",
+      "src": "./img/ball/symbol_4.png"
+    },
+    {
       "alias": "ball",
       "src": "./img/ball.png"
     },

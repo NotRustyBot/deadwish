@@ -55,7 +55,7 @@ export class Game {
 
     init() {
         TimeManager.init();
-        scene2();
+        testing();
     }
 
     update() {
