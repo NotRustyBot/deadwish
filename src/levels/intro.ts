@@ -13,7 +13,7 @@ import { client1 } from "./client1";
 import { interlude } from "./transition";
 
 
-export function into() {
+export function intro() {
     game.scene = Scene.define(scene => {
         const inventory = new Inventory();
         const home = new Home();
