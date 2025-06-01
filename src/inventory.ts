@@ -101,7 +101,7 @@ export class Inventory {
         let i = 0;
         this.items.forEach(item => {
             const inventoryItem = new InventoryItem(item, this.itemSelectionCallback);
-            const x = this.items.length / 2 * -100 + i * 100 + 50;
+            const x = this.items.length / 2 * -120 + i * 120 + 50;
             inventoryItem.container.position.set(x, 0);
             this.container.addChild(inventoryItem.container);
             this.inventoryItems.push(inventoryItem);
@@ -133,8 +133,8 @@ class InventoryItem {
         this.sprite = new Sprite(Assets.get(itemTypeToTexture[this.type]));
         this.sprite.anchor.set(0.5);
         this.background = new Sprite(Assets.get("rect"));
-        this.background.width = 95;
-        this.background.height = 95;
+        this.background.width = 120;
+        this.background.height = 120;
         fitSprite(this.sprite, 100, 100);
         this.background.anchor.set(0.5);
         this.container.addChild(this.background);
@@ -146,13 +146,13 @@ class InventoryItem {
         });
 
         this.container.on("pointerenter", () => {
-            this.background.tint = 0xffffff;
+            this.background.tint = 0x333333;
         });
 
         this.container.on("pointerleave", () => {
-            this.background.tint = 0x555555;
+            this.background.tint = 0x000000;
         });
-        this.background.tint = 0x555555;
+        this.background.tint = 0x000000;
     }
 
     destroy() {

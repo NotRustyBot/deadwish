@@ -90,6 +90,22 @@
       "src": "./img/death2.png"
     },
     {
+      "alias": "ghost-1-0001",
+      "src": "./img/ghost/1/0001.png"
+    },
+    {
+      "alias": "ghost-1-0002",
+      "src": "./img/ghost/1/0002.png"
+    },
+    {
+      "alias": "ghost-1-0003",
+      "src": "./img/ghost/1/0003.png"
+    },
+    {
+      "alias": "ghost-1-0004",
+      "src": "./img/ghost/1/0004.png"
+    },
+    {
       "alias": "home-0001",
       "src": "./img/home/0001.png"
     },
