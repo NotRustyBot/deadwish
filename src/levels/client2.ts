@@ -23,9 +23,12 @@ export function client2() {
 
             const figureOutWhatsNext = new Fact(FactType.problem, `Summon Karl and figure out what's next.`);
             const summoningRitual = new Fact(FactType.general, `You summoned Karl via the ritual.`);
-            const greta = Person.newBall("Greta", "#39B3B3", "431");
+            const greta = Person.newBall("Greta", "#39B3B3");
+            const gretaAddress = greta.setSymbols("431");
             const karlSister = new Fact(FactType.person, `Karl has a sister named Greta.`);
             const karlSisterBye = new Fact(FactType.problem, `Karl wants to talk to Greta one last time.`);
+            const karlSisterWitch = new Fact(FactType.general, `Karl's sister is a witch.`);
+            const karlCursed = new Fact(FactType.problem, `Karl is cursed.`);
 
             const karl = Person.newGhost("Karl", "#39B3B3");
             karl.knownByFact = summoningRitual;
@@ -37,7 +40,7 @@ export function client2() {
             //death.chat.exitable = false;
 
             notebook.facts.add(death.addCommunication({
-                askAs: "uh huh",
+                askAs: "Yeah?",
                 response: {
                     text: [`Yeah I don't really know what he wants.`, `Keeps complaining about his sister, a curse, and whatnot.`, `I figured it would be easier if you summoned him and talked to him.`],
                     emotion: Emotion.confused,
@@ -61,9 +64,21 @@ export function client2() {
                 response: {
                     text: [`You'd let me talk to her?`, `<${greta.knownByFact!.id}>She has a magic address.</>`, `It's ${greta.symbolsHtml}`],
                     emotion: Emotion.happy,
-                    facts: [summoningRitual],
+                    facts: [gretaAddress],
                     event: () => {
                         karl.followUp.delete(sisterInquire);
+                    }
+                },
+            })
+
+            const curseInquire = karl.addCommunication({
+                askAs: "I need to find out who cursed you.",
+                response: {
+                    text: [`I don't think I know anyone who would want to curse me.`, `Honestly, I don't know a lot about curses.`, `But my sister could tell you more about them!`, `<${karlSisterWitch.id}>She is a witch.</>`],
+                    emotion: Emotion.confused,
+                    facts: [karlSisterWitch],
+                    event: () => {
+                        karl.followUp.delete(curseInquire);
                     }
                 },
             })
@@ -77,11 +92,22 @@ export function client2() {
                         karl.addCommunication({
                             askAs: "Tell me about your sister.",
                             response: {
-                                text: [`Her name is <${karlSister.id}>Greta</>.`, `She's always been there for me.`, `I never said goodbye to her...`],
+                                text: [`Her name is <${karlSister.id}>Greta</>.`, `She's always been there for me.`, `<${karlSisterBye.id}>I never said goodbye to her...</>`],
                                 emotion: Emotion.sad,
                                 facts: [karlSister, karlSisterBye],
                                 event: () => {
                                     karl.followUp.add(sisterInquire)
+                                }
+                            }
+                        }),
+                        karl.addCommunication({
+                            askAs: "Tell me about the curse.",
+                            response: {
+                                text: [`I feel like I'm stuck between worlds.`, `<${karlCursed.id}>I think someone cursed me.</>`, `Could you help?`],
+                                emotion: Emotion.confused,
+                                facts: [karlCursed],
+                                event: () => {
+                                    karl.followUp.add(curseInquire)
                                 }
                             }
                         })

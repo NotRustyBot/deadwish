@@ -1,6 +1,6 @@
 import { Chat } from "./chat";
 import { ClickablePerson } from "./clickablePerson";
-import { scene } from "./game";
+import { game, scene } from "./game";
 import { Home } from "./home";
 import { Fact, FactType, Notebook } from "./notebook";
 import { TimeManager } from "./timeManager";
@@ -89,13 +89,13 @@ export class Person {
         const convo = this.responses.get(fact)!
         this.chat.addMessage(convo.askAs, true);
         for await (const text of convo.response.text) {
-            await TimeManager.wait(1000);
+            if(!game.input.key('shift')) await TimeManager.wait(1000);
             this.chat.addMessage(text, false, convo.response.emotion ?? Emotion.neutral);
         }
         for (const fact of convo.response.facts ?? []) {
             this.notebook.add(fact);
         }
-        await TimeManager.wait(1000);
+        if(!game.input.key('shift')) await TimeManager.wait(1000);
 
         convo.response.event?.();
 
@@ -163,7 +163,7 @@ export class Person {
         return ghost;
     }
 
-    static newBall(name: string, color: string, symbols?: string) {
+    static newBall(name: string, color: string) {
         const ball = new Person({
             name, type: PersonType.ball, color, emotionImages: {
                 [Emotion.neutral]: `img/crystal-ball-talk/0001.png`,
@@ -172,7 +172,7 @@ export class Person {
                 [Emotion.sad]: `img/crystal-ball-talk/0004.png`,
             }
         });
-        if(symbols) ball.setSymbols(symbols);
+        //if(symbols) ball.setSymbols(symbols);
         return ball;
     }
 }
