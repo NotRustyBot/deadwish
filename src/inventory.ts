@@ -22,7 +22,7 @@ export const itemTypeToTexture = {
 
 export class Inventory {
     container = new Container();
-    items: ItemType[] = [];
+    items: ItemType[] = [ItemType.summoningPotion];
     constructor() {
         scene.add(Inventory, this);
         game.addUpdatable(UpdateOrder.ui, this);
