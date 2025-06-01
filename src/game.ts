@@ -1,6 +1,6 @@
 import { Container, type Application } from "pixi.js";
 import type { Scene } from "./scene";
-import { scene2, testing } from "./levels";
+import { client2, client1, into } from "./levels";
 import { TimeManager } from "./timeManager";
 import { Input } from "./input";
 
@@ -66,8 +66,7 @@ export class Game {
         });
 
         TimeManager.init();
-        //scene2();
-        testing();
+        into();
         this.app.stage.addChild(this.roomContainer);
         this.app.stage.addChild(this.uiContainer);
     }
