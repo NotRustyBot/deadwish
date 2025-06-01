@@ -5,6 +5,7 @@ import soundBundle from "./bundle_sound.json";
 import "./style/style.css";
 import "./style/notebook.css";
 import "./style/chat.css";
+import "./style/symbols.css";
 import { sound } from "@pixi/sound";
 
 

@@ -120,6 +120,50 @@
     {
       "alias": "ritual-candle_unlit",
       "src": "./img/ritual/candle_unlit.png"
+    },
+    {
+      "alias": "ritual-ritual_circle",
+      "src": "./img/ritual/ritual_circle.png"
+    },
+    {
+      "alias": "symbols-black-0",
+      "src": "./img/symbols/black/0.png"
+    },
+    {
+      "alias": "symbols-black-1",
+      "src": "./img/symbols/black/1.png"
+    },
+    {
+      "alias": "symbols-black-2",
+      "src": "./img/symbols/black/2.png"
+    },
+    {
+      "alias": "symbols-black-3",
+      "src": "./img/symbols/black/3.png"
+    },
+    {
+      "alias": "symbols-black-4",
+      "src": "./img/symbols/black/4.png"
+    },
+    {
+      "alias": "symbols-white-0",
+      "src": "./img/symbols/white/0.png"
+    },
+    {
+      "alias": "symbols-white-1",
+      "src": "./img/symbols/white/1.png"
+    },
+    {
+      "alias": "symbols-white-2",
+      "src": "./img/symbols/white/2.png"
+    },
+    {
+      "alias": "symbols-white-3",
+      "src": "./img/symbols/white/3.png"
+    },
+    {
+      "alias": "symbols-white-4",
+      "src": "./img/symbols/white/4.png"
     }
   ]
 }
