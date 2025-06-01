@@ -62,6 +62,10 @@ export class Fact {
         Fact.lookup.set(this.id, this);
     }
 
+    resolve() {
+        this.resolved = true;
+    }
+
     reference?: any;
     resolved = false;
 }

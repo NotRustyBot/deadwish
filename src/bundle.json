@@ -84,6 +84,14 @@
     {
       "alias": "rect",
       "src": "./img/rect.png"
+    },
+    {
+      "alias": "ritual-candle_lit",
+      "src": "./img/ritual/candle_lit.png"
+    },
+    {
+      "alias": "ritual-candle_unlit",
+      "src": "./img/ritual/candle_unlit.png"
     }
   ]
 }
