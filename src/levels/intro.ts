@@ -125,6 +125,7 @@ export function into() {
                     if (!notebook.facts.has(facts.ballRoomEntered) && ball.container.visible) {
                         notebook.add(facts.ballRoomEntered);
                         TimeManager.wait(1000).then(async () => {
+                            death.chat.addNarration(`Crystal Ball Room`);
                             death.chat.htmlChat.removeOptions();
                             death.showChat();
                             death.chat.htmlChat.removeOptions();
@@ -136,9 +137,10 @@ export function into() {
                         });
                     }
 
-                    if (!notebook.facts.has(facts.potionRoomEntered) && cooking.sprite.visible && facts.getNightmarePotion) {
+                    if (!notebook.facts.has(facts.potionRoomEntered) && cooking.sprite.visible && notebook.facts.has(facts.getNightmarePotion)) {
                         notebook.add(facts.potionRoomEntered);
                         TimeManager.wait(1000).then(async () => {
+                            death.chat.addNarration(`Alchemy Station`);
                             death.chat.addMessage(`First, you'll need to brew a <${facts.getNightmarePotion.id}>Nightmare Potion</>.`, false);
                             death.chat.htmlChat.removeOptions();
                             death.showChat();
@@ -199,11 +201,6 @@ export function into() {
                     response: deathResponse
                 })
             )
-
-            //death.chat.addMessage("Let's go", false);
-            //await TimeManager.wait(2000);
-            //death.chat.addMessage("get some drinks, and order some food", false);
-            //await TimeManager.wait(500);
 
             let isRoomShown = false;
             const showRoom = () => {
