@@ -14,7 +14,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    pointer-events: none;
+    /*pointer-events: none;*/
     --player-color: #db2d81;
     --player-color-semi: #db2d816d;
     --player-bg: #902669;

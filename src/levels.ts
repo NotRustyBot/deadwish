@@ -235,7 +235,7 @@ export function scene2() {
             const notebook = new Notebook();
             death.knownFromStart = true;
             death.chat.addMessage("So there is this guy...", false, Emotion.confused);
-            death.chat.exitable = false;
+            //death.chat.exitable = false;
 
             notebook.facts.add(death.addCommunication({
                 askAs: "uh huh",
