@@ -26,6 +26,11 @@ export class Chat {
         this.htmlChat.addMessage(message, request, emotion);
     }
 
+    addNarration(message: string) {
+        message = processText(message);
+        this.htmlChat.addNarration(message);
+    }
+
     options = new Set<ChatResponseOption>();
     showOptions(knownFacts: Set<Fact>, allowReask = false) {
         this.options.clear();

@@ -237,3 +237,11 @@
     opacity: 0;
     pointer-events: none;
 }
+
+.chat-narrator {
+    align-self: center;
+    color: lightgray;
+    font-style: italic;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}

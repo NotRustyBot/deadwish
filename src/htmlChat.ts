@@ -62,6 +62,9 @@ export class HTMLChat implements IUpdatable, IDestroyable {
         game.addUpdatable(UpdateOrder.ui, this);
         game.scene.add(HTMLChat, this);
     }
+    addNarration(text: string) {
+        this.appearDiv(this.messagesWrapper, text, 'chat-narrator');
+    }
     addMessage(text: string, request: boolean, emotion?: Emotion) {
         if (emotion !== undefined) this.leftPortrait.style.backgroundImage = `url(${this.person.emotionImages[emotion] ?? this.person.emotionImages[Emotion.neutral]})`;
         const msg = this.appearDiv(this.messagesWrapper, text, 'chat-message');
