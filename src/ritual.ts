@@ -8,7 +8,7 @@ import { fitSprite, randomRange } from "./utils";
 
 export const transmutationPattern = "010101";
 export const summoningPattern = "111111";
-export const purification = "101010";
+export const purificationPattern = "101010";
 
 export class Ritual extends Room {
     personContainer: Container;

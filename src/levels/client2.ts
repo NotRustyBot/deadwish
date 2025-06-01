@@ -6,7 +6,7 @@ import { Inventory, ItemType } from "../inventory";
 import { transition } from "../levels";
 import { Fact, FactType, Notebook } from "../notebook";
 import { Emotion, Person, PersonType } from "../person";
-import { Ritual, summoningPattern } from "../ritual";
+import { purificationPattern, Ritual, summoningPattern } from "../ritual";
 import { Scene } from "../scene";
 import { TimeManager } from "../timeManager";
 import { client1 } from "./client1";
@@ -33,9 +33,9 @@ export function client2() {
             const karlSisterSummon = new Fact(FactType.general, `Karl had a final chat with his sister.`);
             const karlSisterDenyCurse = new Fact(FactType.general, `Karl's sister said she can't lift the curse.`);
             const karlSisterLied = new Fact(FactType.problem, `Karl's sister lied about the curse.`);
-            const gretaCursedKarl = new Fact(FactType.problem, `Greta lifted the curse from Karl.`);
-            const karlFinished = new Fact(FactType.problem, `Karl is finished.`);
-            const karlAmuletCursed = new Fact(FactType.problem, `Karl's amulet is cursed.`);
+            const gretaCursedKarl = new Fact(FactType.problem, `Greta cursed Karl.`);
+            const karlFinished = new Fact(FactType.misc, ``);
+            const karlAmuletCursed = new Fact(FactType.problem, `Karl's amulet is cursed. Purify it.`);
 
 
             const karl = Person.newGhost("Karl", "#39B3B3");
@@ -67,6 +67,13 @@ export function client2() {
                 }
             }));
 
+            death.responses.set(figureOutWhatsNext, {
+                askAs: "Any pointers for where to start?",
+                response: {
+                    text: [`You probably need a summoning potion first.`, `Then just do the ritual with it.`]
+                }
+            })
+
             const karlSisterDoubt = karl.addCommunication({
                 askAs: "Karl, your sister says she can't lift your curse.",
                 response: {
@@ -75,7 +82,7 @@ export function client2() {
                     facts: [karl.addCommunication({
                         askAs: "No. I'm sure.",
                         response: {
-                            text: [`<${karlSisterLied.id}>I think she's lying.</>`, `When we talked, it was clear she doesn't wanna let me go.`, `Could you talk to her about that?`],
+                            text: [`<${karlSisterLied.id}>I think she's lying.</>`, `She just summoned me a minute ago. It was clear she doesn't wanna let me go.`, `The curse is unbearable.`, `Could you talk to her about that?`],
                             emotion: Emotion.sad,
                             facts: [karlSisterLied],
                         }
@@ -94,13 +101,9 @@ export function client2() {
                     facts: [gretaCursedKarl, greta.addCommunication({
                         askAs: "Lift the curse now, please. Karl is suffering.",
                         response: {
-                            text: [`Please tell him I'm really sorry.`, `I can't lift the curse from here. <${karlAmuletCursed.id}>I placed it on Karl's amulet.</>`, `If you have the amulet, you can lift the curse.`],
+                            text: [`Please tell him I'm really sorry.`, `I can't lift the curse from here. <${karlAmuletCursed.id}>I placed it on Karl's amulet.</>`, `If you find his amulet, you can lift the curse.`],
                             emotion: Emotion.sad,
                             facts: [karlAmuletCursed],
-                            event: () => {
-                                inventory.add(ItemType.amulet);
-                                karlCursed.resolve();
-                            },
                         }
                     })],
                 },
@@ -130,6 +133,17 @@ export function client2() {
                 },
             })
             karl.chat.addNarration("A shaky ghost appears in front of you. He seems to be confused.");
+
+            karl.responses.set(karlAmuletCursed, {
+                askAs: "Can I have your amulet real quick?",
+                response: {
+                    text: [`Uh, sure.`],
+                    event: () => {
+                        karl.chat.addNarration("Karl gives you the amulet.");
+                        inventory.addItem(ItemType.amulet);
+                    }
+                }
+            })
 
             notebook.facts.add(karl.addCommunication({
                 askAs: "Hello Karl. What seems to be the problem?",
@@ -172,6 +186,21 @@ export function client2() {
                     figureOutWhatsNext.resolve();
                     karl.showChat();
                     karl.clickablePerson = new ClickablePerson(karl, t.personContainer);
+                }
+                else if (t.itemHeld == ItemType.amulet && t.matchPattern(purificationPattern)) {
+                    t.ritualSuccess();
+                    death.chat.addNarration("As the amulet is purified, the ghost of Karl vanishes. You rush to tell Death.");
+                    karlCursed.resolve();
+                    karlAmuletCursed.resolve();
+                    gretaCursedKarl.resolve();
+                    death.followUp.add(karlFinished);
+                    setTimeout(() => {
+                        death.showChat();
+                        death.chat.htmlChat.removeOptions();
+                        death.showOptions();
+                        setTimeout(() => {
+                        }, 500);
+                    }, 1000);
                 }
             };
 
@@ -223,6 +252,9 @@ export function client2() {
                 response: {
                     text: [`I've seen a lot of ways people try to avoid me. I don't think I've seen anything like this yet.`, `Thank you for helping me bring peace to Karl.`],
                     emotion: Emotion.confused,
+                    event: () => {
+                        death.followUp.delete(karlFinished);
+                    },
                     facts: [death.addCommunication({
                         askAs: "No problem, man.",
                         response: {
