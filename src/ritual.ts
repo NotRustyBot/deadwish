@@ -2,18 +2,24 @@ import { Assets, Container, Sprite } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { Inventory, ItemType } from "./inventory";
 import { TimeManager } from "./timeManager";
+import { createHomeSign } from "./home";
+import { Room } from "./room";
 
-export class Ritual {
+export class Ritual extends Room {
     container: Container;
     candles: RitualCandle[] = [];
     itemStand: Sprite;
     itemSprite: Sprite;
     itemHeld?: ItemType;
+    static instance?: Ritual;
 
     get inventory() {
         return scene.getFirst<Inventory>(Inventory)!;
     }
     constructor() {
+        super("ritual-0001");
+        Ritual.instance = this;
+
         this.container = new Container();
 
         this.itemSprite = new Sprite();
@@ -39,6 +45,8 @@ export class Ritual {
         }
 
         game.addUpdatable(UpdateOrder.cooking, this);
+
+        this.hide();
     }
 
     itemSelectedCallback(item?: ItemType) {
@@ -58,8 +66,18 @@ export class Ritual {
 
     customLogic = (ritual: Ritual) => { return false; };
 
+    show() {
+        this.container.visible = true;
+        super.show();
+    }
+    hide() {
+        this.container.visible = false;
+        super.hide();
+    }
+    
     update() {
         this.container.position.set(game.width / 2, game.height - 100);
+        super.update();
     }
 
     checkConditions() {
@@ -75,9 +93,11 @@ export class Ritual {
     }
 
     destroy() {
+        Ritual.instance = undefined;
         this.container.destroy();
         scene.remove(Ritual, this);
         game.removeUpdatable(UpdateOrder.cooking, this);
+        super.destroy();
     }
 }
 
@@ -92,8 +112,8 @@ export class RitualCandle {
         scene.add(RitualCandle, this);
         this.container.addChild(this.sprite);
         ritual.container.addChild(this.container);
-        this.sprite.scale.set(0.25);
-        this.sprite.anchor.set(0.25);
+        this.sprite.scale.set(0.5);
+        this.sprite.anchor.set(0.5);
 
         this.container.interactive = true;
         this.container.on("pointerdown", () => {

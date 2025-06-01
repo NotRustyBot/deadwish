@@ -7,6 +7,7 @@ import { Inventory, ItemType } from "./inventory";
 import { sound } from "@pixi/sound";
 import type { IDestroyable } from "./scene";
 import { createHomeSign } from "./home";
+import { Room } from "./room";
 
 
 export type Recipe = Array<{
@@ -24,13 +25,13 @@ const smoke = [
 
 
 
-export class CookingPot implements IUpdatable, IDestroyable {
-    homeSign: HTMLImageElement;
+export class CookingPot extends Room {
+    static instance?: CookingPot;
     particleContainer: Container;
-    bgSprite: Sprite;
     sprite: Sprite;
     frontSprite: Sprite;
     potContainer: Container;
+    bagContainer: Container;
 
     temperature = 0;
 
@@ -49,13 +50,11 @@ export class CookingPot implements IUpdatable, IDestroyable {
     }
 
     constructor() {
-        this.homeSign = createHomeSign(this, "cooking");
+        super("alchemy-0001");
+        CookingPot.instance = this;
 
-
-        this.bgSprite = new Sprite(Assets.get("alchemy-0001"));
-        this.bgSprite.anchor.set(0.5);
-        game.app.stage.addChild(this.bgSprite);
-
+        this.bagContainer = new Container();
+        game.app.stage.addChild(this.bagContainer);
         this.particleContainer = new Container({
         })
 
@@ -95,6 +94,8 @@ export class CookingPot implements IUpdatable, IDestroyable {
         this.sprite.on("pointerdown", () => {
             this.makePotion();
         })
+        new BagOStuff(this.bagContainer);
+        this.hide();
     }
 
     makePotion() {
@@ -123,11 +124,8 @@ export class CookingPot implements IUpdatable, IDestroyable {
     }
 
     update() {
+        super.update();
         //fit height
-
-        const ratio = game.app.screen.height / this.bgSprite.texture.height;
-        this.bgSprite.position.set(game.app.screen.width / 2, game.app.screen.height / 2);
-        this.bgSprite.scale.set(ratio);
 
         if (this.currentRecipe.length != 0) {
             sound.volume("loop-cooking", this.temperature / 4);
@@ -180,10 +178,28 @@ export class CookingPot implements IUpdatable, IDestroyable {
     }
 
     destroy() {
+        CookingPot.instance = undefined;
         game.scene.remove(CookingPot, this);
         game.removeUpdatable(UpdateOrder.cooking, this);
         this.sprite.destroy();
-        this.homeSign.remove();
+        this.particleContainer.destroy();
+        this.frontSprite.destroy();
+        sound.stop("loop-cooking");
+        super.destroy();
+    }
+    show(): void {
+        this.sprite.visible = true;
+        this.frontSprite.visible = true;
+        this.bagContainer.visible = true;
+        this.particleContainer.visible = true;
+        super.show();
+    }
+    hide(): void {
+        this.sprite.visible = false;
+        this.frontSprite.visible = false;
+        this.bagContainer.visible = false;
+        this.particleContainer.visible = false;
+        super.hide();
     }
 }
 
@@ -225,12 +241,12 @@ export class Ingredient {
     static clicked?: Ingredient;
     type: string;
 
-    constructor(type: string) {
+    constructor(type: string, container: Container) {
         this.type = type;
         this.sprite = new Sprite(Assets.get("alchemy-" + type));
         this.sprite.anchor.set(0.5);
         game.addUpdatable(UpdateOrder.cooking, this);
-        game.app.stage.addChild(this.sprite);
+        container.addChild(this.sprite);
 
         game.scene.add(Ingredient, this);
 
@@ -289,9 +305,11 @@ export class Ingredient {
 
 export class BagOStuff implements IUpdatable, IDestroyable {
     sprite: Sprite;
-    constructor() {
+    parentContainer: Container;
+    constructor(container: Container) {
+        this.parentContainer = container;
         this.sprite = new Sprite(Assets.get("alchemy-bag"));
-        game.app.stage.addChild(this.sprite);
+        this.parentContainer.addChild(this.sprite);
         game.scene.add(BagOStuff, this);
         game.addUpdatable(UpdateOrder.cooking, this);
 
@@ -299,7 +317,7 @@ export class BagOStuff implements IUpdatable, IDestroyable {
 
         this.sprite.interactive = true;
         this.sprite.on("pointerdown", () => {
-            Ingredient.clicked = new Ingredient(pickRandom(Ingredient.types));
+            Ingredient.clicked = new Ingredient(pickRandom(Ingredient.types), this.parentContainer);
         });
     }
 

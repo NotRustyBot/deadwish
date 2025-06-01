@@ -5,15 +5,16 @@ import { Chat } from "./chat";
 import { BagOStuff, CookingPot } from "./cooking";
 import { TimeManager } from "./timeManager";
 import type { IDestroyable } from "./scene";
+import { Ritual } from "./ritual";
+import { Room } from "./room";
 
-export class Home {
-    bgSprite: Sprite;
+export class Home extends Room{
     graphics: Graphics;
     currentNumber = 1;
+    static instance?: Home;
     constructor() {
-        this.bgSprite = new Sprite(Assets.get("home-0001"));
-        this.bgSprite.anchor.set(0.5);
-        game.app.stage.addChild(this.bgSprite);
+        super("home-0001", true);
+        Home.instance = this;
 
         this.bgSprite.addEventListener("pointermove", (e) => { this.mouseMove(e) }, true);
         this.bgSprite.addEventListener("click", () => { this.click() }, true);
@@ -24,6 +25,7 @@ export class Home {
         scene.add(Home, this);
         game.addUpdatable(UpdateOrder.ui, this);
         this.bgSprite.addChild(this.graphics);
+        this.show();
     }
 
     mouseMove(e: FederatedPointerEvent) {
@@ -77,28 +79,30 @@ export class Home {
     }
 
     click() {
+        if (this.currentNumber === 3) {
+            if (Ritual.instance) Ritual.instance.show();
+            else new Ritual().show();
+        }
         if (this.currentNumber === 4) {
-            new CookingPot();
-            new BagOStuff();
-            this.destroy();
+            if (CookingPot.instance) CookingPot.instance.show();
+            else new CookingPot().show();
+        }
+        if (this.currentNumber != 1) {
+            this.hide();
         }
     }
 
     update() {
-        //fit height
-
-        const ratio = game.app.screen.height / this.bgSprite.texture.height;
-        this.bgSprite.position.set(game.app.screen.width / 2, game.app.screen.height / 2);
-        this.bgSprite.scale.set(ratio);
+        super.update();
     }
     destroy() {
         game.removeUpdatable(UpdateOrder.ui, this);
-        game.app.stage.removeChild(this.bgSprite);
-        this.bgSprite.destroy();
+        super.destroy();
+        Home.instance = undefined;
     }
 }
 
-export function createHomeSign(destroyable: IDestroyable, className?: string) {
+export function createHomeSign(room: Room, className?: string) {
     const homeSign = new Image();
     homeSign.src = "img/home_sign.png";
     document.body.appendChild(homeSign);
@@ -108,8 +112,9 @@ export function createHomeSign(destroyable: IDestroyable, className?: string) {
     homeSign.addEventListener("mouseenter", () => sound.play("sfx-door_open", { volume: 0.4, singleInstance: true }));
     homeSign.addEventListener("mouseleave", () => sound.play("sfx-door_close", { volume: 0.4, singleInstance: true }));
     homeSign.addEventListener("click", () => {
-        destroyable.destroy();
-        new Home()
+        room.hide();
+        if(Home.instance) Home.instance.show();
+        else new Home();
     });
 
     return homeSign;

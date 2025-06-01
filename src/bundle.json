@@ -70,6 +70,10 @@
       "src": "./img/home/0004.png"
     },
     {
+      "alias": "home_sign",
+      "src": "./img/home_sign.png"
+    },
+    {
       "alias": "light",
       "src": "./img/light.png"
     },
@@ -84,6 +88,10 @@
     {
       "alias": "rect",
       "src": "./img/rect.png"
+    },
+    {
+      "alias": "ritual-0001",
+      "src": "./img/ritual/0001.png"
     },
     {
       "alias": "ritual-candle_lit",
