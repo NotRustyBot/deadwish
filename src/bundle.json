@@ -194,6 +194,18 @@
       "src": "./img/ritual/ritual_circle.png"
     },
     {
+      "alias": "ritual-shape-star",
+      "src": "./img/ritual-shape/star.png"
+    },
+    {
+      "alias": "ritual-shape-tri-down",
+      "src": "./img/ritual-shape/tri-down.png"
+    },
+    {
+      "alias": "ritual-shape-tri-up",
+      "src": "./img/ritual-shape/tri-up.png"
+    },
+    {
       "alias": "symbols-black-0",
       "src": "./img/symbols/black/0.png"
     },
