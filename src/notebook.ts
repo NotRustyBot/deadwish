@@ -129,8 +129,8 @@ export class Notebook {
         this.facts.add(fact);
         this.generateBook();
 
-        const crystalBall = scene.getFirst<CrystalBall>(CrystalBall)!;
-        if (crystalBall) crystalBall.render();
+        //const crystalBall = scene.getFirst<CrystalBall>(CrystalBall)!;
+        //if (crystalBall) crystalBall.render();
     }
 
     generateBook() {

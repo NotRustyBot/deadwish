@@ -39,8 +39,8 @@ export class Home extends Room {
 
     mouseMove(e: FederatedPointerEvent) {
         if (Chat.isInChat || this.notebook.open) return;
-        const doorDist = 500;
-        const doorWidth = 250;
+        const doorDist = 490;
+        const doorWidth = 240;
         const doorHeight = 700;
         const ritualRect = new Rectangle(-doorWidth / 2, -doorHeight / 2, doorWidth, doorHeight);
         const crystalBallRect = new Rectangle(-doorWidth / 2 - doorDist, -doorHeight / 2, doorWidth, doorHeight);
