@@ -31,12 +31,12 @@ export function testing() {
 
         const antiallergenPrepared = new Fact(FactType.misc, "Antiallergen is prepared.");
 
-        const bob = new Person({ name: "Bob", color: "#39B3B3", type: PersonType.ball });
+        const bob = Person.newBall("Bob", "#39B3B3");
         const bobContact = bob.setSymbols("121");
 
-        const clara = new Person({ name: "Clara", color: "#39B3B3", type: PersonType.ball });
+        const clara = Person.newBall("Clara", "#39B3B3");
         const claraContact = clara.setSymbols("410");
-        
+
         const inventory = new Inventory();
         const home = new Home();
         const ball = new CrystalBall();
