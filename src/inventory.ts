@@ -117,7 +117,7 @@ export class Inventory {
                 tempContainer.y = game.app.screen.height / 2 - 100 * progress;
             })
         });
-        TimeManager.wait(4000).then(() => {
+        TimeManager.wait(4100).then(() => {
             tempContainer.destroy();
         });
     }
