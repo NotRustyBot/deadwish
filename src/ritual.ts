@@ -6,6 +6,10 @@ import { Room } from "./room";
 import { sound } from "@pixi/sound";
 import { fitSprite, randomRange } from "./utils";
 
+export const transmutationPattern = "101010";
+export const summoningPattern = "111111";
+export const cursePattern = "010101";
+
 export class Ritual extends Room {
     personContainer: Container;
     container: Container;

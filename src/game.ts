@@ -1,8 +1,8 @@
 import { Container, type Application } from "pixi.js";
 import type { Scene } from "./scene";
-import { client2, client1, into } from "./levels";
 import { TimeManager } from "./timeManager";
 import { Input } from "./input";
+import { into } from "./levels/intro";
 
 export let game: Game;
 export let scene: Scene;
