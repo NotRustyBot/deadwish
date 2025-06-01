@@ -70,6 +70,22 @@
       "src": "./img/cross.png"
     },
     {
+      "alias": "crystal-ball-talk-0001",
+      "src": "./img/crystal-ball-talk/0001.png"
+    },
+    {
+      "alias": "crystal-ball-talk-0002",
+      "src": "./img/crystal-ball-talk/0002.png"
+    },
+    {
+      "alias": "crystal-ball-talk-0003",
+      "src": "./img/crystal-ball-talk/0003.png"
+    },
+    {
+      "alias": "crystal-ball-talk-0004",
+      "src": "./img/crystal-ball-talk/0004.png"
+    },
+    {
       "alias": "death-0000",
       "src": "./img/death/0000.png"
     },
