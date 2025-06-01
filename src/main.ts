@@ -13,7 +13,7 @@ import { sound } from "@pixi/sound";
 
 (async () => {
     const app = new Application();
-    await app.init({ background: "#000", resizeTo: window, antialias: true,backgroundAlpha:0 });
+    await app.init({ background: "#000", resizeTo: document.body, antialias: true,backgroundAlpha:0 });
     document.getElementById("pixi-container")!.appendChild(app.canvas);
 
     /*for (const key in bundle) {
