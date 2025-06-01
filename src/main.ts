@@ -29,8 +29,14 @@ import { sound } from "@pixi/sound";
 
     //await Assets.load(Object.keys(bundle));
 
+    const robotoSlab = new FontFace("Roboto Slab", "url('./RobotoSlab-VariableFont_wght.ttf')");
+    const eBGaramond = new FontFace("EB Garamond", "url('./EBGaramond-VariableFont_wght.ttf')");
     const caveat = new FontFace("Caveat", "url('./Caveat-VariableFont_wght.ttf')");
-    await caveat.load();
+
+    await Promise.all([robotoSlab.load(), eBGaramond.load(), caveat.load()]);
+
+    document.fonts.add(robotoSlab);
+    document.fonts.add(eBGaramond);
     document.fonts.add(caveat);
 
     const game = new Game(app);

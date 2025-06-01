@@ -3,12 +3,12 @@ import { TimeManager } from "./timeManager";
 
 export async function transition(mid: () => void) {
     TimeManager.animate(0.5, (progress, time) => {
-        game.app.stage.alpha = 1 - progress;
+        game.roomContainer.alpha = 1 - progress;
     })
     await TimeManager.wait(500);
     mid();
     TimeManager.animate(0.5, (progress, time) => {
-        game.app.stage.alpha = progress;
+        game.roomContainer.alpha = progress;
     })
 }
 

@@ -10,6 +10,7 @@ import { Ritual, transmutationPattern } from "../ritual";
 import { Scene } from "../scene";
 import { TimeManager } from "../timeManager";
 import { client1 } from "./client1";
+import { interlude } from "./transition";
 
 
 export function into() {
@@ -88,11 +89,12 @@ export function into() {
                 response: {
                     text: [`Lets's try it out!`],
                     event: () => {
-                        scene.clear();
-                        client1();
+                        interlude(client1,"The next day");
                     }
                 }
             })
+
+            //notebook.add(facts.hellbrewReady);
 
             pizzaPlace.chat.addMessage("Pizza Place, can I take your order?", false);
             pizzaPlace.responses.set(facts.orderPizza, {
@@ -164,10 +166,10 @@ export function into() {
                     text: [`<${facts.pizzaContact.id}>it's</> ${pizzaPlace.symbolsHtml}.`, `Write it down into your notebook for the next time.`, `Enter it and click the ball.`],
                     facts: [facts.pizzaContact],
                 },
-            }),
+            });
 
 
-                game.addUpdatable(UpdateOrder.system, factChecker);
+            game.addUpdatable(UpdateOrder.system, factChecker);
             scene.add(factChecker, factChecker);
 
             const deathResponse = {
