@@ -3,7 +3,7 @@ import { game, scene, UpdateOrder } from "./game";
 import { customDiv } from "./htmlChat";
 import { CrystalBall } from "./crystalBall";
 import { filters, sound } from "@pixi/sound";
-import { recipes } from "./cooking";
+import { recipes, type Recipe } from "./cooking";
 import type { ItemType } from "./inventory";
 
 export enum FactType {
@@ -166,7 +166,7 @@ export class Notebook {
         this.addPage({ title: `<br><br><br><br><br><br><strike>COOKING RECIPES</strike><br><br>ALCHEMY<br><br>`, text: `Drag ingredients from the bag into the cauldron. All the ingredients are randomly mixed in one bag.` });
 
         for (const name in recipes) {
-            const recipe = recipes[name as ItemType];
+            const recipe = recipes[name as keyof typeof recipes] as Recipe;
             const smokeDesc = [
                 "white",
                 "blue",
@@ -183,6 +183,14 @@ export class Notebook {
         }
 
         this.render();
+    }
+
+    hide() {
+        this.notebookDiv.style.display = 'none';
+    }
+
+    show() {
+        this.notebookDiv.style.display = 'block';
     }
 
     generatePage(options: { title: string, text?: string, list?: string[] }) {
