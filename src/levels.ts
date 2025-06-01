@@ -125,10 +125,12 @@ export function testing() {
             askAs: "I have a few questions about John. You were his friend, right?",
             response: {
                 text: ["Oh...", "I miss John.", "What do you want to know?"],
+                emotion: Emotion.sad,
                 facts: [
                     bob.addCommunication({
                         askAs: "Tell me about John's friends.",
                         response: {
+                            emotion: Emotion.confused,
                             text: [`There was this woman, <${fclara.id}>Clara</>. I think they were dating.`],
                             facts: [fclara,
                                 bob.addCommunication({
@@ -176,6 +178,7 @@ export function testing() {
         bob.responses.set(cats, {
             askAs: "Do you like cats?",
             response: {
+                emotion: Emotion.happy,
                 text: [`I'm <${bobAllergic.id}>allergic</> so I never had one.`, "They're really cute though."],
                 facts: [bobAllergic],
                 event: onAntiallergenMade
@@ -188,6 +191,7 @@ export function testing() {
         clara.responses.set(fclara, {
             askAs: "Tell me about John's friends.",
             response: {
+                emotion: Emotion.confused,
                 text: [`Uh, he always used to hang out with this guy, what was his name...`, `Oh, <${fbob.id}>Bob</>.`],
                 facts: [fbob]
             }
@@ -196,10 +200,12 @@ export function testing() {
         clara.responses.set(johnsCat, {
             askAs: "Do you know John's cat?",
             response: {
+                emotion: Emotion.confused,
                 text: [`<${claraHatesCats.id}>Ew</>, that ugly thing?`, "I suppose somebody has to take care of it."],
                 facts: [claraHatesCats, clara.addCommunication({
                     askAs: "Will you take care of the cat?",
                     response: {
+                        emotion: Emotion.sad,
                         text: [`<${clarasCat.id}>I guess</>...`],
                         facts: [clarasCat],
                     }
