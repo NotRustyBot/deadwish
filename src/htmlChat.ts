@@ -73,14 +73,19 @@ export class HTMLChat implements IUpdatable, IDestroyable {
         for (const o of options) {
             const msg = customDiv(container, o.message);
             msg.onclick = () => {
-                this.messagesWrapper.removeChild(container);
-                this.optionsElement = undefined;
+                this.removeOptions();
                 o.select();
                 //this.addOptions(options)
             };
         }
         container.style.setProperty("--calc-height", `${container.clientHeight}px`);
         this.optionsElement = container;
+    }
+    removeOptions() {
+        if (this.optionsElement) {
+            this.messagesWrapper.removeChild(this.optionsElement);
+            this.optionsElement = undefined;
+        }
     }
     appearDiv(parent: HTMLElement | null, text: string, ...classes: string[]) {
         const appearDiv = customDiv(parent, text, ...classes);
