@@ -35,6 +35,10 @@ export function testing() {
 
         const clara = new Person({ name: "Clara", color: "#39B3B3", type: PersonType.ball });
         const claraContact = clara.setSymbols("410");
+        
+        const inventory = new Inventory();
+        const home = new Home();
+        const ball = new CrystalBall();
 
         const death = Person.newDeath();
         death.knownFromStart = true;
@@ -112,9 +116,7 @@ export function testing() {
 
         //const pot = new CookingPot();
         //const bag = new BagOStuff();
-        const inventory = new Inventory();
-        const home = new Home();
-        const ball = new CrystalBall();
+
 
 
 
