@@ -1,4 +1,4 @@
-import { Assets, Container, Sprite, Text } from "pixi.js";
+import { Assets, Container, Sprite, spritesheetAsset, Text } from "pixi.js";
 import { Vector } from "./vector";
 import { game, scene, UpdateOrder, type IUpdatable } from "./game";
 import { MouseButton } from "./input";
@@ -25,6 +25,8 @@ export class CookingPot {
     particleContainer: Container;
     bgSprite: Sprite;
     sprite: Sprite;
+    frontSprite: Sprite;
+    potContainer: Container;
 
     temperature = 0;
 
@@ -50,11 +52,22 @@ export class CookingPot {
 
         this.particleContainer = new Container({
         })
-        game.app.stage.addChild(this.particleContainer);
+
+        this.potContainer = new Container();
 
         this.sprite = new Sprite(Assets.get("alchemy-pot"));
         this.sprite.width = 300;
-        game.app.stage.addChild(this.sprite);
+        this.sprite.anchor.set(0.5, 1);
+        this.potContainer.addChild(this.sprite);
+
+        this.potContainer.addChild(this.particleContainer);
+
+        this.frontSprite = new Sprite(Assets.get("alchemy-pot_front"));
+        this.frontSprite.width = 300;
+        this.frontSprite.anchor.set(0.5, 1);
+        this.potContainer.addChild(this.frontSprite);
+        game.app.stage.addChild(this.potContainer);
+
 
         this.recipeText = new Text({
             text: "",
@@ -86,7 +99,7 @@ export class CookingPot {
                 madeRecipe = true;
             }
         }
-        if(madeRecipe) sound.play("sfx-potion_success");
+        if (madeRecipe) sound.play("sfx-potion_success");
         else sound.play("sfx-sizzle");
         this.currentRecipe = [];
         this.temperature = 0;
@@ -95,10 +108,10 @@ export class CookingPot {
 
     intersects(ingredient: Ingredient) {
         if (true
-            && ingredient.position.x > this.sprite.x
-            && ingredient.position.x < this.sprite.x + this.sprite.width
-            && ingredient.position.y > this.sprite.y
-            && ingredient.position.y < this.sprite.y + this.sprite.height) {
+            && ingredient.position.x > this.potContainer.x - this.sprite.width / 2
+            && ingredient.position.x < this.potContainer.x + this.sprite.width / 2
+            && ingredient.position.y > this.potContainer.y - this.sprite.height
+            && ingredient.position.y < this.potContainer.y) {
             return true;
         }
     }
@@ -116,7 +129,7 @@ export class CookingPot {
             if (this.temperature > 4) this.temperature = 4;
             this.particleBuildup += game.dt * 10 * (this.temperature + 1);
             while (this.particleBuildup > 0) {
-                this.particleContainer.addChild(new SmokeParticle(Vector.fromLike(this.sprite.position).add(new Vector(randomRange(50, 150), -50)), this.smokeColor));
+                this.particleContainer.addChild(new SmokeParticle(Vector.fromLike(this.sprite.position).add(new Vector(randomRange(-30, 30) - this.sprite.skew.x * 500, -this.sprite.height)), this.smokeColor));
                 this.particleBuildup--;
             }
         }
@@ -129,11 +142,18 @@ export class CookingPot {
             if (particle.age > particle.lifetime) this.particleContainer.removeChild(particle);
         }
 
-        this.sprite.x = game.app.screen.width / 2 - this.sprite.width / 2;
-        this.sprite.y = game.app.screen.height - this.sprite.height;
+        this.potContainer.x = game.app.screen.width / 2;
+        this.potContainer.y = game.app.screen.height;
 
-        this.sprite.x += randomRange(-1, 1) * (this.currentRecipe.length > 0 ? 2 : 0);
-        this.sprite.y += randomRange(-1, 1) * (this.currentRecipe.length > 0 ? 2 : 0);
+        this.sprite.skew.x = Math.sin(this.temperature * 25) / 10;
+        this.sprite.scale.y = 1 - Math.sin(this.temperature * 50) / 10;
+
+        this.sprite.x = randomRange(-1, 1) * (this.currentRecipe.length > 0 ? 2 : 0);
+        this.sprite.y = randomRange(-1, 1) * (this.currentRecipe.length > 0 ? 2 : 0);
+
+        this.frontSprite.skew.x = this.sprite.skew.x;
+        this.frontSprite.scale.y = this.sprite.scale.y;
+        this.frontSprite.position.set(this.sprite.x, this.sprite.y);
 
         const ingredients = game.scene.get<Ingredient>(Ingredient);
 
@@ -175,9 +195,10 @@ class SmokeParticle extends Sprite {
         super({ texture: Assets.get("light") });
         this.vecPosition = position;
         this.scale = randomRange(0.2, .5);
-        this.velocity = new Vector(randomRange(-1, 1), randomRange(-2, -1));
+        this.velocity = new Vector(randomRange(-1, 1), randomRange(-2, -1) - 2);
         this.lifetime = randomRange(1.5, 2.5);
         this.tint = tint ?? 0xffffff;
+        this.anchor.set(0.5);
     }
     update() {
         this.age += game.dt;

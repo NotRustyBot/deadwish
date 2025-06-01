@@ -26,6 +26,10 @@
       "src": "./img/alchemy/pot.png"
     },
     {
+      "alias": "alchemy-pot_front",
+      "src": "./img/alchemy/pot_front.png"
+    },
+    {
       "alias": "ball",
       "src": "./img/ball.png"
     },
