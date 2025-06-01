@@ -10,12 +10,14 @@ import { CrystalBall } from "./crystalBall";
 import { Inventory } from "./inventory";
 import { ClickablePerson } from "./clickablePerson";
 import { Person, PersonType } from "./person";
+import { Notebook } from "./notebook";
 
 export class Home extends Room {
     graphics: Graphics;
     currentNumber = 1;
     static instance?: Home;
     container: Container;
+    get notebook() { return scene.getFirst<Notebook>(Notebook)!; }
     constructor() {
         super("home-0001", true);
         Home.instance = this;
@@ -36,7 +38,7 @@ export class Home extends Room {
     }
 
     mouseMove(e: FederatedPointerEvent) {
-        if (Chat.isInChat) return;
+        if (Chat.isInChat || this.notebook.open) return;
         const doorDist = 490;
         const doorWidth = 240;
         const doorHeight = 700;
