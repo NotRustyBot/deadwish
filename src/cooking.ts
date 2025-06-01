@@ -6,6 +6,7 @@ import { pickRandom, randomRange } from "./utils";
 import { Inventory, ItemType } from "./inventory";
 import { sound } from "@pixi/sound";
 import type { IDestroyable } from "./scene";
+import { createHomeSign } from "./home";
 
 
 export type Recipe = Array<{
@@ -21,7 +22,10 @@ const smoke = [
     0x111111
 ]
 
-export class CookingPot {
+
+
+export class CookingPot implements IUpdatable, IDestroyable {
+    homeSign: HTMLImageElement;
     particleContainer: Container;
     bgSprite: Sprite;
     sprite: Sprite;
@@ -45,6 +49,8 @@ export class CookingPot {
     }
 
     constructor() {
+        this.homeSign = createHomeSign(this, "cooking");
+
 
         this.bgSprite = new Sprite(Assets.get("alchemy-0001"));
         this.bgSprite.anchor.set(0.5);
@@ -148,8 +154,8 @@ export class CookingPot {
         this.sprite.skew.x = Math.sin(this.temperature * 25) / 10;
         this.sprite.scale.y = 1 - Math.sin(this.temperature * 50) / 10;
 
-        this.sprite.x = randomRange(-1, 1) * (this.currentRecipe.length > 0 ? 2 : 0);
-        this.sprite.y = randomRange(-1, 1) * (this.currentRecipe.length > 0 ? 2 : 0);
+        //this.sprite.x = randomRange(-1, 1) * (this.currentRecipe.length > 0 ? 2 : 0);
+        //this.sprite.y = randomRange(-1, 1) * (this.currentRecipe.length > 0 ? 2 : 0);
 
         this.frontSprite.skew.x = this.sprite.skew.x;
         this.frontSprite.scale.y = this.sprite.scale.y;
@@ -177,6 +183,7 @@ export class CookingPot {
         game.scene.remove(CookingPot, this);
         game.removeUpdatable(UpdateOrder.cooking, this);
         this.sprite.destroy();
+        this.homeSign.remove();
     }
 }
 

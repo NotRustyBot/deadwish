@@ -4,6 +4,7 @@ import { sound } from "@pixi/sound";
 import { Chat } from "./chat";
 import { BagOStuff, CookingPot } from "./cooking";
 import { TimeManager } from "./timeManager";
+import type { IDestroyable } from "./scene";
 
 export class Home {
     bgSprite: Sprite;
@@ -26,13 +27,13 @@ export class Home {
     }
 
     mouseMove(e: FederatedPointerEvent) {
-        if(Chat.isInChat) return;
+        if (Chat.isInChat) return;
         const doorDist = 500;
         const doorWidth = 250;
         const doorHeight = 700;
-        const ritualRect = new Rectangle(-doorWidth/2, -doorHeight/2, doorWidth, doorHeight);
-        const crystalBallRect = new Rectangle(-doorWidth/2 - doorDist, -doorHeight/2, doorWidth, doorHeight);
-        const alchemyRect = new Rectangle(-doorWidth/2 + doorDist, -doorHeight/2, doorWidth, doorHeight);
+        const ritualRect = new Rectangle(-doorWidth / 2, -doorHeight / 2, doorWidth, doorHeight);
+        const crystalBallRect = new Rectangle(-doorWidth / 2 - doorDist, -doorHeight / 2, doorWidth, doorHeight);
+        const alchemyRect = new Rectangle(-doorWidth / 2 + doorDist, -doorHeight / 2, doorWidth, doorHeight);
         const localPos = e.getLocalPosition(this.bgSprite);
 
         //this.graphics.clear();
@@ -64,19 +65,19 @@ export class Home {
 
     setBg(number: 1 | 2 | 3 | 4 = 1) {
         this.bgSprite.texture = Assets.get("home-000" + number);
-        if(this.currentNumber !== number) {
-            if(number > 1) {
-                sound.play("sfx-door_open",{volume:0.4});
+        if (this.currentNumber !== number) {
+            if (number > 1) {
+                sound.play("sfx-door_open", { volume: 0.4 });
             }
             else {
-                sound.play("sfx-door_close",{volume:0.2});
+                sound.play("sfx-door_close", { volume: 0.2 });
             }
             this.currentNumber = number;
         }
     }
 
-    click(){
-        if(this.currentNumber === 4) {
+    click() {
+        if (this.currentNumber === 4) {
             new CookingPot();
             new BagOStuff();
             this.destroy();
@@ -95,4 +96,21 @@ export class Home {
         game.app.stage.removeChild(this.bgSprite);
         this.bgSprite.destroy();
     }
+}
+
+export function createHomeSign(destroyable: IDestroyable, className?: string) {
+    const homeSign = new Image();
+    homeSign.src = "img/home_sign.png";
+    document.body.appendChild(homeSign);
+    homeSign.classList.add("home-sign");
+    if (className) homeSign.classList.add(className);
+
+    homeSign.addEventListener("mouseenter", () => sound.play("sfx-door_open", { volume: 0.4, singleInstance: true }));
+    homeSign.addEventListener("mouseleave", () => sound.play("sfx-door_close", { volume: 0.4, singleInstance: true }));
+    homeSign.addEventListener("click", () => {
+        destroyable.destroy();
+        new Home()
+    });
+
+    return homeSign;
 }

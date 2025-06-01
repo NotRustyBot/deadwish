@@ -69,7 +69,7 @@ export class Fact {
 export class Notebook {
     facts = new Set<Fact>();
     container = new Container();
-
+    notebookBG:HTMLImageElement;
     notebookDiv: HTMLDivElement;
     notebookContentsDiv: HTMLDivElement;
     pageLeftWrapper: HTMLDivElement;
@@ -81,6 +81,7 @@ export class Notebook {
         return this._open;
     }
     public set open(value) {
+        this.notebookBG.src = value ? "img/notebook.png" : "img/notebook_closed.png";
         this.notebookDiv.classList.toggle('open', value);
         if (this._open != value) {
             this.generateBook();
@@ -90,14 +91,6 @@ export class Notebook {
         this._open = value;
     }
 
-    add(fact: Fact) {
-        if (!this.facts.has(fact) && fact.type !== FactType.misc) sound.play("sfx-write_fact", { singleInstance: true, volume: .2, filters: [new filters.StereoFilter(.5)] });
-        this.facts.add(fact);
-        this.generateBook();
-
-        const crystalBall = scene.getFirst<CrystalBall>(CrystalBall)!;
-        if (crystalBall) crystalBall.render();
-    }
 
 
     constructor() {
@@ -110,6 +103,10 @@ export class Notebook {
         this.notebookDiv = customDiv(document.body, '', 'notebook-wrapper');
         this.notebookDiv.addEventListener("mouseenter", () => this.open = true);
         this.notebookDiv.addEventListener("mouseleave", () => this.open = false);
+        this.notebookBG = document.createElement('img');
+        this.notebookBG.src = "img/notebook_closed.png";
+        this.notebookBG.classList.add('notebook-bg');
+        this.notebookDiv.appendChild(this.notebookBG);
         this.notebookContentsDiv = customDiv(this.notebookDiv, '', 'notebook-contents');
         this.pageLeftWrapper = customDiv(this.notebookContentsDiv, '', 'notebook-page-wrapper');
         this.pageLeftWrapper.addEventListener("click", () => this.movePage(-2));
@@ -117,6 +114,16 @@ export class Notebook {
         this.pageRightWrapper.addEventListener("click", () => this.movePage(2));
         this.generateBook();
         this.render();
+    }
+
+    
+    add(fact: Fact) {
+        if (!this.facts.has(fact) && fact.type !== FactType.misc) sound.play("sfx-write_fact", { singleInstance: true, volume: .2, filters: [new filters.StereoFilter(.5)] });
+        this.facts.add(fact);
+        this.generateBook();
+
+        const crystalBall = scene.getFirst<CrystalBall>(CrystalBall)!;
+        if (crystalBall) crystalBall.render();
     }
 
     generateBook() {
