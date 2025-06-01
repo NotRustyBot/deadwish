@@ -6,6 +6,10 @@
       "src": "./audio/loop/cooking.mp3"
     },
     {
+      "alias": "sfx-ball",
+      "src": "./audio/sfx/ball.mp3"
+    },
+    {
       "alias": "sfx-book_close",
       "src": "./audio/sfx/book_close.mp3"
     },

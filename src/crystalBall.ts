@@ -31,6 +31,7 @@ export class CrystalBall extends Room {
                 if (person.type != PersonType.ball) continue;
                 if (person.symbols != dialed) continue;
                 person.showChat();
+                sound.play("sfx-ball", { singleInstance: true, volume: .5 });
             }
         });
         this.sprite.on("mouseenter", () => {
@@ -40,6 +41,7 @@ export class CrystalBall extends Room {
             this.hover(false);
         });
         game.addUpdatable(UpdateOrder.ui, this);
+        this.render();
         this.hide();
     }
     hover(enter: boolean) {
@@ -64,7 +66,6 @@ export class CrystalBall extends Room {
     }
 
     show() {
-        this.render();
         this.container.visible = true;
         super.show();
     }
