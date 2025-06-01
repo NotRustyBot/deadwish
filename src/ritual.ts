@@ -26,7 +26,7 @@ export class Ritual extends Room {
         this.container = new Container();
         this.graphics = new Graphics();
         this.itemSprite = new Sprite();
-        this.itemSprite.anchor.set(0.5);
+        this.itemSprite.anchor.set(0.5, 1);
 
 
         this.itemStand = new Sprite(Assets.get("ritual-ritual_circle"));
@@ -75,7 +75,7 @@ export class Ritual extends Room {
         } else {
             this.itemSprite.texture = Assets.get("inventory-none");
         }
-        
+
         fitSprite(this.itemSprite, 100, 100);
 
         this.checkConditions();
@@ -181,7 +181,7 @@ export class RitualCandle {
     }
 
     setLit(state: boolean) {
-        
+
         this.isLit = state;
         this.sprite.texture = this.isLit ? Assets.get("ritual-candle_lit") : Assets.get("ritual-candle_unlit");
         this.sprite.tint = this.isLit ? 0xffffff : 0x996699;

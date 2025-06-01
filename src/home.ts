@@ -110,7 +110,7 @@ export class Home extends Room {
 export function createHomeSign(room: Room, className?: string) {
     const homeSign = new Image();
     homeSign.src = "img/home_sign.png";
-    document.body.appendChild(homeSign);
+    document.getElementById("app")!.after(homeSign);
     homeSign.classList.add("home-sign");
     if (className) homeSign.classList.add(className);
 
