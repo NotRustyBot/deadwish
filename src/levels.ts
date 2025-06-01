@@ -12,7 +12,7 @@ export function testing() {
     game.scene = Scene.define(scene => {
 
         const fbob = new Fact(FactType.person, "John had a friend named Bob");
-        const problemCat = new Fact(FactType.problem, "Johns cat needs a new home");
+        const problemCat = new Fact(FactType.problem, "John left behind his cat, who needs to be taken care of");
         const johnsCat = new Fact(FactType.misc, "");
         const bobAllergic = new Fact(FactType.general, "Bob is allergic to cats");
         const fclara = new Fact(FactType.person, "John had a friend named Clara");
@@ -24,7 +24,7 @@ export function testing() {
 
 
 
-        const antialergenPrepared = new Fact(FactType.misc, "Antiallergen is prepared.");
+        const antiallergenPrepared = new Fact(FactType.misc, "Antiallergen is prepared.");
 
         const death = Person.newDeath();
         death.knownFromStart = true;
@@ -65,8 +65,8 @@ export function testing() {
             }
         });
 
-        death.responses.set(antialergenPrepared, {
-            askAs: "Give Bob the antialergen. The cat should live with him.",
+        death.responses.set(antiallergenPrepared, {
+            askAs: "Give Bob the antiallergen. The cat should live with him.",
             response: {
                 text: ["I'll do that! Thanks man!"],
                 emotion: Emotion.happy,
@@ -103,8 +103,8 @@ export function testing() {
 
 
 
-        const pot = new CookingPot();
-        const bag = new BagOStuff();
+        //const pot = new CookingPot();
+        //const bag = new BagOStuff();
         const inventory = new Inventory();
         const ball = new CrystalBall();
         const home = new Home();
@@ -135,11 +135,11 @@ export function testing() {
         });
 
 
-        const onAntialergenMade = () => {
+        const onAntiallergenMade = () => {
             death.customLogic = () => {
                 death.followUp.clear();
-                if (inventory.items.includes(ItemType.antialergen)) {
-                    death.followUp.add(antialergenPrepared);
+                if (inventory.items.includes(ItemType.antiallergen)) {
+                    death.followUp.add(antiallergenPrepared);
                 }
                 if (notebook.facts.has(clarasCat)) {
                     death.followUp.add(clarasCat);
@@ -152,7 +152,7 @@ export function testing() {
             response: {
                 text: [`Not much, I'm <${bobAllergic.id}>allergic</>.`, "But John liked it a lot.", `<${bobWantsJohnsCat.id}>I wish I could take care of it.</>`],
                 facts: [bobAllergic, bobWantsJohnsCat],
-                event: onAntialergenMade
+                event: onAntiallergenMade
             }
         });
 
@@ -161,7 +161,7 @@ export function testing() {
             response: {
                 text: [`I'm <${bobAllergic.id}>allergic</> so I never had one.`, "They're really cute though."],
                 facts: [bobAllergic],
-                event: onAntialergenMade
+                event: onAntiallergenMade
             }
         });
 

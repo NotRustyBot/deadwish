@@ -51,6 +51,8 @@
 .notebook-page {
     width: 100%;
     height: 100%;
+    line-height: .8em;
+    padding: .5em;
 }
 
 .notebook-page.hidden {
@@ -61,10 +63,15 @@
     width: 100%;
     text-align: center;
     font-size: 1em;
-    margin:0;
+    margin: 0;
     padding: 0;
 }
 
 .notebook-page ul {
+    padding-left: 1em;
     list-style-type: "- ";
+}
+
+.notebook-page li {
+    margin-block-end: 0.5em;
 }

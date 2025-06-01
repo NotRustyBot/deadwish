@@ -66,13 +66,13 @@ export class Person {
         const convo = this.responses.get(fact)!
         this.chat.addMessage(convo.askAs, true);
         for await (const text of convo.response.text) {
-            await TimeManager.wait(100);
+            await TimeManager.wait(1000);
             this.chat.addMessage(text, false, convo.response.emotion ?? Emotion.neutral);
         }
         for (const fact of convo.response.facts ?? []) {
             this.notebook.add(fact);
         }
-        await TimeManager.wait(100);
+        await TimeManager.wait(1000);
 
         convo.response.event?.();
 

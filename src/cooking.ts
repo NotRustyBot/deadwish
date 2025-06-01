@@ -1,9 +1,11 @@
-import { Assets, Sprite, Text } from "pixi.js";
+import { Assets, Container, Particle, ParticleContainer, Sprite, Text } from "pixi.js";
 import { Vector } from "./vector";
-import { game, scene, UpdateOrder } from "./game";
+import { game, scene, UpdateOrder, type IUpdatable } from "./game";
 import { MouseButton } from "./input";
-import { pickRandom } from "./utils";
+import { pickRandom, randomRange } from "./utils";
 import { Inventory, ItemType } from "./inventory";
+import { sound } from "@pixi/sound";
+import type { IDestroyable } from "./scene";
 
 
 export type Recipe = Array<{
@@ -12,14 +14,15 @@ export type Recipe = Array<{
 }>
 
 const smoke = [
-    0xffffff,
-    0x5555ff,
-    0x00ff00,
+    0xffeecc,
+    0x5544cc,
+    0x00ee00,
     0xffaa00,
-    0x333333
+    0x111111
 ]
 
 export class CookingPot {
+    particleContainer: Container;
     bgSprite: Sprite;
     sprite: Sprite;
 
@@ -29,22 +32,28 @@ export class CookingPot {
 
     recipeText: Text;
 
+    particleBuildup = 0;
+
     get smokeColor() {
         return smoke[Math.floor(this.temperature)];
     }
 
-    get inventory(){
+    get inventory() {
         return scene.getFirst<Inventory>(Inventory)!;
     }
 
     constructor() {
+
         this.bgSprite = new Sprite(Assets.get("alchemy-0001"));
         this.bgSprite.anchor.set(0.5);
         game.app.stage.addChild(this.bgSprite);
 
-        this.sprite = new Sprite(Assets.get("rect"));
+        this.particleContainer = new Container({
+        })
+        game.app.stage.addChild(this.particleContainer);
+
+        this.sprite = new Sprite(Assets.get("alchemy-pot"));
         this.sprite.width = 300;
-        this.sprite.height = 200;
         game.app.stage.addChild(this.sprite);
 
         this.recipeText = new Text({
@@ -70,11 +79,15 @@ export class CookingPot {
     }
 
     makePotion() {
+        let madeRecipe = false;
         for (const key in recipes) {
             if (JSON.stringify(this.currentRecipe) == JSON.stringify(recipes[key as unknown as ItemType])) {
                 this.inventory.add(key as unknown as ItemType);
+                madeRecipe = true;
             }
         }
+        if(madeRecipe) sound.play("sfx-potion_success");
+        else sound.play("sfx-sizzle");
         this.currentRecipe = [];
         this.temperature = 0;
         this.recipeText.text = this.currentRecipe.map(r => `${r.ingredient} ${r.temperature}`).join("\n");
@@ -91,7 +104,6 @@ export class CookingPot {
     }
 
     update() {
-
         //fit height
 
         const ratio = game.app.screen.height / this.bgSprite.texture.height;
@@ -99,22 +111,43 @@ export class CookingPot {
         this.bgSprite.scale.set(ratio);
 
         if (this.currentRecipe.length != 0) {
+            sound.volume("loop-cooking", this.temperature / 4);
             this.temperature += game.dt / 5;
             if (this.temperature > 4) this.temperature = 4;
+            this.particleBuildup += game.dt * 10 * (this.temperature + 1);
+            while (this.particleBuildup > 0) {
+                this.particleContainer.addChild(new SmokeParticle(Vector.fromLike(this.sprite.position).add(new Vector(randomRange(50, 150), -50)), this.smokeColor));
+                this.particleBuildup--;
+            }
+        }
+        else {
+            sound.volume("loop-cooking", 0);
         }
 
-        this.sprite.tint = this.smokeColor;
+        for (const particle of this.particleContainer.children as SmokeParticle[]) {
+            particle.update();
+            if (particle.age > particle.lifetime) this.particleContainer.removeChild(particle);
+        }
 
         this.sprite.x = game.app.screen.width / 2 - this.sprite.width / 2;
         this.sprite.y = game.app.screen.height - this.sprite.height;
+
+        this.sprite.x += randomRange(-1, 1) * (this.currentRecipe.length > 0 ? 2 : 0);
+        this.sprite.y += randomRange(-1, 1) * (this.currentRecipe.length > 0 ? 2 : 0);
 
         const ingredients = game.scene.get<Ingredient>(Ingredient);
 
         for (const ingredient of ingredients) {
             if (this.intersects(ingredient)) {
+                sound.play("sfx-splash");
+                if (this.temperature > 1) {
+                    sound.play("sfx-sizzle");
+                    this.particleBuildup += 50;
+                }
                 ingredient.destroy();
                 this.currentRecipe.push({ ingredient: ingredient.type, temperature: Math.floor(this.temperature) });
                 this.temperature = 0;
+                sound.play("loop-cooking", { loop: true, singleInstance: true });
                 this.recipeText.text = this.currentRecipe.map(r => `${r.ingredient} ${r.temperature}`).join("\n");
             }
         }
@@ -127,8 +160,37 @@ export class CookingPot {
     }
 }
 
+class SmokeParticle extends Sprite {
+    public get vecPosition(): Vector {
+        return new Vector(this.x, this.y);
+    }
+    public set vecPosition(value: Vector) {
+        this.x = value.x;
+        this.y = value.y;
+    }
+    velocity: Vector;
+    age = 0;
+    lifetime = 2;
+    constructor(position: Vector, tint?: number) {
+        super({ texture: Assets.get("light") });
+        this.vecPosition = position;
+        this.scale = randomRange(0.2, .5);
+        this.velocity = new Vector(randomRange(-1, 1), randomRange(-2, -1));
+        this.lifetime = randomRange(1.5, 2.5);
+        this.tint = tint ?? 0xffffff;
+    }
+    update() {
+        this.age += game.dt;
+        this.alpha = 1 - this.age / this.lifetime;
+        this.vecPosition = this.vecPosition.add(this.velocity);
+        this.velocity.mult(1 - game.dt);
+        this.velocity.y -= 2 * game.dt;
+    }
+
+}
+
 export class Ingredient {
-    static types = ["cannon", "light", "rect"];
+    static types = ["herb", "egg", "bone"];
     position = new Vector();
     velocity = new Vector();
     sprite: Sprite;
@@ -137,7 +199,7 @@ export class Ingredient {
 
     constructor(type: string) {
         this.type = type;
-        this.sprite = new Sprite(Assets.get(type));
+        this.sprite = new Sprite(Assets.get("alchemy-" + type));
         this.sprite.anchor.set(0.5);
         game.addUpdatable(UpdateOrder.cooking, this);
         game.app.stage.addChild(this.sprite);
@@ -163,7 +225,7 @@ export class Ingredient {
         }
 
 
-        this.velocity.mult(0.99);
+        this.velocity.mult(1 - 0.001 * game.dt);
 
         this.position = this.position.add(this.velocity.clone().mult(rate));
 
@@ -173,12 +235,16 @@ export class Ingredient {
         if (Ingredient.clicked == this) {
             if (game.input.mouse.getButtonDown(MouseButton.Left) === false) {
                 this.position.set(Vector.lerp(this.position, game.input.mouse.position, 0.25));
+                this.velocity = this.position.diff(startingposition);
+
             } else {
                 Ingredient.clicked = undefined;
             }
         }
+        else {
+            this.sprite.angle += game.dt * this.velocity.length() * 5;
+        }
 
-        this.velocity = this.position.diff(startingposition);
         if (this.position.x < 0 || this.position.x > game.app.screen.width) {
             this.destroy();
         }
@@ -193,14 +259,15 @@ export class Ingredient {
 
 
 
-export class BagOStuff {
+export class BagOStuff implements IUpdatable, IDestroyable {
     sprite: Sprite;
     constructor() {
-        this.sprite = new Sprite(Assets.get("rect"));
-        this.sprite.width = 100;
-        this.sprite.height = 100;
+        this.sprite = new Sprite(Assets.get("alchemy-bag"));
         game.app.stage.addChild(this.sprite);
         game.scene.add(BagOStuff, this);
+        game.addUpdatable(UpdateOrder.cooking, this);
+
+        this.sprite.anchor.set(0.5);
 
         this.sprite.interactive = true;
         this.sprite.on("pointerdown", () => {
@@ -208,13 +275,18 @@ export class BagOStuff {
         });
     }
 
+    update(): void {
+        this.sprite.position.set(game.app.screen.width / 2 - 500, game.app.screen.height * .55);
+    }
+
     destroy() {
+        game.removeUpdatable(UpdateOrder.cooking, this);
         game.scene.remove(BagOStuff, this);
         this.sprite.destroy();
     }
 }
 
 export const recipes: Record<ItemType, Recipe> = {
-    [ItemType.nightmarePotion]: [{ ingredient: "light", temperature: 0 }, { ingredient: "cannon", temperature: 1 }],
-    [ItemType.antialergen]: [{ ingredient: "light", temperature: 0 }, { ingredient: "light", temperature: 0 }],
+    [ItemType.nightmarePotion]: [{ ingredient: "egg", temperature: 0 }, { ingredient: "bone", temperature: 1 }],
+    [ItemType.antiallergen]: [{ ingredient: "herb", temperature: 0 }, { ingredient: "egg", temperature: 0 }],
 }

@@ -39,8 +39,8 @@ export function titleLookup(type: FactType): string {
     const styles = {
         0: 'Notes',
         1: `General information`,
-        2: `${personName}'s complaints`,
-        3: `${personName}'s personal details`,
+        2: `Problems`,
+        3: `Personal details`,
         4: `Locations`,
         5: `Items`,
     };
@@ -91,7 +91,7 @@ export class Notebook {
     }
 
     add(fact: Fact) {
-        if (!this.facts.has(fact)) sound.play("sfx-write_fact", { singleInstance: true, volume: .2, filters: [new filters.StereoFilter(.5)] });
+        if (!this.facts.has(fact) && fact.type !== FactType.misc) sound.play("sfx-write_fact", { singleInstance: true, volume: .2, filters: [new filters.StereoFilter(.5)] });
         this.facts.add(fact);
         this.generateBook();
 
@@ -145,9 +145,11 @@ export class Notebook {
             const title = titleLookup(i as FactType);
             const lines = Array.from(section);
             while (lines.length > 0) {
-                const page = this.addPage({ title, list: lines.splice(0, 4) });
+                const page = this.addPage({ title, list: lines.splice(0, 5) });
             }
         }
+
+        this.addPage({ title: `<br><br><br><br><br><br><strike>COOKING RECIPES</strike><br><br>ALCHEMY<br><br>`, text: `Drag ingredients from the bag into the cauldron. All the ingredients are randomly mixed in one bag.` });
 
         for (const name in recipes) {
             const recipe = recipes[name as ItemType];
@@ -158,8 +160,11 @@ export class Notebook {
                 "orange",
                 "dark"
             ]
-            const lines = recipe.map(r => `add ${r.ingredient} when the smoke is ${smokeDesc[r.temperature]}`)
-            const page = this.addPage({ title: `${name} recipe`, list: lines });
+            const lines = [`start with ${recipe[0].ingredient}`];
+            lines.push(...recipe.slice(1).map(r => `add ${r.ingredient} when the smoke is ${smokeDesc[r.temperature]}`))
+            let nameFromCamelCase = name.replace(/([A-Z])/g, ' $1').trim();
+            nameFromCamelCase = nameFromCamelCase[0].toUpperCase() + nameFromCamelCase.slice(1);
+            const page = this.addPage({ title: `${nameFromCamelCase}`, list: lines });
 
         }
 

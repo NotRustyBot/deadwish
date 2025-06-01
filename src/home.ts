@@ -2,7 +2,7 @@ import { Assets, FederatedPointerEvent, Graphics, Rectangle, Sprite } from "pixi
 import { game, scene, UpdateOrder } from "./game";
 import { sound } from "@pixi/sound";
 import { Chat } from "./chat";
-import { CookingPot } from "./cooking";
+import { BagOStuff, CookingPot } from "./cooking";
 import { TimeManager } from "./timeManager";
 
 export class Home {
@@ -78,6 +78,7 @@ export class Home {
     click(){
         if(this.currentNumber === 4) {
             new CookingPot();
+            new BagOStuff();
             this.destroy();
         }
     }

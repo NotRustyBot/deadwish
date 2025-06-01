@@ -2,6 +2,10 @@
   "name": "bundle_sound",
   "assets": [
     {
+      "alias": "loop-cooking",
+      "src": "./audio/loop/cooking.mp3"
+    },
+    {
       "alias": "sfx-book_close",
       "src": "./audio/sfx/book_close.mp3"
     },
@@ -20,6 +24,18 @@
     {
       "alias": "sfx-page_turn",
       "src": "./audio/sfx/page_turn.mp3"
+    },
+    {
+      "alias": "sfx-potion_success",
+      "src": "./audio/sfx/potion_success.mp3"
+    },
+    {
+      "alias": "sfx-sizzle",
+      "src": "./audio/sfx/sizzle.mp3"
+    },
+    {
+      "alias": "sfx-splash",
+      "src": "./audio/sfx/splash.mp3"
     },
     {
       "alias": "sfx-write_fact",

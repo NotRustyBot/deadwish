@@ -6,6 +6,26 @@
       "src": "./img/alchemy/0001.png"
     },
     {
+      "alias": "alchemy-bag",
+      "src": "./img/alchemy/bag.png"
+    },
+    {
+      "alias": "alchemy-bone",
+      "src": "./img/alchemy/bone.png"
+    },
+    {
+      "alias": "alchemy-egg",
+      "src": "./img/alchemy/egg.png"
+    },
+    {
+      "alias": "alchemy-herb",
+      "src": "./img/alchemy/herb.png"
+    },
+    {
+      "alias": "alchemy-pot",
+      "src": "./img/alchemy/pot.png"
+    },
+    {
       "alias": "ball",
       "src": "./img/ball.png"
     },
