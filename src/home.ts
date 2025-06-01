@@ -17,7 +17,7 @@ export class Home extends Room {
     currentNumber = 1;
     static instance?: Home;
     container: Container;
-    get notebook() { return scene.getFirst<Notebook>(Notebook)!; }
+    get notebook() { return scene.getFirst<Notebook>(Notebook); }
     constructor() {
         super("home-0001", true);
         Home.instance = this;
@@ -39,7 +39,7 @@ export class Home extends Room {
     }
 
     mouseMove(e: FederatedPointerEvent) {
-        if (Chat.isInChat || this.notebook.open) return;
+        if (Chat.isInChat || this.notebook?.open) return;
         const doorDist = 500;
         const doorWidth = 230;
         const doorHeight = 700;
