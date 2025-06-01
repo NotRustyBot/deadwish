@@ -3,11 +3,15 @@ import { game } from "./game";
 import { Home } from "./home";
 import { Inventory, ItemType } from "./inventory";
 import { Fact, FactType, Notebook } from "./notebook";
-import { Emotion, Person } from "./person";
+import { Emotion, Person, PersonType } from "./person";
 import { Ritual } from "./ritual";
 import { Scene } from "./scene";
 import { TimeManager } from "./timeManager";
 
+
+const transmutationPattern = "101010";
+const summoningPattern = "101101";
+const cursePattern = "010101";
 
 
 export function testing() {
@@ -231,6 +235,7 @@ export function scene2() {
             const notebook = new Notebook();
             death.knownFromStart = true;
             death.chat.addMessage("So there is this guy...", false, Emotion.confused);
+            death.chat.exitable = false;
 
             notebook.facts.add(death.addCommunication({
                 askAs: "uh huh",
@@ -242,8 +247,11 @@ export function scene2() {
                             askAs: "Got a name at least?",
                             response: {
                                 text: [`<${figureOutWhatsNext.id}>Karl</>.`],
-                                facts: [figureOutWhatsNext]
-                            }
+                                facts: [figureOutWhatsNext],
+                                event: () => {
+                                    death.chat.exitable = true;
+                                }
+                            },
                         })
                     ],
                 }
@@ -252,6 +260,7 @@ export function scene2() {
 
             const karl = new Person({ name: "Karl", color: "#39B3B3" });
             karl.knownByFact = summoningRitual;
+            karl.type = PersonType.ghost;
             notebook.facts.add(karl.addCommunication({
                 askAs: "Hello Karl. What seems to be the problem?",
                 response: {
@@ -261,13 +270,11 @@ export function scene2() {
 
             const ritual = new Ritual();
             ritual.customLogic = (t: Ritual) => {
-                if (t.itemHeld == ItemType.summoningPotion) {
+                if (t.itemHeld == ItemType.summoningPotion && t.matchPattern(summoningPattern)) {
                     notebook.add(summoningRitual);
                     figureOutWhatsNext.resolve();
                     karl.showChat();
-                    return true;
                 }
-                return false;
             };
 
             notebook.render();

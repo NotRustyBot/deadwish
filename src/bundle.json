@@ -110,6 +110,26 @@
       "src": "./img/inventory/antiallergen.png"
     },
     {
+      "alias": "item-amulet",
+      "src": "./img/item/amulet.png"
+    },
+    {
+      "alias": "item-potion_0",
+      "src": "./img/item/potion_0.png"
+    },
+    {
+      "alias": "item-potion_1",
+      "src": "./img/item/potion_1.png"
+    },
+    {
+      "alias": "item-potion_2",
+      "src": "./img/item/potion_2.png"
+    },
+    {
+      "alias": "item-potion_3",
+      "src": "./img/item/potion_3.png"
+    },
+    {
       "alias": "light",
       "src": "./img/light.png"
     },

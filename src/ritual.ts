@@ -1,10 +1,10 @@
 import { Assets, Container, Graphics, Sprite } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
-import { Inventory, ItemType } from "./inventory";
+import { Inventory, ItemType, itemTypeToTexture } from "./inventory";
 import { TimeManager } from "./timeManager";
 import { createHomeSign } from "./home";
 import { Room } from "./room";
-import { randomRange } from "./utils";
+import { fitSprite, randomRange } from "./utils";
 
 export class Ritual extends Room {
     container: Container;
@@ -32,9 +32,13 @@ export class Ritual extends Room {
         this.itemStand.anchor.set(0.5);
         this.itemStand.interactive = true;
         this.itemStand.on("pointerdown", () => {
-            if (this.itemHeld) this.inventory.add(this.itemHeld);
-            this.itemHeld = undefined;
-            this.itemSprite.texture = Assets.get("inventory-none");
+            if (this.itemHeld) {
+                this.inventory.add(this.itemHeld);
+                this.itemHeld = undefined;
+                this.itemSprite.texture = Assets.get("inventory-none");
+                return;
+            }
+
             this.inventory.selectItem().then(item => this.itemSelectedCallback(item));
         })
 
@@ -46,10 +50,10 @@ export class Ritual extends Room {
         game.roomContainer.addChild(this.container);
 
         for (let index = 0; index < 6; index++) {
-            const angle = index * Math.PI * 2 / 6;
+            const angle = index * Math.PI * 2 / 6 + Math.PI / 6;
             const candle = new RitualCandle(this);
             candle.container.x = 300 * Math.cos(angle);
-            candle.container.y = 150 * Math.sin(angle);
+            candle.container.y = 120 * Math.sin(angle);
             candle.container.scale = (Math.sin(angle) * 0.5 + 0.5) * .8 + .7;
             this.candles.push(candle);
         }
@@ -59,9 +63,20 @@ export class Ritual extends Room {
         this.hide();
     }
 
+    matchPattern(string: string) {
+        return string === this.candles.map(candle => candle.isLit ? 1 : 0).join("");
+    }
+
     itemSelectedCallback(item?: ItemType) {
         this.itemHeld = item;
-        this.itemSprite.texture = Assets.get("inventory-" + item);
+        if (item) {
+            this.itemSprite.texture = Assets.get(itemTypeToTexture[item]);
+        } else {
+            this.itemSprite.texture = Assets.get("inventory-none");
+        }
+        
+        fitSprite(this.itemSprite, 100, 100);
+
         this.checkConditions();
     }
 
@@ -76,7 +91,7 @@ export class Ritual extends Room {
         }
     }
 
-    customLogic = (ritual: Ritual) => { return false; };
+    customLogic = (ritual: Ritual) => { };
 
     show() {
         this.container.visible = true;
@@ -111,14 +126,8 @@ export class Ritual extends Room {
     }
 
     checkConditions() {
-        let allLit = this.candles.every(candle => candle.isLit);
-        if (allLit && this.itemHeld != undefined) {
+        if (this.itemHeld != undefined) {
             let result = this.customLogic(this);
-            if (result) {
-
-            } else {
-                this.failRitual();
-            }
         }
     }
 

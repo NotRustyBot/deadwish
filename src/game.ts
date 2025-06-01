@@ -57,6 +57,14 @@ export class Game {
     }
 
     init() {
+        document.body.addEventListener('dragstart', event => {
+            event.preventDefault();
+        });
+
+        document.body.addEventListener('drop', event => {
+            event.preventDefault();
+        });
+
         TimeManager.init();
         scene2();
         this.app.stage.addChild(this.roomContainer);
