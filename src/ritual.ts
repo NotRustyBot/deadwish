@@ -1,4 +1,4 @@
-import { Assets, Container, Graphics, Sprite } from "pixi.js";
+import { Assets, Container, Graphics, Rectangle, Sprite } from "pixi.js";
 import { game, scene, UpdateOrder } from "./game";
 import { Inventory, ItemType, itemTypeToTexture } from "./inventory";
 import { TimeManager } from "./timeManager";
@@ -161,6 +161,7 @@ export class RitualCandle {
         this.container.addChild(this.sprite);
         this.container.addChild(this.light);
         ritual.container.addChild(this.container);
+        this.sprite.hitArea = new Rectangle(-this.sprite.width / 2, -this.sprite.height / 3, this.sprite.width, this.sprite.height / 3 * 2);
         this.sprite.scale.set(0.5);
         this.sprite.anchor.set(0.5, .75);
 

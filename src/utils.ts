@@ -17,7 +17,7 @@ export function clamp(n: number, min = 0, max = 1) {
 }
 
 export function fitSprite(sprite: Sprite, width: number, height: number) {
-    const ratio = sprite.width / sprite.height;
+    const ratio = sprite.texture.width / sprite.texture.height;
     if (width / ratio > height) {
         sprite.width = height * ratio;
         sprite.height = height;
