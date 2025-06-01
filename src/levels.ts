@@ -206,8 +206,6 @@ export function scene2() {
     transition(() => {
         game.scene?.clear();
         game.scene = Scene.define(scene => {
-            const pot = new CookingPot();
-            const bag = new BagOStuff();
             const inventory = new Inventory();
             const ball = new CrystalBall();
             const home = new Home();
