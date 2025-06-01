@@ -5,6 +5,7 @@ import { Home } from "./home";
 import { Inventory, ItemType } from "./inventory";
 import { Fact, FactType, Notebook } from "./notebook";
 import { Emotion, Person } from "./person";
+import { Ritual } from "./ritual";
 import { Scene } from "./scene";
 import { TimeManager } from "./timeManager";
 
@@ -201,9 +202,9 @@ export function testing() {
     game.scene.setup();
 }
 
-function scene2() {
+export function scene2() {
     transition(() => {
-        game.scene.clear();
+        game.scene?.clear();
         game.scene = Scene.define(scene => {
             const pot = new CookingPot();
             const bag = new BagOStuff();
@@ -213,7 +214,12 @@ function scene2() {
             const notebook = new Notebook();
 
 
+
+
             const figureOutWhatsNext = new Fact(FactType.problem, `Summon Karl and figure out what's next.`);
+            const summoningRitual = new Fact(FactType.general, `You summoned Karl via the ritual.`);
+
+
 
             const death = Person.newDeath();
             death.knownFromStart = true;
@@ -235,8 +241,30 @@ function scene2() {
                     ],
                 }
             }));
+
+
+            const karl = new Person({ name: "Karl", color: "#39B3B3" });
+            karl.knownByFact = summoningRitual;
+            notebook.facts.add(karl.addCommunication({
+                askAs: "Hello Karl. What seems to be the problem?",
+                response: {
+                    text: [`...`, `meú bych`],
+                }
+            }))
+
+            const ritual = new Ritual();
+            ritual.customLogic = (t: Ritual) => {
+                if (t.itemHeld == ItemType.summoningPotion) {
+                    notebook.add(summoningRitual);
+                    figureOutWhatsNext.resolve();
+                    return true;
+                }
+                return false;
+            };
+
             notebook.render();
 
+            karl.showOptions();
             death.showChat();
 
         });

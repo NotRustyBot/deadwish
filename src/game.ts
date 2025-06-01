@@ -1,6 +1,6 @@
 import type { Application } from "pixi.js";
 import type { Scene } from "./scene";
-import { testing } from "./levels";
+import { scene2, testing } from "./levels";
 import { TimeManager } from "./timeManager";
 import { Input } from "./input";
 
@@ -55,7 +55,7 @@ export class Game {
 
     init() {
         TimeManager.init();
-        testing();
+        scene2();
     }
 
     update() {
