@@ -331,7 +331,7 @@ export class BagOStuff implements IUpdatable, IDestroyable {
     }
 }
 
-export const recipes: Record<ItemType, Recipe> = {
+export const recipes: Partial<Record<ItemType, Recipe>> = {
     [ItemType.nightmarePotion]: [{ ingredient: "egg", temperature: 0 }, { ingredient: "bone", temperature: 1 }],
     [ItemType.antiallergen]: [{ ingredient: "herb", temperature: 0 }, { ingredient: "egg", temperature: 0 }],
     [ItemType.summoningPotion]: [{ ingredient: "herb", temperature: 0 }, { ingredient: "egg", temperature: 0 }, { ingredient: "bone", temperature: 2 }],
