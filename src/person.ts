@@ -163,7 +163,7 @@ export class Person {
         return ghost;
     }
 
-    static newBall(name: string, color: string) {
+    static newBall(name: string, color: string, symbols?: string) {
         const ball = new Person({
             name, type: PersonType.ball, color, emotionImages: {
                 [Emotion.neutral]: `img/crystal-ball-talk/0001.png`,
@@ -172,6 +172,7 @@ export class Person {
                 [Emotion.sad]: `img/crystal-ball-talk/0004.png`,
             }
         });
+        if(symbols) ball.setSymbols(symbols);
         return ball;
     }
 }

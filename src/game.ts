@@ -3,6 +3,7 @@ import type { Scene } from "./scene";
 import { TimeManager } from "./timeManager";
 import { Input } from "./input";
 import { into } from "./levels/intro";
+import { client2 } from "./levels/client2";
 
 export let game: Game;
 export let scene: Scene;
@@ -66,7 +67,7 @@ export class Game {
         });
 
         TimeManager.init();
-        into();
+        client2();
         this.app.stage.addChild(this.roomContainer);
         this.app.stage.addChild(this.uiContainer);
     }
