@@ -1,4 +1,4 @@
-import type { ChatResponseOption } from "./chat";
+import type { Chat, ChatResponseOption } from "./chat";
 import { CustomColor } from "./color";
 import { game, UpdateOrder, type IUpdatable } from "./game";
 import { Emotion, type Person } from "./person";
@@ -13,8 +13,10 @@ export class HTMLChat implements IUpdatable, IDestroyable {
     leftPortrait: HTMLElement;
     leftName: HTMLElement;
     optionsElement?: HTMLElement;
+    exitButton: HTMLElement;
     person: Person;
     color: CustomColor;
+    chat: Chat;
     private _scrollBottom = 0;
     private _scrollTarget = 0;
     public get scrollTarget() {
@@ -33,7 +35,8 @@ export class HTMLChat implements IUpdatable, IDestroyable {
         this._scrollBottom = value;
         this.messagesWrapper.style.bottom = `${this._scrollBottom}px`;
     }
-    constructor(person: Person) {
+    constructor(person: Person, chat: Chat) {
+        this.chat = chat;
         this.person = person;
         this.color = CustomColor.fromHTML(this.person.color);
         this.parentElement = customDiv(document.body, '', 'absolute');
@@ -41,6 +44,9 @@ export class HTMLChat implements IUpdatable, IDestroyable {
         const hsl = this.color.toHSL();
         this.parentElement.style.setProperty("--bg-color", CustomColor.fromHsl(hsl[0], hsl[1] * .4, hsl[2] * .2 + .1).toCSS());
         this.parentElement.style.setProperty("--outline-color", CustomColor.fromHsl(hsl[0], hsl[1] * .7, hsl[2] * .6).toCSS());
+        this.exitButton = customDiv(this.parentElement, '<img src="img/cross.png"> Close conversation', 'chat-exit-button');
+        this.exitButton.addEventListener("click", () => this.chat.hideChat());
+
         this.leftName = customDiv(this.parentElement, this.person.name, 'chat-name', 'left');
         this.leftName.style.color = this.person.color;
         this.leftPortrait = customDiv(this.parentElement, '', 'chat-portrait', 'left');
@@ -89,6 +95,7 @@ export class HTMLChat implements IUpdatable, IDestroyable {
         return appearDiv;
     }
     update() {
+        this.exitButton.classList.toggle('hidden', !this.chat.canCloseChat);
         const realTarget = Math.min(Math.max(this.scrollTarget, -this.messagesHeight + this.wrapperHeight - 100), 0);
         this.scrollTarget += (realTarget - this.scrollTarget) * 50 * game.dt;
 

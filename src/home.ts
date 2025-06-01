@@ -7,6 +7,7 @@ import { TimeManager } from "./timeManager";
 import type { IDestroyable } from "./scene";
 import { Ritual } from "./ritual";
 import { Room } from "./room";
+import { CrystalBall } from "./crystalBall";
 
 export class Home extends Room{
     graphics: Graphics;
@@ -79,6 +80,10 @@ export class Home extends Room{
     }
 
     click() {
+        if (this.currentNumber === 2) {
+            if (CrystalBall.instance) CrystalBall.instance.show();
+            else new CrystalBall().show();
+        }
         if (this.currentNumber === 3) {
             if (Ritual.instance) Ritual.instance.show();
             else new Ritual().show();

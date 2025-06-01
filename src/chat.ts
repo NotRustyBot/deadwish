@@ -10,9 +10,14 @@ export class Chat {
     person: Person;
     htmlChat: HTMLChat;
     static isInChat = false;
+    exitable = true;
+
+    get canCloseChat(){
+        return !this.person.busy && this.exitable;
+    }
 
     constructor(person: Person) {
-        this.htmlChat = new HTMLChat(person);
+        this.htmlChat = new HTMLChat(person,this);
         this.person = person;
     }
 

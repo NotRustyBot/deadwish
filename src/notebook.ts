@@ -26,12 +26,12 @@ export function factStylelookup(id: number): string {
 export function styleLookup(type: FactType): string {
     const styles = {
         0: 'color: "";',
-        1: 'color: #ffaa00;',
-        2: 'color: #ff0000;',
-        3: 'color: #99ffff;',
+        1: 'color: #f6c40e;',
+        2: 'color: #f53838;',
+        3: 'color: #11e3d9;',
         4: 'color: #55ff55;',
-        5: 'color: #ff55ff;',
-        6: 'color: #0055ff;',
+        5: 'color: #ea2eea;',
+        6: 'color: #307ef3;',
     };
     return styles[type as keyof typeof styles] ?? '';
 }
@@ -76,7 +76,7 @@ export class Fact {
 export class Notebook {
     facts = new Set<Fact>();
     container = new Container();
-    notebookBG:HTMLImageElement;
+    notebookBG: HTMLImageElement;
     notebookDiv: HTMLDivElement;
     notebookContentsDiv: HTMLDivElement;
     pageLeftWrapper: HTMLDivElement;
@@ -123,7 +123,7 @@ export class Notebook {
         this.render();
     }
 
-    
+
     add(fact: Fact) {
         if (!this.facts.has(fact) && fact.type !== FactType.misc) sound.play("sfx-write_fact", { singleInstance: true, volume: .2, filters: [new filters.StereoFilter(.5)] });
         this.facts.add(fact);

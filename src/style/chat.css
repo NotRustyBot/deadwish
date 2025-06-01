@@ -35,9 +35,10 @@
     0% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
-    }  
+    }
 }
 
 @keyframes appear-vignette {
@@ -45,6 +46,7 @@
         opacity: 0;
         backdrop-filter: blur(0px);
     }
+
     100% {
         opacity: 1;
         backdrop-filter: blur(10px);
@@ -56,6 +58,7 @@
         opacity: 0;
         transform: translateX(-100px);
     }
+
     100% {
         opacity: 1;
         transform: translateX(0px);
@@ -201,4 +204,36 @@
 
 .chat-content img {
     max-width: 100%;
+}
+
+.chat-exit-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: white;
+    padding: 0.5em;
+    font-size: 30px;
+    border-radius: .5em;
+    font-family: "EB Garamond";
+    transition: background-color .5s, opacity .5s;
+    z-index: 3;
+    pointer-events: all;
+    display: flex;
+    align-items: center;
+    margin: 1em;
+}
+
+.chat-exit-button img {
+    height: 1em;
+    margin-right: 0.5em
+}
+
+.chat-exit-button:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.063);
+}
+
+.chat-exit-button.hidden {
+    opacity: 0;
+    pointer-events: none;
 }

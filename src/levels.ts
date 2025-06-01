@@ -50,7 +50,7 @@ export function testing() {
                                 death.addCommunication({
                                     askAs: "Who will take care of it?",
                                     response: {
-                                        text: [`Ask <${fbob.id}>Bob</>. His friend.`, `<${bobContact.id}>Crystal ball symbols</> are ${bob.symbolsHtml}`],
+                                        text: [`You could try asking <${fbob.id}>Bob</>. His friend.`, `His <${bobContact.id}>magic address</> is ${bob.symbolsHtml}.`],
                                         facts: [fbob, bobContact],
                                     }
                                 })

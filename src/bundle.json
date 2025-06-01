@@ -30,6 +30,14 @@
       "src": "./img/alchemy/pot_front.png"
     },
     {
+      "alias": "ball-0001",
+      "src": "./img/ball/0001.png"
+    },
+    {
+      "alias": "ball-ball",
+      "src": "./img/ball/ball.png"
+    },
+    {
       "alias": "ball-symbol_0",
       "src": "./img/ball/symbol_0.png"
     },
@@ -56,6 +64,10 @@
     {
       "alias": "cannon",
       "src": "./img/cannon.png"
+    },
+    {
+      "alias": "cross",
+      "src": "./img/cross.png"
     },
     {
       "alias": "death-0001",
